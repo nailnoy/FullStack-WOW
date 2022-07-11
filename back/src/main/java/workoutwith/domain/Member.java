@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 import static javax.persistence.FetchType.EAGER;
 
@@ -28,15 +29,16 @@ public class Member {
     @JoinColumn(name = "club_id")
     @ManyToOne(fetch = EAGER)
     private Club club;
-
+    
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus; //승인상태 [WAITING, CONFIRMED]
 
     @Builder
-    public Member(User user, Club club, ApprovalStatus approvalStatus) {
+    public Member(User user, Club club,  ApprovalStatus approvalStatus) {
         this.user = user;
         this.club = club;
+        
         this.approvalStatus = approvalStatus;
     }
 
