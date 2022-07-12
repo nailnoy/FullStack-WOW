@@ -11,7 +11,7 @@ const App = ({ Component }) => {
         <>
             <Head>
                 <meta charSet='utf-8' />
-                <title>ZoMbird</title>
+                <title>WOW</title>
             </Head>
             <Component />
         </>
