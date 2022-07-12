@@ -26,7 +26,7 @@ const MainClubCard = () => {
                                 sx={{
                                     pt: '10%',
                                 }}
-                                image="/img/clubimage.jpeg"
+                                image="https://velog.velcdn.com/images/zolyer/post/d8620848-232a-47c5-a6db-2283b9fe4d28/image.jpeg"
                                 alt="default"
                             />
                             <CardContent sx={{ flexGrow: 1 }}>
@@ -59,7 +59,7 @@ const MainClubCard = () => {
                                 sx={{
                                     pt: '10%',
                                 }}
-                                image="./img/clubimage.jpeg"
+                                image="https://velog.velcdn.com/images/zolyer/post/d8620848-232a-47c5-a6db-2283b9fe4d28/image.jpeg"
                                 alt="random"
                             />
                             <CardContent sx={{ flexGrow: 1 }}>
