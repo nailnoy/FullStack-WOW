@@ -1,47 +1,35 @@
 {
-  "name": "front",
-  "version": "0.1.0",
-  "private": true,
+  "name": "react-zombird-front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next -p 3060",
+    "build": "next build"
+  },
+  "author": "ZoMD",
+  "license": "ISC",
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.8.7",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "antd": "^4.21.6",
-    "http-proxy-middleware": "^2.0.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
-    "styled-components": "^5.3.5",
-    "styled-media-query": "^2.1.2",
-    "web-vitals": "^2.1.4"
+    "antd": "^4.18.7",
+    "mui": "^0.0.1",
+    "next": "^12.1.0",
+    "next-redux-wrapper": "^7.0.5",
+    "prop-types": "^15.8.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^8.0.2",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "styled-components": "^5.3.3"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:8080",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0"
   }
 }
