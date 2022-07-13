@@ -1,0 +1,55 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/playdata?autoReconnect=true 
+    username: root
+    password: dl616263
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: none #create #none #update #validate
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        
+  mail :
+     host : smtp.gmail.com
+     port : 587
+     username : 'your email'
+     password : 'your password'
+     properties :
+         mail :
+            smtp :
+                auth : true
+                starttls :
+                     enable : true 
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
+    com: #failed to connect to service endpoint \uC624\uB958\uAC00 \uB728\uC9C0 \uC54A\uAC8C \uD568
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+
+cloud:
+  aws:
+    s3:
+      bucket: 
+    region:
+      static: 
+    credentials:
+      instance-profile: true
+    stack:
+      auto: false

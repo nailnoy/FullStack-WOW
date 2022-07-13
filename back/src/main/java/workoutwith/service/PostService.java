@@ -24,7 +24,7 @@ public class PostService {
     private final S3Service s3Service;
     private final String imageUrl = "https://cdn.lifestyleasia.com/wp-content/uploads/sites/2/2020/02/25145253/Photo-by-Alfons-Morales-on-Unsplash-scaled-1535x900.jpg";
 
-    //독서모임 생성, 수정할 때 시작일이 오늘 날짜보다 빠르면 예외처리 -> FE 측에서 처리??
+    //모임 생성, 수정할 때 시작일이 오늘 날짜보다 빠르면 예외처리 -> FE 측에서 처리??
 
     @Transactional
     public Post createPost(PostCreateRequestDto requestDto, MultipartFile file) {

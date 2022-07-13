@@ -18,7 +18,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    //참여신청 -> 독서모임장에게 메일
+    //참여신청 -> 모임장에게 메일
     @PostMapping
     public ResponseEntity<MemberResponseDto> memberApply(
             @RequestBody MemberCreateRequestDto memberCreateRequestDto) {
@@ -40,7 +40,7 @@ public class MemberController {
         return new ResponseEntity("운동모임 참여가 취소되었습니다.", HttpStatus.OK);
     }
 
-    //참여 승인 -> 참여중인 독서모임에 추가, 참여 신청자에게 메일(승인되었습니다)
+    //참여 승인 -> 참여중인 모임에 추가, 참여 신청자에게 메일(승인되었습니다)
     @PutMapping
     public ResponseEntity<MemberResponseDto> memberApprove(
             @RequestBody MemberApproveRequestDto memberApproveRequestDto) {
@@ -64,7 +64,7 @@ public class MemberController {
         return new ResponseEntity(memberPageResponseDto, HttpStatus.OK);
     }
 
-    //참여중인 독서모임 조회
+    //참여중인 모임 조회
     @GetMapping("/users/{userId}")
     public ResponseEntity<JoiningClubPageResponse> getJoiningClubs(
             @PathVariable("userId") String userId,

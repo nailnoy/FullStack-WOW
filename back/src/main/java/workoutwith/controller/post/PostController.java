@@ -28,7 +28,7 @@ public class    PostController {
             PostCreateRequestDto postCreateRequestDto,
             @RequestParam(value = "img", required = false) MultipartFile file) {
     	Post post = postService.createPost(postCreateRequestDto, file);
-        return new ResponseEntity("게시 등록이 완료되었습니다. (clubId: " + post.getId() + ")", HttpStatus.OK);    
+        return new ResponseEntity("게시글 등록이 완료되었습니다. (clubId: " + post.getId() + ")", HttpStatus.OK);    
     }
 
     //게시글 리스트 조회
