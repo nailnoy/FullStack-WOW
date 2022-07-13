@@ -22,7 +22,7 @@ public class    ClubController {
 
     private final ClubService clubService;
 
-    //독서모임 생성
+    //모임 생성
     @PostMapping
     public ResponseEntity<ClubCreateRequestDto> createClub(
             ClubCreateRequestDto clubCreateRequestDto,
@@ -37,7 +37,7 @@ public class    ClubController {
         }
     }
 
-    //독서모임 리스트 조회
+    //모임 리스트 조회
     @GetMapping
     public ResponseEntity<ClubPageResponseDto> getClubs(
             @RequestParam(value = "sortBy") String sortBy,
@@ -59,7 +59,7 @@ public class    ClubController {
         return new ResponseEntity<>(pageResponseDto, HttpStatus.OK);
     }
 
-    //독서모임 상세조회
+    //모임 상세조회
     @GetMapping("/{clubId}")
     public ResponseEntity<ClubDetailResponseDto> getClubDetail(
             @PathVariable Long clubId) {
@@ -68,7 +68,7 @@ public class    ClubController {
         );
     }
 
-    //사용자가 만든 독서모임 조회
+    //사용자가 만든 모임 조회
     @GetMapping("/users/{userId}")
     public ResponseEntity<ClubDetailResponseDto> getUserClub(
             @PathVariable String userId) {
@@ -80,7 +80,7 @@ public class    ClubController {
         }
     }
 
-    // 독서모임 수정 (my page)
+    // 모임 수정 (my page)
     @PutMapping("/users/{userId}")
     public ResponseEntity<Void> updateClub(
             ClubUpdateRequestDto clubUpdateRequestDto,
@@ -94,7 +94,7 @@ public class    ClubController {
         }
     }
 
-    // 독서모임 삭제 (my page)
+    // 모임 삭제 (my page)
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<Void> deleteClub(
             @PathVariable String userId) {

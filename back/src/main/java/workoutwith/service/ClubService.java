@@ -28,7 +28,7 @@ public class ClubService {
     private final S3Service s3Service;
     private final String imageUrl = "https://cdn.lifestyleasia.com/wp-content/uploads/sites/2/2020/02/25145253/Photo-by-Alfons-Morales-on-Unsplash-scaled-1535x900.jpg";
 
-    //독서모임 생성, 수정할 때 시작일이 오늘 날짜보다 빠르면 예외처리 -> FE 측에서 처리??
+    //모임 생성, 수정할 때 시작일이 오늘 날짜보다 빠르면 예외처리 -> FE 측에서 처리??
 
     @Transactional
     public Club createClub(ClubCreateRequestDto requestDto, MultipartFile file) {
@@ -75,7 +75,7 @@ public class ClubService {
                 .build();
     }
 
-    //독서모임 만료 처리 메서드
+    //모임 만료 처리 메서드
     private void changeClubStatus(Club club) {
         if (LocalDate.now().isAfter(club.getEndDate())) {
             club.changeStatus(ClubStatus.EXPIRED);
@@ -89,13 +89,13 @@ public class ClubService {
         }
     }
 
-    //독서모임 검색조건 조회
+    //모임 검색조건 조회
     //param 으로 아예 tags 나 keyword 를 포함하지 않을 수도 있기 때문에 ==null 로 비교
     public List<Club> findAllClubs(String tags, String clubStatus, String keyword) {
         //클럽 모집 여부 상태 확인
         changeAllClubStatus();
 
-        //모든 독서모임 조회
+        //모든 모임 조회
         List<Club> clubs = clubRepository.findAll();
 
         //모집중 만 필터링

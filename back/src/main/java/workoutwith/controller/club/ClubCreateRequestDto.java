@@ -19,11 +19,6 @@ public class ClubCreateRequestDto {
     private String startDate;
     private String endDate;
     private String tags;
-    private String bookTitle;
-    private String author;
-    private String publisher;
-    private int publishedAt;
-    private String bookDescription;
     private String description;
     private String addressDetail;
     private String addressStreet;

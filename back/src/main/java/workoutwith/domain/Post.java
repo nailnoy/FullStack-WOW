@@ -41,7 +41,6 @@ public class Post extends BaseTime {
     @Column(nullable = false)
     private String contents;
 
-    private int likes;
 
     @Builder
     public Post(User user, String title, String contents, String imgUrl, int likes) {
@@ -49,11 +48,6 @@ public class Post extends BaseTime {
         this.title = title;
         this.contents = contents;
         this.imgUrl = imgUrl;
-        this.likes = likes;
-    }
-
-    public void changeLikes(int likes) {
-        this.likes = likes;
     }
 
     //TODO: 파라미터 줄이는 방법 구상
