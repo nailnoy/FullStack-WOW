@@ -15,5 +15,5 @@ public interface PostCommentRepository extends JpaRepository<PostComment, Long> 
 
     Page<PostComment> findAllByUser(User user, Pageable pageable);
 
-    Page<PostComment> findAllByClubId(Long postId, Pageable pageable);
+    Page<PostComment> findAllByPostId(Long postId, Pageable pageable);
 }
