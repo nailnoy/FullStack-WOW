@@ -1,6 +1,6 @@
 package workoutwith.service;
 
-import workoutwith.common.error.exception.ClubNotFoundException;
+import workoutwith.common.error.exception.PostNotFoundException;
 import workoutwith.common.error.exception.UserNotFoundException;
 import workoutwith.controller.post.PostCreateRequestDto;
 import workoutwith.controller.post.PostUpdateRequestDto;
@@ -82,7 +82,7 @@ public class PostService {
     }
 
     public Post findPostById(Long clubId) {
-    	Post post = postRepository.findById(clubId).orElseThrow(ClubNotFoundException::new);
+    	Post post = postRepository.findById(clubId).orElseThrow(PostNotFoundException::new);
         return post;
     }
 

@@ -30,10 +30,10 @@ public class    ClubController {
         //이 유저가 만든 독서모임이 있는지 체크(한사람당 한 개)
         //400 에러 -> 잘못된 요청
         if (clubService.findClubByUserId(clubCreateRequestDto.getUserId()) != null) {
-            return new ResponseEntity("한 사람 당 하나의 독서모임만 생성할 수 있습니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("한 사람 당 하나의 운동모임만 생성할 수 있습니다.", HttpStatus.BAD_REQUEST);
         } else {
             Club club = clubService.createClub(clubCreateRequestDto, file);
-            return new ResponseEntity("독서모임 등록이 완료되었습니다. (clubId: " + club.getId() + ")", HttpStatus.OK);
+            return new ResponseEntity("운동모임 등록이 완료되었습니다. (clubId: " + club.getId() + ")", HttpStatus.OK);
         }
     }
 
@@ -88,7 +88,7 @@ public class    ClubController {
             @RequestParam(value = "img", required = false) MultipartFile file) {
         try {
             clubService.updateClub(clubUpdateRequestDto, userId, file);
-            return new ResponseEntity("독서모임 수정이 완료되었습니다.", HttpStatus.OK);
+            return new ResponseEntity("운동모임 수정이 완료되었습니다.", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -99,7 +99,7 @@ public class    ClubController {
     public ResponseEntity<Void> deleteClub(
             @PathVariable String userId) {
         clubService.deleteClub(userId);
-        return new ResponseEntity("독서모임 삭제가 완료되었습니다.", HttpStatus.OK);
+        return new ResponseEntity("운동모임 삭제가 완료되었습니다.", HttpStatus.OK);
     }
 
 }

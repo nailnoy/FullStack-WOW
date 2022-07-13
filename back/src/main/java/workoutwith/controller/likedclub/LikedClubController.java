@@ -24,10 +24,10 @@ public class LikedClubController {
         try {
             LikedClub likedClub = likedClubService.createLikedClub(likedClubRequestDto);
             return new ResponseEntity(
-                    "좋아요한 독서모임에 등록되었습니다. (likedClubId: " + likedClub.getId() + ")", HttpStatus.OK
+                    "좋아요한 운동모임에 등록되었습니다. (likedClubId: " + likedClub.getId() + ")", HttpStatus.OK
             );
         } catch (Exception e) {
-            return new ResponseEntity("이미 등록된 좋아요한 독서모임 입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("이미 등록된 좋아요한 운동모임 입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -37,7 +37,7 @@ public class LikedClubController {
             @RequestParam("userId") String userId) {
         likedClubService.deleteLikedClub(clubId, userId);
         return new ResponseEntity(
-                "좋아요한 독서모임에서 삭제되었습니다.", HttpStatus.OK
+                "좋아요한 운동모임에서 삭제되었습니다.", HttpStatus.OK
         );
     }
 
@@ -56,7 +56,7 @@ public class LikedClubController {
         return new ResponseEntity(likedClubPageResponseDto, HttpStatus.OK);
     }
 
-    // 사용자가 등록한 좋아요한 독서모임 아이디 조회 (FE 요청으로 추가적으로 만든 api)
+    // 사용자가 등록한 좋아요한 모임 아이디 조회 (FE 요청으로 추가적으로 만든 api)
     @GetMapping("/ids")
     public ResponseEntity<LikedClubIdListResponseDto> getUserLikedClubIds(
             @RequestParam("userId") String userId) {

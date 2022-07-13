@@ -26,7 +26,7 @@ public class MemberController {
             Member member = memberService.apply(memberCreateRequestDto);
             return new ResponseEntity("참여신청이 완료되었습니다. (memberId : " + member.getId() + ")", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity("이미 참여신청된 독서모임 입니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("이미 참여신청된 운동모임 입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -37,7 +37,7 @@ public class MemberController {
             @RequestParam("clubId") Long clubId,
             @RequestParam("delete") String deleteStatus) {
         memberService.deleteMember(userId, clubId, deleteStatus);
-        return new ResponseEntity("독서모임 참여가 취소되었습니다.", HttpStatus.OK);
+        return new ResponseEntity("운동모임 참여가 취소되었습니다.", HttpStatus.OK);
     }
 
     //참여 승인 -> 참여중인 독서모임에 추가, 참여 신청자에게 메일(승인되었습니다)
@@ -79,7 +79,7 @@ public class MemberController {
         return new ResponseEntity(joiningClubPageResponse, HttpStatus.OK);
     }
 
-    //참여중인 독서모임 아이디 조회 (FE 요청으로 추가적으로 만든 api)
+    //참여중인 모임 아이디 조회 (FE 요청으로 추가적으로 만든 api)
     @GetMapping("/ids")
     public ResponseEntity<JoiningClubIdListResponseDto> getJoiningClubIds(
             @RequestParam("userId") String userId) {
