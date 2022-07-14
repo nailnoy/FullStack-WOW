@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/playdata
     username: root
-    password: playdata
+    password: dl616263
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -38,7 +38,7 @@ logging:
       hibernate:
         SQL: DEBUG
         type: TRACE
-    com: #failed to connect to service endpoint \uC624\uB958\uAC00 \uB728\uC9C0 \uC54A\uAC8C \uD568
+    com: #failed to connect to service endpoint
       amazonaws:
         util:
           EC2MetadataUtils: error

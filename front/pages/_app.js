@@ -3,8 +3,15 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import 'antd/dist/antd.css'
 import './Font.css';
+import CssBaseline from '@mui/material/CssBaseline';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import wrapper from '../store/configureStore';
+import GlobalStyles from '../GlobalStyles';
+
+
+const theme = createTheme();
 
 const App = ({ Component }) => {
     return (
@@ -13,7 +20,11 @@ const App = ({ Component }) => {
                 <meta charSet='utf-8' />
                 <title>WOW</title>
             </Head>
-            <Component />
+            <GlobalStyles/>
+            <ThemeProvider theme={theme}>
+		        <CssBaseline />
+                <Component />
+            </ThemeProvider>
         </>
         
     );
