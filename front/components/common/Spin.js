@@ -1,13 +1,5 @@
-import styled from "styled-components";
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { CircularProgress } from '@mui/material/';
 
-const CustomSpin = () => <StyledSpin indicator={antIcon} />;
+const CustomSpin = () => <CircularProgress size={80} />;
 
 export default CustomSpin;
-
-const antIcon = <LoadingOutlined style={{ fontSize: 60 }} spin />;
-
-const StyledSpin = styled(Spin)`
-	color: #fea82f;
-`;

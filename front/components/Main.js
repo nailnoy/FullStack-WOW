@@ -36,7 +36,7 @@ const Main = () => {
             justifyContent="center"
           >
             <Button variant="contained">모임 만들기</Button>
-            <Button variant="outlined">모임 검색하기</Button>
+            <Button variant="outlined" href="/club">모임 검색하기</Button>
           </Stack>
         </Container>
       </Box>

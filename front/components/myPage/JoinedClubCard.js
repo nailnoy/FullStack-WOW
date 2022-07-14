@@ -1,161 +1,85 @@
 import React from "react";
-import { Card, message, Skeleton } from "antd";
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 import styled from "styled-components";
 import { customMedia } from "../../GlobalStyles";
 
 import SmallTag from "../common/SmallTag";
 import ExpiredTag from "../common/ExpiredTag";
 import WaitingTag from "../common/WaitingTag";
-import unfilledHeart from "../../images/icons/unfilled_heart.png";
-import filledHeart from "../../images/icons/filled_heart.png";
+
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const JoinedClubCard = () => {
 
-	return (
-		<StyledCard
-			hoverable
-			cover={
-					<SkeletonImg />
-			}
-		>
-			<Meta title="테니스" description="열심히 해봅시다" />
-			<>
-					<ClubExpiredTag>마감</ClubExpiredTag>
-			</>
-			<TagContainer>
-					<ClubTag>온라인</ClubTag>
-			</TagContainer>
-			<LikeIcon>
-				<img src={unfilledHeart} alt="Unfilled like icon" />
-				<LikeNum>2</LikeNum>
-			</LikeIcon>
-		</StyledCard>
-	);
+  return (
+    <Container sx={{ py: 0 }} maxWidth="md">
+      <Grid container spacing={4}>
+        {cards.map((card) => (
+          <Grid item key={card} xs={12} sm={6} md={4}>
+            <Card
+              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+            >
+
+              <CardMedia
+                component="img"
+                sx={{
+                  pt: '10%',
+                }}
+                image="https://velog.velcdn.com/images/zolyer/post/d8620848-232a-47c5-a6db-2283b9fe4d28/image.jpeg"
+                alt="default"
+              />
+              <TagContainer>
+                <ClubTag>온라인</ClubTag>
+              </TagContainer>
+              <>
+                  <ClubExpiredTag>마감</ClubExpiredTag>
+                </>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography gutterBottom variant="h5" component="h2" fontFamily="Jua" fontWeight="600">
+                  모집 제목
+                </Typography>
+                <Typography fontFamily="Jua">
+                  간략한 소개문입니다.
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" variant="outlined">자세히</Button>
+                <Button size="small" variant="outlined" color="success">참가 신청</Button>
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+              </CardActions>
+
+            </Card>
+
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
+
+  );
 };
 
 export default JoinedClubCard;
 
-const { Meta } = Card;
-
-const StyledCard = styled(Card)`
-	width: 360px;
-	height: 385px;
-	border: 2px solid #e5e5e5;
-  border-radius: 10px;
-  
-  ${customMedia.lessThan("mobile")`
-    width: 295px;
-    height: 320px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    width: 363px;
-    height: 388px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-    width: 295px;
-    height: 320px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-    width: 280px;
-    height: 305px;
-  `}
-
-	.ant-card-cover img {
-    height: 192.5px;
-    
-    ${customMedia.lessThan("mobile")`
-      height: 160px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      height: 194px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      height: 160px;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      height: 152.5px;
-    `}
-	}
-
-	.ant-card-body {
-		height: 190px;
-		padding: 20px;
-    position: relative;
-    
-    ${customMedia.lessThan("mobile")`
-      height: 160px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      height: 194px;
-      padding: 20px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      height: 160px;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      height: 152.5px;
-      padding: 15px;
-    `}
-	}
-
-	.ant-card-meta-title {
-		font-weight: bold;
-    font-size: 22px;
-    
-    ${customMedia.lessThan("mobile")`
-      font-size: 20px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      font-size: 22px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-    font-size: 20px;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-    font-size: 18px;
-    `}
-	}
-
-	.ant-card-meta-description {
-		font-size: 16px;
-    color: black;
-    
-    ${customMedia.lessThan("mobile")`
-      font-size: 16px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      font-size: 18px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      font-size: 16px;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      font-size: 14px;
-    `}
-	}
-`;
 
 const TagContainer = styled.div`
 	display: flex;
 	gap: 5px;
 
-	position: absolute;
-  bottom: 25px;
+	position: relative;
+  padding: 10px;
+  bottom: 60px;
   
   ${customMedia.lessThan("mobile")`
     bottom: 15px;
@@ -204,57 +128,6 @@ const ClubTag = styled(SmallTag)`
 	}
 `;
 
-const LikeIcon = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	cursor: pointer;
-
-	position: absolute;
-	right: 20px;
-  bottom: 25px;
-  
-  ${customMedia.lessThan("mobile")`
-    bottom: 15px;  
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    bottom: 20px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-    bottom: 15px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-    bottom: 15px;
-  `}
-
-  img {
-		width: 24px;
-    height: 22px;
-
-  ${customMedia.lessThan("mobile")`
-    width: 22px;
-    height: 20px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    width: 24px;
-    height: 22px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-    width: 20px;
-    height: 18px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-    width: 20px;
-    height: 18px;
-  `}
-`;
-
 const LikeNum = styled.span`
   ${customMedia.lessThan("mobile")`
     font-size: 14px;
@@ -276,9 +149,9 @@ const ClubExpiredTag = styled(ExpiredTag)`
 	& {
 		font-size: 14px;
 		padding: 5px;
-		position: absolute;
-		top: 5%;
-    right: 3%;
+		position: relative;
+    left: 75%;
+    bottom: 105px;
     
     ${customMedia.lessThan("mobile")`
       top: 5%;
@@ -303,7 +176,7 @@ const ClubWaitingTag = styled(WaitingTag)`
 	& {
 		font-size: 14px;
 		padding: 5px;
-		position: absolute;
+		position: relative;
 		top: 5%;
     right: 3%;
     
@@ -331,29 +204,3 @@ const ClubWaitingTag = styled(WaitingTag)`
 	}
 `;
 
-const SkeletonImg = styled(Skeleton.Image)`
-	.ant-skeleton-image {
-		width: 360px;
-    height: 192.5px;
-    
-    ${customMedia.lessThan("mobile")`
-      width: 295px;
-      height: 160px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      width: 363px;
-      height: 194px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      width: 295px;
-      height: 160px;
-    `}
-    
-    ${customMedia.between("tablet", "desktop")`
-      width: 280px;
-      height: 152.5px;
-    `}
-	}
-`;
