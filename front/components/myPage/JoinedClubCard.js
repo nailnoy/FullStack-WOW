@@ -81,50 +81,12 @@ const TagContainer = styled.div`
   padding: 10px;
   bottom: 60px;
   
-  ${customMedia.lessThan("mobile")`
-    bottom: 15px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    bottom: 20px;
-    gap: 5px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-    bottom: 15px;
-    gap: 3px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-    bottom: 15px;
-    gap: 3px;
-  `}
 `;
 
 const ClubTag = styled(SmallTag)`
 	& {
 		font-size: 14px;
     padding: 7px 13px;
-    
-    ${customMedia.lessThan("mobile")`
-      font-size: 12px;
-      padding: 5px 10px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      font-size: 14px;
-      padding: 5px 12px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      font-size: 12px;
-      padding: 5px 10px;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      font-size: 10px;
-      padding: 5px 10px;
-    `}
 	}
 `;
 
@@ -152,23 +114,6 @@ const ClubExpiredTag = styled(ExpiredTag)`
 		position: relative;
     left: 75%;
     bottom: 105px;
-    
-    ${customMedia.lessThan("mobile")`
-      top: 5%;
-      right: 3%;
-    `}
-
-    ${customMedia.between("mobile", "tablet")`
-      top: 5%;
-      right: 3%;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      font-size: 14px;
-      padding: 3px;
-      top: 7%;
-      right: 5%;
-    `}
 	}
 `;
 
@@ -177,30 +122,8 @@ const ClubWaitingTag = styled(WaitingTag)`
 		font-size: 14px;
 		padding: 5px;
 		position: relative;
-		top: 5%;
-    right: 3%;
-    
-    ${customMedia.lessThan("mobile")`
-      top: 5%;
-      right: 3%;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      top: 5%;
-      right: 3%;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      top: 5%;
-      right: 3%;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      font-size: 14px;
-      padding: 3px;
-      top: 7%;
-      right: 5%;
-    `}
+    left: 75%;
+    bottom: 105px;
 	}
 `;
 
