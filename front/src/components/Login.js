@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GoogleLogin } from "react-google-login";
+import { gapi } from 'gapi-script';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { customMedia } from "../GlobalStyles";
 
 const Login = ({ ...props }) => {
+	const navigate = useNavigate();
 
-	
+	window.gapi.load('client:auth2', () => {
+		window.gapi.client.init({
+			clientId: '307597584973-qp8l0s0igt38fbtbdlpm0sm4upmmjtnn.apps.googleusercontent.com',
+			plugin_name: "chat"
+		})})
+	   
 
 	const onSuccess = async (response) => {
 		const {
@@ -31,12 +39,12 @@ const Login = ({ ...props }) => {
 				localStorage.setItem("user_id", user.id);
 				localStorage.setItem("user_image", user.imgUrl);
 				props.onCancel();
-	
+				navigate(0);
 			} else {
 				localStorage.setItem("user_id", res.data.id);
 				localStorage.setItem("user_image", res.data.imgUrl);
 				props.onCancel();
-	
+				navigate(0);
 			}
 		} catch (err) {
 			console.log(err);
@@ -52,7 +60,7 @@ const Login = ({ ...props }) => {
 	return (
 		<>
 			<GoogleLogin
-				clientId="8306441995-q1v3aml6vvq6esrp8kvcqok4iqf6tp91.apps.googleusercontent.com"
+				clientId="307597584973-qp8l0s0igt38fbtbdlpm0sm4upmmjtnn.apps.googleusercontent.com"
 				render={(renderProps) => (
 					<GoogleLoginButton
 						onClick={renderProps.onClick}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Input } from "antd";
 import styled from "styled-components";
+import 'antd/dist/antd.css' 
 
 const SearchBar = (props) => {
 	const onSearch = (value) => {

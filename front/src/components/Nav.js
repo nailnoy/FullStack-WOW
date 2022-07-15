@@ -1,70 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Modal } from "antd";
+import styled from "styled-components";
 import AppBar from '@mui/material/AppBar';
 import Link from '@mui/material/Link';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useState, useEffect } from 'react';
-import Modal from './common/Modal';
 import Login from './Login';
 
 
 
 const Nav = () => {
-    const [modalVisible, setModalVisible] = useState(false)
-    const openModal = () => {
-        setModalVisible(true)
-    }
-    const closeModal = () => {
-        setModalVisible(false)
-    }
-
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoggedIn, setLoggedIn] = useState(false);
     const userId = localStorage.getItem("user_id");
-
+    const userImg = localStorage.getItem("user_image");
 
     useEffect(() => {
         if (userId) {
             setLoggedIn(true);
-    
         }
-    }, [userId]);
+    }, [userId, userImg]);
+
+    const openModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("user_id");
-  
         setLoggedIn(false);
         window.location.reload();
-
     };
 
-    const dropdownMenu = (
-        <>
-            <Link
-                variant="button"
-                color="inherit"
-                href="/mypage"
-                underline="none"
-                fontFamily="Jua"
-                fontSize="1.5rem"
-                sx={{ my: 1, mx: 1.5 }}
-            >
-                마이페이지
-            </Link>
 
-            <Link
-                variant="button"
-                color="inherit"
-                onClick={ handleLogout }
-                underline="none"
-                fontFamily="Jua"
-                fontSize="1.5rem"
-                sx={{ my: 1, mx: 1.5 }}
-            >
-                로그아웃
-            </Link>
-        </>
-    );
 
 
     return (
@@ -89,52 +60,80 @@ const Nav = () => {
                     </Link>
                 </Typography>
                 <nav>
-    <>
-                
-                    <Link
-                        variant="button"
-                        color="inherit"
-                        href="/club"
-                        underline="none"
-                        fontFamily="Jua"
-                        fontSize="1.5rem"
-                        sx={{ my: 1, mx: 1.5 }}
-                    >
-                        모임목록
-                    </Link>
-                    <Link
-                        variant="button"
-                        color="inherit"
-                        href="/post"
-                        underline="none"
-                        fontFamily="Jua"
-                        fontSize="1.5rem"
-                        sx={{ my: 1, mx: 1.5 }}
-                    >
-                        게시판
-                    </Link>
-                    <dropdownMenu/>
-                    {!isLoggedIn && <Link
-                        variant="button"
-                        color="inherit"
-                        onClick={openModal}
-                        underline="none"
-                        fontFamily="Jua"
-                        fontSize="1.5rem"
-                        sx={{ my: 1, mx: 1.5 }}
-                    >
-                        로그인
-                    </Link>
-}
-                    {
-                        modalVisible && <Modal
-                            visible={modalVisible}
-                            closable={true}
-                            maskClosable={true}
-                            onClose={closeModal}><Login onCancel={closeModal} /></Modal>
-                    }
+                    <>
 
-</>
+                        <Link
+                            variant="button"
+                            color="inherit"
+                            href="/club"
+                            underline="none"
+                            fontFamily="Jua"
+                            fontSize="1.5rem"
+                            sx={{ my: 1, mx: 1.5 }}
+                        >
+                            모임목록
+                        </Link>
+                        <Link
+                            variant="button"
+                            color="inherit"
+                            href="/post"
+                            underline="none"
+                            fontFamily="Jua"
+                            fontSize="1.5rem"
+                            sx={{ my: 1, mx: 1.5 }}
+                        >
+                            게시판
+                        </Link>
+                        {!isLoggedIn ? 
+                        (
+                            <>
+                        <Link
+                            variant="button"
+                            color="inherit"
+                            onClick={openModal}
+                            underline="none"
+                            fontFamily="Jua"
+                            fontSize="1.5rem"
+                            sx={{ my: 1, mx: 1.5 }}
+                        >
+                            로그인
+                        </Link>
+                        <StyledModal visible={isModalVisible} onCancel={handleCancel}>
+                            <Title>
+                                WOW와 함께 더 건강해질 시간
+                            </Title>
+                            <Login onCancel={handleCancel} setLoggedIn={setLoggedIn} />
+                        </StyledModal>
+                        </>
+                        ):(
+                            <>
+                            <Link
+                                variant="button"
+                                color="inherit"
+                                href="/mypage"
+                                underline="none"
+                                fontFamily="Jua"
+                                fontSize="1.5rem"
+                                sx={{ my: 1, mx: 1.5 }}
+                            >
+                                마이페이지
+                            </Link>
+                
+                            <Link
+                                variant="button"
+                                color="inherit"
+                                onClick={handleLogout}
+                                underline="none"
+                                fontFamily="Jua"
+                                fontSize="1.5rem"
+                                sx={{ my: 1, mx: 1.5 }}
+                            >
+                                로그아웃
+                            </Link>
+                        </>
+                        )}
+
+                    </>
                 </nav>
             </Toolbar>
         </AppBar>
@@ -145,3 +144,23 @@ const Nav = () => {
 
 
 export default Nav;
+
+const Title = styled.div`
+	font-size: 26px;
+	white-space: pre-wrap;
+}
+`
+
+const StyledModal = styled(Modal)`
+	display: flex;
+	justify-content: center;
+
+	.ant-modal-content {
+		padding: 30px 55px;
+		display: flex;
+		align-items: center;
+    }
+    .ant-modal-footer {
+		display: none;
+	}
+    `
