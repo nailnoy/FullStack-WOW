@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { GoogleLogin } from "react-google-login";
 import { gapi } from 'gapi-script';
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,8 @@ const Login = ({ ...props }) => {
 					email,
 					imgUrl: imageUrl,
 				};
+
+				console.log(user);
 
 				await axios.post("/users", user);
 
