@@ -65,7 +65,7 @@ public class User {
         this.imgUrl = imgUrl;
     }
     
-    public void reportUser(String authority, int declaration) {   //변수에 final -> 이 변수는 수정 불가
+    public void reportUser(int authority, int declaration) {   //변수에 final -> 이 변수는 수정 불가
         this.authority = authority;
         this.declaration = declaration;
     }

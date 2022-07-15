@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import { Tabs, Row, Divider } from "antd";
+import { Tabs, Row, Divider, Modal } from "antd";
 import styled from "styled-components";
 import { customMedia } from "../../GlobalStyles";
+
 
 import LikedClubCard from "./LikedClubCard";
 import JoinedClubCard from "./JoinedClubCard";
@@ -14,82 +17,210 @@ import Button from "../common/Button";
 import Spin from "../common/Spin";
 
 const Main = () => {
+	const navigate = useNavigate();
+
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [myClub, setMyClub] = useState();
+	const [likedClubs, setLikedClubs] = useState([]);
+	const [myLikedClubs, setMyLikedClubs] = useState([]);
+	const [myJoinedClubs, setMyJoinedClubs] = useState([]);
+	const [myPendingMembers, setMyPendingMembers] = useState();
+	const [myPendingMembersTotal, setMyPendingMembersTotal] = useState(0);
+	const [myPendingMembersPage, setMyPendingMembersPage] = useState(1);
+	const [myMembers, setMyMembers] = useState();
+	const [myMembersTotal, setMyMembersTotal] = useState(0);
+	const [myMembersPage, setMyMembersPage] = useState(1);
+	const [myLikedClubsTotal, setMyLikedClubsTotal] = useState(0);
+	const [myLikedClubsPage, setMyLikedClubsPage] = useState(1);
+	const [myJoinedClubsTotal, setMyJoinedClubsTotal] = useState(0);
+	const [myJoinedClubsPage, setMyJoinedClubsPage] = useState(1);
+	const [loading, setLoading] = useState(true);
+	const userId = localStorage.getItem("user_id");
+
+	useEffect(() => {
+		fetchData();
+	}, [
+		myMembersPage,
+		myPendingMembersPage,
+		myJoinedClubsPage,
+		myLikedClubsTotal,
+		myLikedClubsPage,
+	]);
+
+	const fetchData = async () => {
+		try {
+			const likedClubsRes = await axios.get(`/likedClubs/users/${userId}`, {
+				params: { page: myLikedClubsPage },
+			});
+
+			setMyLikedClubs(likedClubsRes.data.likedClubList);
+			setMyLikedClubsTotal(likedClubsRes.data.totalCount);
+
+			const joinedClubsRes = await axios.get(`/members/users/${userId}`, {
+				params: {
+					page: myJoinedClubsPage,
+				},
+			});
+
+			setMyJoinedClubs(joinedClubsRes.data.joiningClubList);
+			setMyJoinedClubsTotal(joinedClubsRes.data.totalCount);
+
+			const myClubRes = await axios.get(`/clubs/users/${userId}`);
+
+			if (myClubRes.data) {
+				const pendingMembersRes = await axios.get("/members", {
+					params: {
+						userId: userId,
+						approvalStatus: "WAITING",
+						page: myPendingMembersPage,
+					},
+				});
+
+				setMyPendingMembers(pendingMembersRes.data.memberList);
+				setMyPendingMembersTotal(pendingMembersRes.data.totalCount);
+
+				const memberRes = await axios.get("/members", {
+					params: {
+						userId: userId,
+						approvalStatus: "CONFIRMED",
+						page: myMembersPage,
+					},
+				});
+
+				setMyMembers(memberRes.data.memberList);
+				setMyMembersTotal(memberRes.data.totalCount);
+			}
+
+			setMyClub(myClubRes.data);
+
+			const likedClubRes = await axios.get("/likedClubs/ids", {
+				params: {
+					userId: userId,
+				},
+			});
+			setLikedClubs(likedClubRes.data.likedClubIdList);
+
+			setLoading(false);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const showModal = () => {
+		setIsModalVisible(true);
+	};
+
+	const cancelModal = () => {
+		setIsModalVisible(false);
+	};
+
+	const DeleteClub = async () => {
+		try {
+			const res = await axios.get(`/clubs/users/${userId}`);
+
+			if (res.data) {
+				const deleteRes = await axios.delete(`/clubs/users/${userId}`);
+
+				if (deleteRes.status === 200) {
+					alert("운동모임이 성공적으로 삭제되었습니다.");
+					cancelModal();
+					navigate(0);
+				} else {
+					alert("운동모임 삭제에 실패하였습니다.");
+				}
+			} else {
+				alert("현재 개설한 운동모임이 존재하지 않습니다.");
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+
 	return (
 		<Wrapper>
-			<SpinContainer>
+			{loading ? (
+				<SpinContainer>
 					<Spin />
-			</SpinContainer>
+				</SpinContainer>
+			) : (
 				<>
 					<StyledTabs defaultActiveKey="1">
 
 						<TabPane tab="좋아요한 운동모임" key="1">
-								<TabContainer>
-									<CardRow>
-											<LikedClubCard/>
-									</CardRow>
-									<PaginationRow>
-										<Pagination/>
-									</PaginationRow>
-								</TabContainer>
+							<TabContainer>
+								<CardRow>
+									<LikedClubCard />
+								</CardRow>
+								<PaginationRow>
+									<Pagination />
+								</PaginationRow>
+							</TabContainer>
 						</TabPane>
 						<TabPane tab="참여중인 운동모임" key="2">
-								<TabContainer>
-									<CardRow>
-											<JoinedClubCard/>
-									</CardRow>
-									<PaginationRow>
-										<Pagination/>
-									</PaginationRow>
-								</TabContainer>
+							<TabContainer>
+								<CardRow>
+									<JoinedClubCard />
+								</CardRow>
+								<PaginationRow>
+									<Pagination />
+								</PaginationRow>
+							</TabContainer>
 
 						</TabPane>
 						<TabPane tab="운동모임 관리" key="3">
-								<TabContainer gutter={[0, 100]}>
-									<Box>
-										<MidTitle>참여자 관리</MidTitle>
-										<Text>승인 대기자</Text>
-											<>
-												<Row gutter={[0, 16]}>
-														<Row key="d">
-															<PendingMember/>
-														</Row>
-												</Row>
-												<PaginationRow>
-													<Pagination/>
-												</PaginationRow>
-											</>
-										<Divider />
-										<Text>참여자 목록</Text>
-											<>
-												<Row gutter={[0, 16]}>
-														<Row key="e">
-															<Member/>
-														</Row>
-
-												</Row>
-												<PaginationRow>
-													<Pagination/>
-												</PaginationRow>
-											</>
-									</Box>
-									<Box>
-										<MidTitle>정보 수정</MidTitle>
-										<Divider />
-										<DeleteBtnContainer>
-											<TextBox>
-												<LargeText>운동모임 삭제하기</LargeText>
-												<Text>
-													한 번 운동모임을 삭제하면 복구할 수 없습니다. 신중하게
-													결정해주세요!
-												</Text>
-											</TextBox>
-											<DeleteBtn>운동모임 삭제</DeleteBtn>
-										</DeleteBtnContainer>
-									</Box>
-								</TabContainer>
+							<TabContainer gutter={[0, 100]}>
+								<Box>
+									<MidTitle>참여자 관리</MidTitle>
+									<Text>승인 대기자</Text>
+									<>
+										<PendingMember />
+										<PaginationRow>
+											<Pagination />
+										</PaginationRow>
+									</>
+									<Divider />
+									<Text>참여자 목록</Text>
+									<>
+										<Member />
+										<PaginationRow>
+											<Pagination />
+										</PaginationRow>
+									</>
+								</Box>
+								<Box>
+									<MidTitle>정보 수정</MidTitle>
+									<Divider />
+									<DeleteBtnContainer>
+										<TextBox>
+											<LargeText>운동모임 삭제하기</LargeText>
+											<Text>
+												한 번 운동모임을 삭제하면 복구할 수 없습니다. 신중하게
+												결정해주세요!
+											</Text>
+										</TextBox>
+										<DeleteBtn onClick={showModal}>운동모임 삭제</DeleteBtn>
+									</DeleteBtnContainer>
+									<StyledModal
+										visible={isModalVisible}
+										onCancel={cancelModal}
+									>
+										<Text>
+											정말로 운동모임을 삭제하시겠습니까?
+										</Text>
+										<ButtonRow>
+											<FilledBtn onClick={DeleteClub}>확인</FilledBtn>
+											<UnfilledBtn type="button" onClick={cancelModal}>
+												취소
+											</UnfilledBtn>
+										</ButtonRow>
+									</StyledModal>
+								</Box>
+							</TabContainer>
 						</TabPane>
 					</StyledTabs>
 				</>
+			)}
 		</Wrapper>
 	);
 };
@@ -338,150 +469,47 @@ const DeleteBtn = styled(Button)`
   `}
 `;
 
-// const StyledModal = styled(Modal)`
-// 	display: flex;
-// 	justify-content: center;
+const StyledModal = styled(Modal)`
+	display: flex;
+	justify-content: center;
 
-// 	.ant-modal-content {
-// 		padding: 30px 55px;
-// 		display: flex;
-//     align-items: center;
-    
-//     ${customMedia.lessThan("mobile")`
-//       padding: 3px 7px;
-//     `}
+	.ant-modal-content {
+		padding: 30px 55px;
+		display: flex;
+    align-items: center;
 
-//     ${customMedia.between("mobile", "largeMobile")`
-//       padding: 5px 10px;
-//     `}
+	.ant-modal-footer {
+		display: none;
+	}
+`;
 
-//     ${customMedia.between("largeMobile", "tablet")`
-//       padding: 10px 25px;
-//     `}
+const ButtonRow = styled(Row)`
+	margin-top: 30px;
+	display: flex;
+	justify-content: center;
+  gap: 50px;
+`;
 
-//     ${customMedia.between("tablet", "desktop")`
-//       padding: 30px 55px;
-//     `}
-// 	}
+const FilledBtn = styled(Button)`
+	& {
+		color: #ffffff;
+		background-color: #1890ff;;
+		border: none;
+		border-radius: 6px;
+		outline: none;
+    cursor: pointer;
+	}
+`;
 
-// 	.ant-modal-body {
-//     text-align: center;
-    
-//     ${customMedia.lessThan("mobile")`
-//       padding: 30px 55px;
-//     `}
-
-//     ${customMedia.between("mobile", "largeMobile")`
-//       padding: 30px 55px;
-//     `}
-
-//     ${customMedia.between("largeMobile", "tablet")`
-//       padding: 30px 55px;
-//     `}
-
-//     ${customMedia.between("tablet", "desktop")`
-//       padding: 30px 55px;
-//     `}
-// 	}
-
-// 	.ant-modal-footer {
-// 		display: none;
-// 	}
-// `;
-
-// const ModalTitle = styled.div`
-// 	font-size: 22px;
-// 	font-weight: bold;
-// 	margin-bottom: 10px;
-
-// 	${customMedia.lessThan("mobile")`
-//     font-size: 14px;
-//   `}
-
-// 	${customMedia.between("mobile", "largeMobile")`
-//     font-size: 16px;
-//   `}
-
-//   ${customMedia.between("largeMobile", "tablet")`
-//     font-size: 18px;
-//   `}
-
-//   ${customMedia.between("tablet", "desktop")`
-//     font-size: 20px;
-//   `}
-// `;
-
-// const ButtonRow = styled(Row)`
-// 	margin-top: 30px;
-// 	display: flex;
-// 	justify-content: center;
-//   gap: 50px;
-  
-//   ${customMedia.lessThan("mobile")`
-//     margin-top: 15px;
-//   `}
-
-// 	${customMedia.between("mobile", "largeMobile")`
-//     margin-top: 15px;
-//   `}
-
-//   ${customMedia.between("largeMobile", "tablet")`
-//     margin-top: 20px;
-//   `}
-// `;
-
-// const FilledBtn = styled(Button)`
-// 	& {
-// 		color: #ffffff;
-// 		background-color: #ff6701;
-// 		border: none;
-// 		border-radius: 6px;
-// 		outline: none;
-//     cursor: pointer;
-    
-//     ${customMedia.lessThan("mobile")`
-//       font-size: 10px;
-//     `}
-
-//     ${customMedia.between("mobile", "largeMobile")`
-//       font-size: 12px;
-//     `}
-
-//     ${customMedia.between("largeMobile", "tablet")`
-//       font-size: 14px;
-//     `}
-
-//     ${customMedia.between("tablet", "desktop")`
-//       font-size: 16px;
-//     `}
-// 	}
-// `;
-
-// const UnfilledBtn = styled(Button)`
-// 	& {
-// 		color: #ff6701;
-// 		background-color: #ffffff;
-// 		border: 2px solid #ff6701;
-// 		border-radius: 6px;
-//     cursor: pointer;
-    
-//     ${customMedia.lessThan("mobile")`
-//       font-size: 10px;
-//     `}
-
-//     ${customMedia.between("mobile", "largeMobile")`
-//       font-size: 12px;
-//     `}
-
-//     ${customMedia.between("largeMobile", "tablet")`
-//       font-size: 14px;
-//     `}
-
-//     ${customMedia.between("tablet", "desktop")`
-//       font-size: 16px;
-//     `}
-// 	}
-// `;
+const UnfilledBtn = styled(Button)`
+	& {
+		color: #1890ff;;
+		background-color: #ffffff;
+		border: 2px solid #1890ff;;
+		border-radius: 6px;
+    cursor: pointer;
+	}
+`;
 
 const PaginationRow = styled(Row)`
   width: 100%;

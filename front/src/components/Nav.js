@@ -25,7 +25,7 @@ const Nav = () => {
         setIsModalVisible(true);
     };
 
-    const handleCancel = () => {
+    const cancelModel = () => {
         setIsModalVisible(false);
     };
 
@@ -65,7 +65,7 @@ const Nav = () => {
                         <Link
                             variant="button"
                             color="inherit"
-                            href="/club"
+                            href="/clubs"
                             underline="none"
                             fontFamily="Jua"
                             fontSize="1.5rem"
@@ -98,11 +98,11 @@ const Nav = () => {
                         >
                             로그인
                         </Link>
-                        <StyledModal visible={isModalVisible} onCancel={handleCancel}>
+                        <StyledModal visible={isModalVisible} onCancel={cancelModel}>
                             <Title>
                                 WOW와 함께 더 건강해질 시간
                             </Title>
-                            <Login onCancel={handleCancel} setLoggedIn={setLoggedIn} />
+                            <Login onCancel={cancelModel} setLoggedIn={setLoggedIn} />
                         </StyledModal>
                         </>
                         ):(

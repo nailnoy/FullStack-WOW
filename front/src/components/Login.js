@@ -32,8 +32,6 @@ const Login = ({ ...props }) => {
 					imgUrl: imageUrl,
 				};
 
-				console.log(user);
-
 				await axios.post("/users", user);
 
 				await axios.get(`users/${user.id}`);
