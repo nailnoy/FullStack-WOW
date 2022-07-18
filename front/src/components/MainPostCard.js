@@ -14,7 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const cards = [1, 2, 3];
 
-const MainClubCard = () => {
+const MainPostCard = () => {
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
       <Typography
@@ -23,8 +23,9 @@ const MainClubCard = () => {
         component="h2"
         fontFamily="Jua"
         fontSize="2rem"
+        marginTop="100px"
       >
-        최근 등록된 모임
+        최근 게시글
       </Typography>
       <Grid container spacing={4}>
         {cards.map((card) => (
@@ -64,19 +65,6 @@ const MainClubCard = () => {
                 >
                   태그
                 </Box>
-                <Box
-                  sx={{
-                    textAlign: "center",
-                    bgcolor: "red",
-                    boxShadow: 1,
-                    borderRadius: 2,
-                    p: 1,
-                    minWidth: 45,
-                    maxHeight: 35,
-                  }}
-                >
-                  마감
-                </Box>
               </Grid>
               <CardMedia
                 component="img"
@@ -85,12 +73,11 @@ const MainClubCard = () => {
                   objectFit: "contain",
                 }}
                 height="300"
-                image="https://velog.velcdn.com/images/zolyer/post/d8620848-232a-47c5-a6db-2283b9fe4d28/image.jpeg"
-                // image="https://p4.wallpaperbetter.com/wallpaper/41/681/303/pc-hd-1080p-nature-1920x1080-wallpaper-preview.jpg"
+                image="http://drive.google.com/uc?export=view&id=1z3CRSIYjm0c9IlEgk5LSMG2XbkvdqWdA"
                 alt="default"
               />
               <CardContent sx={{ flexGrow: 1 }}>
-              <Typography
+                <Typography
                   gutterBottom
                   variant="h5"
                   fontFamily="Jua"
@@ -99,11 +86,11 @@ const MainClubCard = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
-                    WebkitLineClamp: '1',
-                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: "1",
+                    WebkitBoxOrient: "vertical",
                   }}
                 >
-                  모집 제목
+                  게시글 제목
                 </Typography>
                 <Typography
                   fontFamily="Jua"
@@ -112,19 +99,19 @@ const MainClubCard = () => {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
-                    WebkitLineClamp: '3',
-                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: "3",
+                    WebkitBoxOrient: "vertical",
                   }}
                 >
-                  간략한 소개문입니다.간략한 소개문입니다.간략한 소개문입니다.간략한 소개문입니다.간략한 소개문입니다.간략한 소개문입니다.간략한 소개문입니다.
+                  간략한 소개문입니다.
                 </Typography>
               </CardContent>
               <CardActions>
                 <Button size="small" variant="outlined">
                   자세히
                 </Button>
-                <Button size="small" variant="outlined" color="success">
-                  참가 신청
+                <Button size="small" variant="outlined" color="error">
+                  신고
                 </Button>
                 <IconButton aria-label="add to favorites">
                   <FavoriteIcon />
@@ -138,4 +125,4 @@ const MainClubCard = () => {
   );
 };
 
-export default MainClubCard;
+export default MainPostCard;
