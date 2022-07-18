@@ -8,10 +8,12 @@ import {
   Grid,
 } from "@mui/material";
 import React from "react";
-import ReactMarkdown from "react-markdown";
-import Comments from "./comments";
+import { Viewer } from "@toast-ui/react-editor";
+import CommentView from "./CommentView";
+import { useNavigate } from "react-router-dom";
 
-const ClubPostView = () => {
+const Main = () => {
+  const navigate = useNavigate();
   const MD = `
   내용 테스트
   # 헤더1
@@ -43,7 +45,7 @@ const ClubPostView = () => {
             color="warning"
             size="large"
           >
-            수정
+            <Typography fontFamily="Jua">수정</Typography>
           </Button>
           <Button
             // onClick={onDeleteHandler}
@@ -51,7 +53,7 @@ const ClubPostView = () => {
             color="error"
             size="large"
           >
-            삭제
+            <Typography fontFamily="Jua">삭제</Typography>
           </Button>
         </Box>
 
@@ -77,8 +79,8 @@ const ClubPostView = () => {
             YYYY년 MM월 DD일 HH시 MM분 SS초
           </Typography>
           <Divider />
-          {/* <ReactMarkdown children={ViewContents.text}/> */}
-          <ReactMarkdown children={MD} />
+          {/* <Viewer initialValue={ViewContents.text}/> */}
+          <Viewer initialValue={MD} />
           <Divider />
         </section>
         <Box id="btnBox2" display="flex" justifyContent="right" sx={{ pt: 3 }}>
@@ -92,9 +94,9 @@ const ClubPostView = () => {
             </Button>
             <Button
               LinkComponent="button"
-              href="/club"
               className="backBtn"
               color="info"
+              onClick={() => navigate(-1)}
             >
               돌아가기
             </Button>
@@ -102,23 +104,9 @@ const ClubPostView = () => {
         </Box>
       </Container>
       <Container sx={{ p: 8 }} maxWidth="md" className="containerCmt">
-        <Grid container justify="space-between">
-          <Grid item>
-            <Typography
-              className="commentTitle"
-              variant="h5"
-              fontFamily="Jua"
-              gutterBottom
-            >
-              댓글
-            </Typography>
-          </Grid>
-          <Grid item></Grid>
-        </Grid>
-
-        <Comments />
+        <CommentView />
       </Container>
     </>
   );
 };
-export default ClubPostView;
+export default Main;

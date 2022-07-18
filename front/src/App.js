@@ -7,6 +7,7 @@ import MyPage from "./pages/Mypage";
 import ScrollToTop from "./components/common/ScrollToTop";
 import GlobalStyles from "./GlobalStyles";
 import ClubEdit from "./pages/ClubEdit";
+import ClubView from "./pages/ClubView";
 
 const App = () => {
 	return (
@@ -18,6 +19,7 @@ const App = () => {
 					<Route exact path="/clubs" element={<Club/>} />
 					<Route exact path="/myPage" element={<MyPage/>} />
 					<Route exact path="/clubs/edit" element={<ClubEdit/>} />
+					<Route exact path="/clubpost/:id" element={<ClubView/>} />
 				</Routes>
 			</ScrollToTop>
 		</BrowserRouter>
