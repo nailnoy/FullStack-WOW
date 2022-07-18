@@ -1,5 +1,5 @@
 import React from "react";
-import Main from "../components/clubPage/edit/Main";
+import Main from "../components/clubPage/Create/Main";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 

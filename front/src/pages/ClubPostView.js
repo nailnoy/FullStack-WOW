@@ -1,5 +1,5 @@
 import React from "react";
-import ClubPostView from "../components/0717/clubPostView";
+import ClubPostView from "../components/clubPage/view/clubPostView";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 
