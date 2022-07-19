@@ -8,6 +8,7 @@ import moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 import MapContainer from "../../common/MapContainer";
 import { FormSelect } from "../../common/FormSelect";
+import { useNavigate } from "react-router-dom";
 
 
 import {
@@ -39,6 +40,8 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 
 const Main = () => {
+	const navigate = useNavigate();
+
 	const [editForm] = Form.useForm();
 	const [inputText, setInputText] = useState("");
 	const [streetAddress, setStreetAddress] = useState("");
@@ -135,8 +138,10 @@ const Main = () => {
 		try {
 			const res = await axios.post(`/clubs`, formData);
 
-			if (res.status === 200)
+			if (res.status === 200){
 				alert("운동모임이 성공적으로 생성되었습니다!");
+				navigate(-1);
+			}
 			else alert("운동모임 생성에 실패했습니다.");
 		} catch (err) {
 			if (
@@ -738,3 +743,5 @@ const SkeletonImg = styled(Skeleton.Image)`
     `}
 	}
 `;
+
+
