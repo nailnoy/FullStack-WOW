@@ -257,9 +257,9 @@ const Main = () => {
 					<StyledTabs defaultActiveKey="1">
 
 						<TabPane tab="좋아요한 운동모임" key="1">
-						{myLikedClubsTotal !== 0 ? (
+							{myLikedClubsTotal !== 0 ? (
 								<Container sx={{ py: 4 }} maxWidth="md">
-								<Grid container spacing={4}>
+									<Grid container spacing={4}>
 										{myLikedClubs.map((likedClub) => (
 											<LikedClubCard
 												key={likedClub.id}
@@ -270,7 +270,7 @@ const Main = () => {
 											/>
 										))}
 									</Grid>
-                
+
 									<PaginationRow>
 										<Pagination
 											total={myLikedClubsTotal}
@@ -285,9 +285,9 @@ const Main = () => {
 							)}
 						</TabPane>
 						<TabPane tab="참여중인 운동모임" key="2">
-						{myJoinedClubsTotal !== 0 ? (
+							{myJoinedClubsTotal !== 0 ? (
 								<Container sx={{ py: 4 }} maxWidth="md">
-								<Grid container spacing={4}>
+									<Grid container spacing={4}>
 										{myJoinedClubs.map((joinedClub) => (
 											<JoinedClubCard
 												key={joinedClub.id}
@@ -416,9 +416,9 @@ const Main = () => {
 												onClick={showModal}
 												sx={{ mr: 5 }}
 											>
-												<Typography fontFamily="Jua">운동모임 삭제</Typography> 
+												<Typography fontFamily="Jua">운동모임 삭제</Typography>
 											</Button>
-											
+
 											<StyledModal
 												visible={isModalVisible}
 												onCancel={cancelModal}
@@ -428,24 +428,24 @@ const Main = () => {
 													신중하게 선택하신 다음 확인 버튼을 눌러주세요.
 												</Text>
 												<ButtonRow>
-												<Button
-													size="small"
-												variant="contained"
-												color="error"
-												onClick={hadleDeleteClub}
-												sx={{ mr: 5 }}
-											>
-												<Typography fontFamily="Jua">확인</Typography> 
-											</Button>
-											<Button
-													size="small"
-												variant="outlined"
-												color="success"
-												onClick={cancelModal}
-												sx={{ mr: 5 }}
-											>
-												<Typography fontFamily="Jua">취소</Typography> 
-											</Button>
+													<Button
+														size="small"
+														variant="contained"
+														color="error"
+														onClick={hadleDeleteClub}
+														sx={{ mr: 5 }}
+													>
+														<Typography fontFamily="Jua">확인</Typography>
+													</Button>
+													<Button
+														size="small"
+														variant="outlined"
+														color="success"
+														onClick={cancelModal}
+														sx={{ mr: 5 }}
+													>
+														<Typography fontFamily="Jua">취소</Typography>
+													</Button>
 												</ButtonRow>
 											</StyledModal>
 										</DeleteBtnContainer>
@@ -453,7 +453,7 @@ const Main = () => {
 								</TabContainer>
 							) : (
 								<NotFound>
-								  	현재 운영중인 운동모임이 존재하지 않습니다
+									현재 운영중인 운동모임이 존재하지 않습니다
 								</NotFound>
 							)}
 						</TabPane>
@@ -659,41 +659,6 @@ const DeleteBtnContainer = styled.div`
   `}
 `;
 
-const DeleteBtn = styled(Button)`
-	width: 140px;
-	font-size: 18px;
-	font-weight: bold;
-	color: #ffffff;
-	background-color: #ff0000;
-	border: none;
-	padding: 0 20px;
-	border-radius: 6px;
-	text-align: center;
-	flex: 0.1;
-
-  ${customMedia.lessThan("mobile")`
-    font-size: 10px;
-    padding: 5px 15px;
-    align-self: center;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    font-size: 10px;
-    padding: 5px 15px;
-    align-self: center;
-  `}
-
-  ${customMedia.between("largeMobile", "tablet")`
-    width: 80px;
-    font-size: 12px;
-  `}
-
-  ${customMedia.between("tablet", "desktop")`
-    width: 120px;
-    font-size: 16px;
-  `}
-`;
-
 const StyledModal = styled(Modal)`
 	display: flex;
 	justify-content: center;
@@ -715,26 +680,6 @@ const ButtonRow = styled(Row)`
   gap: 50px;
 `;
 
-const FilledBtn = styled(Button)`
-	& {
-		color: #ffffff;
-		background-color: #1890ff;;
-		border: none;
-		border-radius: 6px;
-		outline: none;
-    cursor: pointer;
-	}
-`;
-
-const UnfilledBtn = styled(Button)`
-	& {
-		color: #1890ff;;
-		background-color: #ffffff;
-		border: 2px solid #1890ff;;
-		border-radius: 6px;
-    cursor: pointer;
-	}
-`;
 
 const PaginationRow = styled(Row)`
   width: 100%;

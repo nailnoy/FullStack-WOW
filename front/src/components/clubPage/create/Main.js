@@ -3,11 +3,9 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { customMedia } from "../../../GlobalStyles";
-import PostEditor from "../../common/PostEditor";
 import moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 import MapContainer from "../../common/MapContainer";
-import { FormSelect } from "../../common/FormSelect";
 import { useNavigate } from "react-router-dom";
 
 

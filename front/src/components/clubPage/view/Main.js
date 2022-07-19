@@ -41,6 +41,7 @@ const Main = (props) => {
   const clubId = useParams().id;
   const userId = localStorage.getItem("user_id");
   const userImg = localStorage.getItem("user_image");
+  const reportHistory = [].concat(JSON.parse(localStorage.getItem("report_history")));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -196,16 +197,18 @@ const Main = (props) => {
     try {
       const getRes = await axios.get(`/users/${club.userId}`);
       if (getRes.status === 200) {
-        const reportData = { authority:  Number(getRes.data.authority), declaration: Number(getRes.data.declaration) };
+        const reportData = { authority: Number(getRes.data.authority), declaration: Number(getRes.data.declaration) };
         const res = await axios.put(`/users/report/${club.userId}`, reportData);
         if (res.status === 200) {
           message.success("신고가 완료되었습니다.");
-        }else{
+          localStorage.setItem("report_history", JSON.stringify(reportHistory.concat([clubId])));
+        } else {
           message.error("신고에 실패하였습니다.");
         }
-      }else{
+      } else {
         message.error("게시글의 회원 정보를 찾을 수 없습니다.");
       }
+      navigate(0);
     } catch (err) {
       console.log(err);
     }
@@ -223,7 +226,7 @@ const Main = (props) => {
         <>
           <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
 
-           
+
             <Box
               className="headerLogo"
               display="flex"
@@ -238,44 +241,53 @@ const Main = (props) => {
               display="flex"
               justifyContent="right"
             >
-              <Button
-                onClick={showReportModal}
-                className="reportBtn"
-                color="error"
-                size="large"
-                startIcon={<ReportProblemIcon/>}
-              >
-                <Typography fontFamily="Jua">신고</Typography>
-              </Button>
-              <StyledModal
-												visible={isReportModalVisible}
-												onCancel={handleReportCancel}
-											>
-											<Typography fontFamily="Jua">
-													한 번 신고하시면 다시 되돌릴 수 없습니다. <br />{" "}
-													신중하게 선택하신 다음 확인 버튼을 눌러주세요.
-                          </Typography>
-												
-													<Button
-														size="small"
-														variant="contained"
-														color="error"
-														onClick={handleReportUser}
-														sx={{ m: 3 }}
-													>
-														<Typography fontFamily="Jua">확인</Typography>
-													</Button>
-													<Button
-														size="small"
-														variant="outlined"
-														color="success"
-														onClick={handleReportCancel}
-														sx={{ m: 3 }}
-													>
-														<Typography fontFamily="Jua">취소</Typography>
-													</Button>
-												
-											</StyledModal>
+
+              {(() => {
+                if (!reportHistory.includes(clubId)) {
+                  return (
+                    <>
+                      <Button
+                        onClick={showReportModal}
+                        className="reportBtn"
+                        color="error"
+                        size="large"
+                        startIcon={<ReportProblemIcon />}
+                      >
+                        <Typography fontFamily="Jua">신고</Typography>
+                      </Button>
+                      <StyledModal
+                        visible={isReportModalVisible}
+                        onCancel={handleReportCancel}
+                      >
+                        <Typography fontFamily="Jua">
+                          한 번 신고하시면 다시 되돌릴 수 없습니다. <br />{" "}
+                          신중하게 선택하신 다음 확인 버튼을 눌러주세요.
+                        </Typography>
+
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="error"
+                          onClick={handleReportUser}
+                          sx={{ m: 3 }}
+                        >
+                          <Typography fontFamily="Jua">확인</Typography>
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="success"
+                          onClick={handleReportCancel}
+                          sx={{ m: 3 }}
+                        >
+                          <Typography fontFamily="Jua">취소</Typography>
+                        </Button>
+
+                      </StyledModal>
+                    </>)
+
+                } else return
+              })()}
               <Button
                 onClick={showInfoModal}
                 className="infoBtn"
@@ -290,50 +302,50 @@ const Main = (props) => {
                 color="warning"
                 size="large"
               >
-                 <StyledModal
-              visible={isInfoModalVisible}
-              onCancel={() => handleInfoCancel()}
-            >
-              <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-                <Typography
-                  variant="h5"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
+                <StyledModal
+                  visible={isInfoModalVisible}
+                  onCancel={() => handleInfoCancel()}
                 >
-                  참여 인원
-                </Typography>
+                  <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      참여 인원
+                    </Typography>
 
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  - {club.minPersonnel}인 ~ {club.maxPersonnel}인
-                </Typography>
-                <br />
-                <Typography
-                  variant="h5"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  진행 기간
-                </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      - {club.minPersonnel}인 ~ {club.maxPersonnel}인
+                    </Typography>
+                    <br />
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      진행 기간
+                    </Typography>
 
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  - {club.startDate} ~ {club.endDate}
-                </Typography>
-                <br />
-              </Container>
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      - {club.startDate} ~ {club.endDate}
+                    </Typography>
+                    <br />
+                  </Container>
 
-            </StyledModal>
+                </StyledModal>
                 <Typography fontFamily="Jua">수정</Typography>
               </Button>
               <Button
