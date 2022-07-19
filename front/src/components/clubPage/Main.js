@@ -53,6 +53,7 @@ function Main() {
 
 			setClubs(res.data.clubList);
 
+
 			if (userId) {
 				const likedClubRes = await axios.get("/likedClubs/ids", {
 					params: {

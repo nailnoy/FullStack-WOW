@@ -3,9 +3,11 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { customMedia } from "../../../GlobalStyles";
+import PostEditor from "../../common/PostEditor";
 import moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 import MapContainer from "../../common/MapContainer";
+import { FormSelect } from "../../common/FormSelect";
 import { useNavigate } from "react-router-dom";
 
 
@@ -37,7 +39,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 
-const Main = (props) => {
+const Main = () => {
 	const navigate = useNavigate();
 
 	const [editForm] = Form.useForm();
@@ -50,6 +52,7 @@ const Main = (props) => {
 	const [endDate, setEndDate] = useState("");
 	const userId = localStorage.getItem("user_id");
 	const fullAddress = streetAddress + " " + detailAddress;
+	const myClub = JSON.parse(localStorage.getItem("myClub"));
 
 	const editorRef = createRef();
 
@@ -131,16 +134,18 @@ const Main = (props) => {
 		);
 
 		formData.append("img", imgFile);
+		console.log(formData);
 
 		try {
-			const res = await axios.post(`/clubs`, formData);
+			const res = await axios.put(`/clubs/users/${userId}`, formData);
 
 			if (res.status === 200) {
-				message.success("운동모임이 성공적으로 생성되었습니다!");
-				navigate(-1);
+				message.success("운동모임이 성공적으로 수정되었습니다!");
+				localStorage.removeItem("myClub");
+				navigate(0);
 			}
 			else {
-				message.error("운동모임 생성에 실패했습니다.")
+				message.error("운동모임 수정에 실패했습니다.")
 			};
 		} catch (err) {
 			if (
@@ -179,7 +184,7 @@ const Main = (props) => {
 				<Row gutter={32}>
 					<Col span={16}>
 						<Form.Item
-							initialValue={""}
+							initialValue={myClub.title}
 							label="이름"
 							name="title"
 							rules={[{ required: true, message: "모임 이름을 입력하세요." }]}
@@ -187,7 +192,7 @@ const Main = (props) => {
 							<StyledInput placeholder="이름" />
 						</Form.Item>
 						<Form.Item
-							initialValue={""}
+							initialValue={myClub.contents}
 							label="한 줄 소개"
 							name="contents"
 							rules={[
@@ -208,7 +213,7 @@ const Main = (props) => {
 							<Row>
 								<PersonnelRow>
 									<Form.Item
-										initialValue={""}
+										initialValue={myClub.minPersonnel}
 										name="minPersonnel"
 									>
 										<StyledInputNumber min={2} placeholder={2} />
@@ -217,7 +222,7 @@ const Main = (props) => {
 								</PersonnelRow>
 								<PersonnelRow>
 									<Form.Item
-										initialValue={""}
+										initialValue={myClub.maxPersonnel}
 										name="maxPersonnel"
 									>
 										<StyledInputNumber min={2} placeholder={2} />
@@ -227,6 +232,10 @@ const Main = (props) => {
 							</Row>
 						</Form.Item>
 						<Form.Item
+							initialValue={[
+								moment(myClub.startDate),
+								moment(myClub.endDate),
+							]}
 							label="진행 기간"
 							name="date"
 							rules={[
@@ -279,7 +288,7 @@ const Main = (props) => {
 				</Row>
 				<Col span={16}>
 					<Form.Item
-						initialValue={""}
+						initialValue={myClub.tags}
 						label="태그"
 						name="tag"
 						rules={[
@@ -294,7 +303,11 @@ const Main = (props) => {
 						<Form.Item label="위치">
 							<Form.Item
 								name="addressStreet"
-								initialValue={""}
+								initialValue={
+									myClub.addressStreet === "undefined"
+										? ""
+										: myClub.addressStreet
+								}
 							>
 								<StyledInput
 									placeholder="도로명 주소"
@@ -304,7 +317,11 @@ const Main = (props) => {
 							</Form.Item>
 							<Form.Item
 								name="addressDetail"
-								initialValue={""}
+								initialValue={
+									myClub.addressDetail === "undefined"
+										? ""
+										: myClub.addressDetail
+								}
 							>
 								<StyledInput placeholder="상세 주소" />
 							</Form.Item>
@@ -323,15 +340,15 @@ const Main = (props) => {
 						previewStyle="vertical"
 						height="79vh"
 						initialEditType="markdown"
-						hideModeSwitch= "true"
-						initialValue="더 건강한 내일을 위해 함께해요."
+						hideModeSwitch="true"
+						initialValue={myClub.description}
 						ref={editorRef}
 						plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
 					/>
 				</Row>
 
 				<ButtonRow>
-					<FilledBtn type="primary" htmlType="summit" >작성</FilledBtn>
+					<FilledBtn type="primary" htmlType="summit" >수정</FilledBtn>
 				</ButtonRow>
 
 			</StyledForm>

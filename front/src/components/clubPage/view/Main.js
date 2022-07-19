@@ -15,14 +15,16 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import IconButton from '@mui/material/IconButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/react-editor";
 import CommentView from "./CommentView";
 import { useNavigate } from "react-router-dom";
 import MapContainer from "../../common/MapContainer";
+import Spin from "../../common/Spin";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
@@ -39,7 +41,8 @@ import { width } from "@mui/system";
 const Main = (props) => {
   const navigate = useNavigate();
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [club, setClub] = useState("");
   const [editable, setEditable] = useState();
   const [total, setTotal] = useState(0);
@@ -48,9 +51,11 @@ const Main = (props) => {
   const [apply, setApply] = useState("");
   const [loading, setLoading] = useState(true);
   const [createdAt, setCreatedAt] = useState();
+  const [user, setUser] = useState("");
   const clubId = useParams().id;
   const userId = localStorage.getItem("user_id");
   const userImg = localStorage.getItem("user_image");
+  const reportHistory = [].concat(JSON.parse(localStorage.getItem("report_history")));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,12 +105,21 @@ const Main = (props) => {
     fetchData();
   }, [userImg, total, page]);
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const showInfoModal = () => {
+    setIsInfoModalVisible(true);
+
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const handleInfoCancel = () => {
+    setIsInfoModalVisible(false);
+  };
+
+  const showReportModal = () => {
+    setIsReportModalVisible(true);
+  };
+
+  const handleReportCancel = () => {
+    setIsReportModalVisible(false);
   };
 
   const handleLikedClubs = (clubId) => {
@@ -194,11 +208,38 @@ const Main = (props) => {
       }
     } catch (err) {
       console.log(err);
+      message.error("로그인이 필요한 기능입니다.");
+    }
+  };
+
+  const MoveToUpdate = () => {
+    localStorage.setItem("myClub", JSON.stringify(club));
+    navigate("../update");
+  };
+
+  const handleReportUser = async () => {
+    try {
+      const getRes = await axios.get(`/users/${club.userId}`);
+      if (getRes.status === 200) {
+        const reportData = { authority: Number(getRes.data.authority), declaration: Number(getRes.data.declaration) };
+        const res = await axios.put(`/users/report/${club.userId}`, reportData);
+        if (res.status === 200) {
+          message.success("신고가 완료되었습니다.");
+          localStorage.setItem("report_history", JSON.stringify(reportHistory.concat([clubId])));
+        } else {
+          message.error("신고에 실패하였습니다.");
+        }
+      } else {
+        message.error("게시글의 회원 정보를 찾을 수 없습니다.");
+      }
+      navigate(0);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   return (
-    <Wrapper>
+    <>
       {loading ? (
         <SpinContainer>
           <Spin />
@@ -206,49 +247,7 @@ const Main = (props) => {
       ) : (
         <>
           <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-            <StyledModal
-              visible={isModalVisible}
-              onCancel={() => handleCancel()}
-            >
-              <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-                <Typography
-                  variant="h5"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  참여 인원
-                </Typography>
 
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  - {club.minPersonnel}인 ~ {club.maxPersonnel}인
-                </Typography>
-                <br />
-                <Typography
-                  variant="h5"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  진행 기간
-                </Typography>
-
-                <Typography
-                  variant="subtitle1"
-                  component="div"
-                  className="count"
-                  fontFamily="Jua"
-                >
-                  - {club.startDate} ~ {club.endDate}
-                </Typography>
-                <br />
-              </Container>
-            </StyledModal>
             <Box
               className="headerLogo"
               display="flex"
@@ -263,20 +262,111 @@ const Main = (props) => {
               display="flex"
               justifyContent="right"
             >
+
+              {(() => {
+                if (!reportHistory.includes(clubId)) {
+                  return (
+                    <>
+                      <Button
+                        onClick={showReportModal}
+                        className="reportBtn"
+                        color="error"
+                        size="large"
+                        startIcon={<ReportProblemIcon />}
+                      >
+                        <Typography fontFamily="Jua">신고</Typography>
+                      </Button>
+                      <StyledModal
+                        visible={isReportModalVisible}
+                        onCancel={handleReportCancel}
+                      >
+                        <Typography fontFamily="Jua">
+                          한 번 신고하시면 다시 되돌릴 수 없습니다. <br />{" "}
+                          신중하게 선택하신 다음 확인 버튼을 눌러주세요.
+                        </Typography>
+
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="error"
+                          onClick={handleReportUser}
+                          sx={{ m: 3 }}
+                        >
+                          <Typography fontFamily="Jua">확인</Typography>
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color="success"
+                          onClick={handleReportCancel}
+                          sx={{ m: 3 }}
+                        >
+                          <Typography fontFamily="Jua">취소</Typography>
+                        </Button>
+
+                      </StyledModal>
+                    </>)
+
+                } else return
+              })()}
               <Button
-                onClick={showModal}
-                className="detailBtn"
+                onClick={showInfoModal}
+                className="infoBtn"
                 color="success"
                 size="large"
               >
                 <Typography fontFamily="Jua">상세정보</Typography>
               </Button>
               <Button
-                //onClick={}
+                onClick={MoveToUpdate}
                 className="modifyBtn"
                 color="warning"
                 size="large"
               >
+                <StyledModal
+                  visible={isInfoModalVisible}
+                  onCancel={() => handleInfoCancel()}
+                >
+                  <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      참여 인원
+                    </Typography>
+
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      - {club.minPersonnel}인 ~ {club.maxPersonnel}인
+                    </Typography>
+                    <br />
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      진행 기간
+                    </Typography>
+
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      className="count"
+                      fontFamily="Jua"
+                    >
+                      - {club.startDate} ~ {club.endDate}
+                    </Typography>
+                    <br />
+                  </Container>
+
+                </StyledModal>
                 <Typography fontFamily="Jua">수정</Typography>
               </Button>
               <Button
@@ -289,33 +379,34 @@ const Main = (props) => {
               </Button>
             </Box>
 
-            <Typography
-              variant="h4"
-              component="div"
-              className="title"
-              fontFamily="Jua"
-            >
-              {club.title}
-            </Typography>
-            <Typography
-              component="div"
-              className="date"
-              fontFamily="Jua"
-              fontSize="11px"
-              sx={{ color: "text.secondary" }}
-            >
-              {createdAt}
-            </Typography>
-            <Divider />
-            <Box sx={{ minHeight: "350px", py: 1 }}>
-              <Viewer
-                initialValue={club.description}
-                plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
-              />
-            </Box>
-            <Divider />
+            <section>
+              <Typography
+                variant="h4"
+                component="div"
+                className="title"
+                fontFamily="Jua"
+              >
+                {/* {ViewContents.title} */}
+                {club.title}
+              </Typography>
+              {/* <Divider /> */}
+              <Typography
+                component="div"
+                className="date"
+                fontFamily="Jua"
+                fontSize="11px"
+                sx={{ color: "text.secondary" }}
+              >
+                {/* {ViewContents.date} */}
+                {createdAt}
+              </Typography>
+              <Divider />
+              {/* <Viewer initialValue={ViewContents.text}/> */}
+              <Viewer initialValue={club.description || ''} />
+              <Divider />
+            </section>
             {(() => {
-              if (club.addressStreet !== "") {
+              if (club.addressStreet !== '') {
                 return (
                   <>
                     <Typography
@@ -323,7 +414,6 @@ const Main = (props) => {
                       component="div"
                       className="mapTitle"
                       fontFamily="Jua"
-                      sx={{ pt: 1 }}
                     >
                       모임 장소
                     </Typography>
@@ -343,9 +433,7 @@ const Main = (props) => {
                     </Typography>
                     <MapWrapper>
                       <MapContainer
-                        searchSpot={
-                          club.addressStreet + " " + club.addressDetail
-                        }
+                        searchSpot={club.addressStreet + " " + club.addressDetail}
                       />
                     </MapWrapper>
                   </>
@@ -425,10 +513,11 @@ const Main = (props) => {
           </Container>
           <Container sx={{ p: 8 }} maxWidth="md" className="containerCmt">
             <CommentView />
+
           </Container>
         </>
       )}
-    </Wrapper>
+    </>
   );
 };
 export default Main;

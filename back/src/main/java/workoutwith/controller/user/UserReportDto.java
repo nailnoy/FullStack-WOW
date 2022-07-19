@@ -7,16 +7,12 @@ import org.springframework.beans.BeanUtils;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserResponseDto { //DTO : 로직x. 순수한 데이터 객체, getter, setter 만을 가짐
+public class UserReportDto { //DTO : 로직x. 순수한 데이터 객체, getter, setter 만을 가짐
 
-    private String id;
-    private String name;
-    private String email;
-    private String imgUrl;
     private int authority;
     private int declaration;
 
-    public UserResponseDto(User user) {
+    public UserReportDto(User user) {
         BeanUtils.copyProperties(user, this);
     }
 }
