@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Modal, message } from "antd";
 import styled from "styled-components";
+import Spin from "../../common/Spin";
 
 import { customMedia } from "../../../GlobalStyles";
 
@@ -14,13 +15,26 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
+import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/react-editor";
 import CommentView from "./CommentView";
 import { useNavigate } from "react-router-dom";
 import MapContainer from "../../common/MapContainer";
+
+import Prism from "prismjs";
+import "prismjs/themes/prism.css";
+
+// code-syntax-highlight
+import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
+import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+
+// color-syntax
+import "tui-color-picker/dist/tui-color-picker.css";
+import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
+import { width } from "@mui/system";
 
 const Main = (props) => {
   const navigate = useNavigate();
@@ -47,9 +61,20 @@ const Main = (props) => {
         console.log(res.data);
         let tempCeatedAt = new Date(res.data.createdAt);
 
-        setCreatedAt(tempCeatedAt.getFullYear() + '년 ' + (tempCeatedAt.getMonth() + 1) + '월 '
-          + tempCeatedAt.getDate() + '일 ' + tempCeatedAt.getHours() + '시 '
-          + tempCeatedAt.getMinutes() + '분 ' + tempCeatedAt.getSeconds() + '초');
+        setCreatedAt(
+          tempCeatedAt.getFullYear() +
+            "년 " +
+            (tempCeatedAt.getMonth() + 1) +
+            "월 " +
+            tempCeatedAt.getDate() +
+            "일 " +
+            tempCeatedAt.getHours() +
+            "시 " +
+            tempCeatedAt.getMinutes() +
+            "분 " +
+            tempCeatedAt.getSeconds() +
+            "초"
+        );
 
         if (userId) {
           const likedClubRes = await axios.get("/likedClubs/ids", {
@@ -74,7 +99,6 @@ const Main = (props) => {
     };
     fetchData();
   }, [userImg, total, page]);
-
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -168,268 +192,323 @@ const Main = (props) => {
       } else {
         message.error("운동모임 삭제에 실패하였습니다.");
       }
-
     } catch (err) {
       console.log(err);
     }
   };
 
-
-
   return (
-    <>
-      <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-        <StyledModal
-          visible={isModalVisible}
-          onCancel={() => handleCancel()}
-        >
+    <Wrapper>
+      {loading ? (
+        <SpinContainer>
+          <Spin />
+        </SpinContainer>
+      ) : (
+        <>
           <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-            <Typography
-              variant="h5"
-              component="div"
-              className="count"
-              fontFamily="Jua"
+            <StyledModal
+              visible={isModalVisible}
+              onCancel={() => handleCancel()}
             >
-              참여 인원
-            </Typography>
+              <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
+                <Typography
+                  variant="h5"
+                  component="div"
+                  className="count"
+                  fontFamily="Jua"
+                >
+                  참여 인원
+                </Typography>
 
-            <Typography
-              variant="subtitle1"
-              component="div"
-              className="count"
-              fontFamily="Jua"
+                <Typography
+                  variant="subtitle1"
+                  component="div"
+                  className="count"
+                  fontFamily="Jua"
+                >
+                  - {club.minPersonnel}인 ~ {club.maxPersonnel}인
+                </Typography>
+                <br />
+                <Typography
+                  variant="h5"
+                  component="div"
+                  className="count"
+                  fontFamily="Jua"
+                >
+                  진행 기간
+                </Typography>
+
+                <Typography
+                  variant="subtitle1"
+                  component="div"
+                  className="count"
+                  fontFamily="Jua"
+                >
+                  - {club.startDate} ~ {club.endDate}
+                </Typography>
+                <br />
+              </Container>
+            </StyledModal>
+            <Box
+              className="headerLogo"
+              display="flex"
+              sx={{ pb: 3, color: "text.secondary" }}
             >
-              - {club.minPersonnel}인 ~ {club.maxPersonnel}인
-            </Typography>
-            <br />
-            <Typography
-              variant="h5"
-              component="div"
-              className="count"
-              fontFamily="Jua"
+              {/* {ViewContents.noteId}/{ViewContents.title} */}
+              글번호 / {club.id}
+            </Box>
+            <Box
+              id="btnBox"
+              //   className={ ViewContents.noteId === "admin" || UserAuth === false ? "noneDisplay" : "onDisplay" }
+              display="flex"
+              justifyContent="right"
             >
-              진행 기간
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              component="div"
-              className="count"
-              fontFamily="Jua"
-            >
-              - {club.startDate} ~ {club.endDate}
-            </Typography>
-            <br />
-          </Container>
-
-        </StyledModal>
-        <Box
-          className="headerLogo"
-          display="flex"
-          sx={{ pb: 3, color: "text.secondary" }}
-        >
-          {/* {ViewContents.noteId}/{ViewContents.title} */}
-          글번호 / {club.id}
-        </Box>
-        <Box
-          id="btnBox"
-          //   className={ ViewContents.noteId === "admin" || UserAuth === false ? "noneDisplay" : "onDisplay" }
-          display="flex"
-          justifyContent="right"
-        >
-          <Button
-            onClick={showModal}
-            className="detailBtn"
-            color="success"
-            size="large"
-          >
-            <Typography fontFamily="Jua">상세정보</Typography>
-          </Button>
-          <Button
-            //onClick={}
-            className="modifyBtn"
-            color="warning"
-            size="large"
-          >
-            <Typography fontFamily="Jua">수정</Typography>
-          </Button>
-          <Button
-            onClick={handleDeleteClub}
-            className="deleteBtn"
-            color="error"
-            size="large"
-          >
-            <Typography fontFamily="Jua">삭제</Typography>
-          </Button>
-        </Box>
-
-        <section>
-          <Typography
-            variant="h4"
-            component="div"
-            className="title"
-            fontFamily="Jua"
-          >
-            {/* {ViewContents.title} */}
-            {club.title}
-          </Typography>
-          {/* <Divider /> */}
-          <Typography
-            component="div"
-            className="date"
-            fontFamily="Jua"
-            fontSize="11px"
-            sx={{ color: "text.secondary" }}
-          >
-            {/* {ViewContents.date} */}
-            {createdAt}
-          </Typography>
-          <Divider />
-          {/* <Viewer initialValue={ViewContents.text}/> */}
-          <Viewer initialValue={club.description} />
-          <Divider />
-        </section>
-        {(() => {
-          if (club.addressStreet !== '') {
-            return(
-            <>
-              <Typography
-                variant="h5"
-                component="div"
-                className="mapTitle"
-                fontFamily="Jua"
+              <Button
+                onClick={showModal}
+                className="detailBtn"
+                color="success"
+                size="large"
               >
-                모임 장소
-              </Typography>
-
-              <Typography
-                variant="subtitle1"
-                component="div"
-                className="address"
-                fontFamily="Jua"
+                <Typography fontFamily="Jua">상세정보</Typography>
+              </Button>
+              <Button
+                //onClick={}
+                className="modifyBtn"
+                color="warning"
+                size="large"
               >
-                {club.addressStreet !== "undefined"
-                  ? club.addressStreet
-                  : ""}{" "}
-                {club.addressDetail !== "undefined"
-                  ? club.addressDetail
-                  : ""}
-              </Typography>
-              <MapWrapper>
-                <MapContainer
-                  searchSpot={club.addressStreet + " " + club.addressDetail}
-                />
-              </MapWrapper>
-            </>
-            );
-          } else return
-        })()}
-        <Box id="btnBox2" display="flex" justifyContent="right" sx={{ pt: 3 }}>
-          <LikeContainer>
-            <LikeNum>{club.likes}</LikeNum>
-            <IconButton aria-label="add to favorites"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (userId) {
-                  handleLikedClubs(club.id);
-                } else {
-                  message.warning("로그인이 필요한 기능입니다.");
-                }
-              }}>
-              {likedClubs.includes(club.id) ? (
-                <FavoriteIcon style={{ color: 'red' }} />
-              ) : (
-                <FavoriteIcon />
-              )}
-            </IconButton>
-          </LikeContainer>
-          <ButtonGroup variant="contained">
+                <Typography fontFamily="Jua">수정</Typography>
+              </Button>
+              <Button
+                onClick={handleDeleteClub}
+                className="deleteBtn"
+                color="error"
+                size="large"
+              >
+                <Typography fontFamily="Jua">삭제</Typography>
+              </Button>
+            </Box>
+
+            <Typography
+              variant="h4"
+              component="div"
+              className="title"
+              fontFamily="Jua"
+            >
+              {club.title}
+            </Typography>
+            <Typography
+              component="div"
+              className="date"
+              fontFamily="Jua"
+              fontSize="11px"
+              sx={{ color: "text.secondary" }}
+            >
+              {createdAt}
+            </Typography>
+            <Divider />
+            <Box sx={{ minHeight: "350px", py: 1 }}>
+              <Viewer
+                initialValue={club.description}
+                plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+              />
+            </Box>
+            <Divider />
             {(() => {
-              if (club.userId !== userId) {
-                if (club.clubStatus !== "EXPIRED") {
-                  if (userId && apply.includes(club.id))
-                    return (
-                      <Button
-                        onClick={handleDeleteApply(club.id)}
-                        className="deleteBtn"
-                        color="error"
-                      >
-                        참여취소
-                      </Button>
-                    );
-                  else
-                    return (
-                      <Button
-                        className="joinBtn"
-                        color="success"
-                        onClick={() => {
-                          if (userId) {
-                            handlePostApply(club.id);
-                          } else {
-                            message.warning("로그인이 필요한 기능입니다.");
-                          }
-                        }}
+              if (club.addressStreet !== "") {
+                return (
+                  <>
+                    <Typography
+                      variant="h5"
+                      component="div"
+                      className="mapTitle"
+                      fontFamily="Jua"
+                      sx={{ pt: 1 }}
+                    >
+                      모임 장소
+                    </Typography>
 
-                      >
-                        참가신청
-                      </Button>
-                    );
-                } else return <Button disabled>모집마감</Button>;
-              } else return
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      className="address"
+                      fontFamily="Jua"
+                    >
+                      {club.addressStreet !== "undefined"
+                        ? club.addressStreet
+                        : ""}{" "}
+                      {club.addressDetail !== "undefined"
+                        ? club.addressDetail
+                        : ""}
+                    </Typography>
+                    <MapWrapper>
+                      <MapContainer
+                        searchSpot={
+                          club.addressStreet + " " + club.addressDetail
+                        }
+                      />
+                    </MapWrapper>
+                  </>
+                );
+              } else return;
             })()}
-
-            <Button
-              LinkComponent="button"
-              className="backBtn"
-              color="info"
-              onClick={() => navigate(-1)}
+            <Box
+              id="btnBox2"
+              display="flex"
+              justifyContent="right"
+              sx={{ pt: 3 }}
             >
-              돌아가기
-            </Button>
-          </ButtonGroup>
-        </Box>
-      </Container>
-      <Container sx={{ p: 8 }} maxWidth="md" className="containerCmt">
-        <CommentView />
-      </Container>
-    </>
+              <LikeContainer>
+                <LikeNum>{club.likes}</LikeNum>
+                <IconButton
+                  aria-label="add to favorites"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (userId) {
+                      handleLikedClubs(club.id);
+                    } else {
+                      message.warning("로그인이 필요한 기능입니다.");
+                    }
+                  }}
+                >
+                  {likedClubs.includes(club.id) ? (
+                    <FavoriteIcon style={{ color: "red" }} />
+                  ) : (
+                    <FavoriteIcon />
+                  )}
+                </IconButton>
+              </LikeContainer>
+              <ButtonGroup variant="contained">
+                {(() => {
+                  if (club.userId !== userId) {
+                    if (club.clubStatus !== "EXPIRED") {
+                      if (userId && apply.includes(club.id))
+                        return (
+                          <Button
+                            onClick={handleDeleteApply(club.id)}
+                            className="deleteBtn"
+                            color="error"
+                          >
+                            참여취소
+                          </Button>
+                        );
+                      else
+                        return (
+                          <Button
+                            className="joinBtn"
+                            color="success"
+                            onClick={() => {
+                              if (userId) {
+                                handlePostApply(club.id);
+                              } else {
+                                message.warning("로그인이 필요한 기능입니다.");
+                              }
+                            }}
+                          >
+                            참가신청
+                          </Button>
+                        );
+                    } else return <Button disabled>모집마감</Button>;
+                  } else return;
+                })()}
+
+                <Button
+                  LinkComponent="button"
+                  className="backBtn"
+                  color="info"
+                  onClick={() => navigate(-1)}
+                >
+                  돌아가기
+                </Button>
+              </ButtonGroup>
+            </Box>
+          </Container>
+          <Container sx={{ p: 8 }} maxWidth="md" className="containerCmt">
+            <CommentView />
+          </Container>
+        </>
+      )}
+    </Wrapper>
   );
 };
 export default Main;
 
+const Wrapper = styled.div`
+  width: 1200px;
+  margin: 0 auto;
+  flex: 1;
+
+  ${customMedia.lessThan("mobile")`
+    width: 295px;
+  `}
+
+  ${customMedia.between("mobile", "largeMobile")`
+    width: 363px;
+  `}
+
+	${customMedia.between("largeMobile", "tablet")`
+    width: 610px;
+  `}
+
+	${customMedia.between("tablet", "desktop")`
+    width: 880px;
+  `}
+`;
+
+const SpinContainer = styled.div`
+  width: 100%;
+  height: 80vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${customMedia.lessThan("mobile")`
+    height: 40vh;
+  `}
+
+  ${customMedia.between("mobile", "largeMobile")`
+    height: 40vh;
+  `}
+
+	${customMedia.between("largeMobile", "tablet")`
+    height: 40vh;
+  `}
+`;
+
 const StyledModal = styled(Modal)`
-	display: flex;
-	justify-content: center;
+  display: flex;
+  justify-content: center;
 
-	.ant-modal-content {
-		padding: 30px 55px;
-		display: flex;
-		align-items: center;
+  .ant-modal-content {
+    padding: 30px 55px;
+    display: flex;
+    align-items: center;
 
-		${customMedia.lessThan("mobile")`
+    ${customMedia.lessThan("mobile")`
       padding: 15px 25px;
     `}
 
-		${customMedia.between("mobile", "tablet")`
+    ${customMedia.between("mobile", "tablet")`
       padding: 25px 50px;
     `}
-	}
+  }
 
-	.ant-modal-body {
-		text-align: center;
-	}
+  .ant-modal-body {
+    text-align: center;
+  }
 
-	.ant-modal-footer {
-		display: none;
-	}
+  .ant-modal-footer {
+    display: none;
+  }
 `;
 
 const LikeNum = styled.span`
-${customMedia.lessThan("mobile")`
+  ${customMedia.lessThan("mobile")`
   font-size: 14px;
 `}
 
-${customMedia.between("mobile", "largeMobile")`
+  ${customMedia.between("mobile", "largeMobile")`
   font-size: 16px;
 `}
 
@@ -443,13 +522,13 @@ ${customMedia.between("tablet", "desktop")`
 `;
 
 const LikeContainer = styled.div`
-	position: relative;
+  position: relative;
 `;
 
 const MapWrapper = styled.div`
-	width: 850px;
+  width: 850px;
   height: 250px;
-  
+
   ${customMedia.lessThan("mobile")`
     width: 295px;
   `}

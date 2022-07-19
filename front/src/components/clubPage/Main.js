@@ -17,6 +17,7 @@ function Main() {
 	const [sortBy, setSortBy] = useState("createdAt");
 	const [clubStatus, setClubStatus] = useState("");
 	const [selectedTags, setSelectedTags] = useState([]);
+	const [tags, setTags] = useState([]);
 	const [keyword, setKeyword] = useState("");
 	const [likedClubs, setLikedClubs] = useState([]);
 	const [page, setPage] = useState(1);
@@ -41,6 +42,14 @@ function Main() {
 					page: page,
 				},
 			});
+
+			if(res.data.clubList.length > tags.length){
+				for (let i=0;i<res.data.clubList.length;i++){
+					setTags((prevState) => {
+						return [...prevState, { tags : res.data.clubList[i].tags }]
+					});
+				}
+			};
 
 			setClubs(res.data.clubList);
 
@@ -97,10 +106,8 @@ function Main() {
 		}
 	};
 
-
     return (
         <>
-            {/* 상단 AppBar 들어갈 부분 */}
             <main>
             {loading ? (
                 <SpinContainer>
@@ -125,7 +132,13 @@ function Main() {
                 </Container>
 
                 <Container sx={{ py: 1 }} maxWidth="xs">
-                    <Tags />
+                    <Tags 
+					selectedTags={selectedTags}
+					setSelectedTags={setSelectedTags}
+					tags={tags}
+					setTags={setTags}
+					clubs={clubs}
+					/>
                 </Container>
 
                 <Container sx={{ py: 0 }} maxWidth="md">
@@ -146,7 +159,6 @@ function Main() {
                 </>
         )}
             </main>
-            {/* 카피라이트 들어갈 부분 */}
         </>
     );
 };

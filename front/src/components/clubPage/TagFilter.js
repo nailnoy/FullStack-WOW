@@ -3,17 +3,38 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import styled from "styled-components";
 
-export default function Tags() {
+const Tags = (props) => {
+  let strTags = props.tags.map(JSON.stringify);
+	let removeDuplicatesTags = [...new Set(strTags)].map(JSON.parse);
+
+  const handleSelectTags = (e) => {
+    if(e.target.innerText != undefined){
+      let tagName = e.target.innerText;
+      // let index = props.selectedTags.indexOf(tagName);
+      console.log(tagName);
+
+      // if (props.selectedTags.includes(tagName)) {
+      //   props.selectedTags.splice(index, 1);
+      //   props.setSelectedTags([...props.selectedTags]);
+      // } else {
+        props.setSelectedTags([...props.selectedTags, tagName]);
+      // }
+    }else{
+      props.setSelectedTags([]);
+    }
+    
+	};
+
     return (
         <FilterContainer>
         <Autocomplete
         size="small"
-        multiple
-        limitTags={2}
+        disablePortal
         id="multiple-limit-tags"
-        options={categories}
-        getOptionLabel={(option) => option.category}
-        defaultValue={[]}
+        options={removeDuplicatesTags}
+        onChange={handleSelectTags}
+        getOptionLabel={(option) => option.tags}
+        // defaultValue={[]}
         renderInput={(params) => (
             <TextField {...params} 
             label="태그" 
@@ -25,6 +46,8 @@ export default function Tags() {
         </FilterContainer>
     );
   }
+
+  export default Tags;
 
   const categories = [
     {category: '축구'},

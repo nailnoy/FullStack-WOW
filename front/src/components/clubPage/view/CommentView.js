@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { customMedia } from "../../../GlobalStyles";
 import { useParams } from "react-router-dom";
 
-import Comment from "./comment";
+import Comment from "./Comment";
 import Pagination from "../../common/Pagination";
 import profile from "../../../images/icons/profile.png";
 import { Box, Button, Container, List, ListItem, Typography } from "@mui/material";
