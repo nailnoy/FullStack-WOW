@@ -1,16 +1,16 @@
 import React from "react";
-import ClubPostView from "../components/0717/clubPostView";
+import Main from "../components/clubPage/view/Main";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 
-const ClubPostViewPage = () =>{
+const ClubView = (props) =>{
     return(
         <>
         <Nav />
-        <ClubPostView/>
+        <Main {...props} />
         <Footer />
         </>
     );
 };
 
-export default ClubPostViewPage;
+export default ClubView;

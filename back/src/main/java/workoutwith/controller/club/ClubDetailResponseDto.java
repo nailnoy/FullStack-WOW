@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,6 +30,7 @@ public class ClubDetailResponseDto {
     private String addressDetail;       //모임 위치 상세주소
     private String addressStreet;       //모임 위치 도로명주소
     private ClubStatus clubStatus;      //모임 모집여부
+    private LocalDateTime createdAt;
 
     public ClubDetailResponseDto(Club club) {
         BeanUtils.copyProperties(club, this);

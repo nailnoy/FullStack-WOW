@@ -1,27 +1,52 @@
 import React from "react";
 import styled from "styled-components";
+import { Button, Typography } from '@mui/material';
 import { customMedia } from "../../GlobalStyles";
 
 import profile from "../../images/icons/profile.png";
 
-const PendingMember = () => {
-	return (
-		<PendingMemberBar>
-			<PendingMemberProfileIcon>
-					<img src={profile} alt="Profile icon" />
-			</PendingMemberProfileIcon>
-			<PendingMemberUsername>
-				이관용
-			</PendingMemberUsername>
-			<PendingMemberEmail>omomo4426@naver.com</PendingMemberEmail>
-			<PendingMemberBtn>
-				승인
-			</PendingMemberBtn>
-			<PendingMemberBtn>
-				거절
-			</PendingMemberBtn>
-		</PendingMemberBar>
-	);
+const PendingMember = (props) => {
+  return (
+    <PendingMemberBar>
+      <PendingMemberProfileIcon>
+        {props.myPendingMember.imgUrl ? (
+          <img src={props.myPendingMember.imgUrl} alt="Profile icon" />
+        ) : (
+          <img src={profile} alt="Profile icon" />
+        )}
+      </PendingMemberProfileIcon>
+      <PendingMemberUsername>
+        {props.myPendingMember.name}
+      </PendingMemberUsername>
+      <PendingMemberEmail>{props.myPendingMember.email}</PendingMemberEmail>
+      
+      <Button
+        size="small"
+        variant="contained"
+        color="success"
+        onClick={() => props.handleMemberApproval(props.myPendingMember.id)}
+        sx={{ mr: 5 }}
+      >
+        <Typography fontFamily="Jua">승인</Typography>
+      </Button>
+
+      <Button
+        size="small"
+        variant="contained"
+        color="error"
+        onClick={() =>
+          props.handleMemberReject(
+            props.myPendingMember.userId,
+            props.myPendingMember.clubId
+          )
+        }
+        sx={{ mr: 5 }}
+      >
+        <Typography fontFamily="Jua">거절</Typography>
+      </Button>
+
+    </PendingMemberBar>
+  );
 };
 
 export default PendingMember;

@@ -1,24 +1,38 @@
 import React from 'react';
 import styled from "styled-components";
+import { Button, Typography } from "@mui/material";
 import { customMedia } from "../../GlobalStyles";
 
-import Button from "../common/Button";
 import profile from "../../images/icons/profile.png";
 
 
-const Member = () => {
-	return (
-		<MemberBar>
-			<MemberProfileIcon>
-					<img src={profile} alt="Profile icon" />
-			</MemberProfileIcon>
-			<MemberUsername>김정현</MemberUsername>
-			<MemberEmail>omomo010@gmail.com</MemberEmail>
-			<MemberBtn>
-				내보내기
-			</MemberBtn>
-		</MemberBar>
-	);
+const Member = (props) => {
+  return (
+    <MemberBar>
+      <MemberProfileIcon>
+        {props.myMember.imgUrl ? (
+          <img src={props.myMember.imgUrl} alt="Profile icon" />
+        ) : (
+          <img src={profile} alt="Profile icon" />
+        )}
+      </MemberProfileIcon>
+      <MemberUsername>{props.myMember.name}</MemberUsername>
+      <MemberEmail>{props.myMember.email}</MemberEmail>
+
+      <Button
+        size="small"
+        variant="contained"
+        color="error"
+        onClick={() =>
+          props.handleMemberDelete(props.myMember.userId, props.myMember.clubId)
+        }
+        sx={{ mr: 5 }}
+      >
+        <Typography fontFamily="Jua">내보내기</Typography>
+      </Button>
+
+    </MemberBar>
+  );
 };
 
 const MemberBar = styled.div`

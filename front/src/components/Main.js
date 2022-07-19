@@ -35,7 +35,7 @@ const Main = () => {
             spacing={2}
             justifyContent="center"
           >
-            <Button variant="contained" href="/clubs/edit">모임 만들기</Button>
+            <Button variant="contained" href="/clubs/create">모임 만들기</Button>
             <Button variant="outlined" href="/clubs">모임 검색하기</Button>
           </Stack>
         </Container>
