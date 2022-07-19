@@ -10,42 +10,48 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    public UserController(final UserService userService) {
-        this.userService = userService;
-    }
+	public UserController(final UserService userService) {
+		this.userService = userService;
+	}
 
-    //유저 정보 상세 조회
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> searchUser(
-            @PathVariable final String userId) {
-        User user = userService.searchUser(userId);
-        if (user != null) {
-            return ResponseEntity.ok(
-                    new UserResponseDto(userService.searchUser(userId))
-            );
-        } else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	// 유저 정보 상세 조회
+	@GetMapping("/{userId}")
+	public ResponseEntity<UserResponseDto> searchUser(@PathVariable final String userId) {
+		User user = userService.searchUser(userId);
+		if (user != null) {
+			return ResponseEntity.ok(new UserResponseDto(userService.searchUser(userId)));
+		} else {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+	}
+
+	// 유저 정보 등록
+	@PostMapping
+	public ResponseEntity<UserResponseDto> createUser(@RequestBody final UserCreateRequestDto userCreateRequestDto) {
+		final User user = userService.searchUser(userCreateRequestDto.toEntity().getId());
+
+		// 유저 정보가 등록되어 있다면
+		if (user != null) {
+			return ResponseEntity
+					.ok(new UserResponseDto(userService.searchUser(userCreateRequestDto.toEntity().getId())));
+		}
+
+		// 유저 정보가 등록되어 있지 않다면
+		return ResponseEntity.ok(new UserResponseDto(userService.createUser(userCreateRequestDto.toEntity())));
+	}
+
+	@PutMapping("report/{userId}")
+    public ResponseEntity<Void> reportUser(
+    		UserReportDto userReportDto,
+    		 @PathVariable final String userId) {
+    	try {
+    		userService.reportUser(userReportDto, userId);
+    		return new ResponseEntity("유저 신고가 완료되었습니다.", HttpStatus.OK);
+    	} catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    //유저 정보 등록
-    @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(
-            @RequestBody final UserCreateRequestDto userCreateRequestDto) {
-        final User user = userService.searchUser(userCreateRequestDto.toEntity().getId());
-
-        // 유저 정보가 등록되어 있다면
-        if (user != null) {
-            return ResponseEntity.ok(
-                    new UserResponseDto(userService.searchUser(userCreateRequestDto.toEntity().getId()))
-            );
-        }
-
-        // 유저 정보가 등록되어 있지 않다면
-        return ResponseEntity.ok(
-                new UserResponseDto(userService.createUser(userCreateRequestDto.toEntity()))
-        );
-    }
 }

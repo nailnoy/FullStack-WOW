@@ -126,7 +126,7 @@ const ClubCard = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" variant="outlined" onClick={() => navigate(`${props.club.id}`)}>
+          <Button size="small" variant="outlined" onClick={() => navigate(`../detail/${props.club.id}`)}>
             자세히
           </Button>
           <Button size="small" variant="outlined" color="success">
