@@ -1,6 +1,7 @@
 import React from "react";
 import Main from '../components/Main';
 import MainClubCard from '../components/MainClubCard';
+import MainPostCard from '../components/MainPostCard';
 import Footer from '../components/Footer';
 import Nav from '../components/Nav';
 
@@ -19,6 +20,7 @@ const Home = () => {
       <Nav />
         <Main />
         <MainClubCard />
+        <MainPostCard />
       <Footer />
       </ThemeProvider>
     </>

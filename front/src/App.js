@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "../src/pages/Home";
 import Club from "../src/pages/Club";
+import Post from "../src/pages/Post";
 import MyPage from "./pages/Mypage";
 import ScrollToTop from "./components/common/ScrollToTop";
 import GlobalStyles from "./GlobalStyles";
@@ -20,6 +21,7 @@ const App = () => {
 				<Routes>
 					<Route exact path="/" element={<Home/>} />
 					<Route exact path="/clubs" element={<Club/>} />
+					<Route exact path="/post" element={<Post/>} />
 					<Route exact path="/myPage" element={<MyPage/>} />
 					<Route exact path="/detail/:id" element={<ClubView/>} />
 					<Route exact path="/clubs/create" element={<CreateClub/>} />
