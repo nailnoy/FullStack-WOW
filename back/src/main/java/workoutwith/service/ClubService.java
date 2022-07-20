@@ -26,7 +26,7 @@ public class ClubService {
     private final LikedClubRepository likedClubRepository;
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
-    private final String imageUrl = "https://cdn.lifestyleasia.com/wp-content/uploads/sites/2/2020/02/25145253/Photo-by-Alfons-Morales-on-Unsplash-scaled-1535x900.jpg";
+    private final String imageUrl = "https://velog.velcdn.com/images/zolyer/post/d8620848-232a-47c5-a6db-2283b9fe4d28/image.jpeg";
 
     //모임 생성, 수정할 때 시작일이 오늘 날짜보다 빠르면 예외처리 -> FE 측에서 처리??
 

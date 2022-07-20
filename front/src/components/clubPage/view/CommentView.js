@@ -172,7 +172,6 @@ const fetchCmtData = async () => {
             등록
           </Button>
         </Box>
-        {/* <ListRow> */}
 		<List >
           {comments
             ? comments.map((comment) => (
@@ -191,14 +190,13 @@ const fetchCmtData = async () => {
 				))
 				: ""}
 		</List>
-        {/* </ListRow> */}
       </Container>
       <PaginationRow>
         <Pagination
-		total={total}
-		pageSize={5}
-		current={page}
-		onChange={(page) => setPage(page)}
+          total={total}
+          pageSize={5}
+          current={page}
+          onChange={(page) => setPage(page)}
         />
       </PaginationRow>
     </>

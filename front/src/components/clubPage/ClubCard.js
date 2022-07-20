@@ -3,20 +3,22 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { customMedia } from "../../GlobalStyles";
 
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Box from "@mui/material/Box";
-import { message } from "antd"
+import { message } from "antd";
 
 const ClubCard = (props) => {
+  console.log(props.club);
   const navigate = useNavigate();
+
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card
@@ -29,7 +31,8 @@ const ClubCard = (props) => {
         }}
       >
         <Grid
-          container spacing={0}
+          container
+          spacing={0}
           justifyContent="space-between"
           sx={{
             position: "absolute",
@@ -64,16 +67,15 @@ const ClubCard = (props) => {
                 p: 1,
                 minWidth: 45,
                 maxHeight: 35,
-
               }}
             >
               마감
-            </Box>) : (
+            </Box>
+          ) : (
             ""
           )}
         </Grid>
         {props.club.imgUrl ? (
-
           <CardMedia
             component="img"
             sx={{
@@ -83,7 +85,8 @@ const ClubCard = (props) => {
             height="300"
             image={props.club.imgUrl}
             alt="default"
-          />) : (
+          />
+        ) : (
           <CardMedia
             component="img"
             sx={{
@@ -105,36 +108,47 @@ const ClubCard = (props) => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: '1',
-              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: "1",
+              WebkitBoxOrient: "vertical",
             }}
           >
             {props.club.title}
           </Typography>
           <Typography
             fontFamily="Jua"
-            height="70px"
+            height="20px"
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: '3',
-              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: "1",
+              WebkitBoxOrient: "vertical",
             }}
           >
             {props.club.contents}
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" variant="outlined" onClick={() => navigate(`../detail/${props.club.id}`)}>
-            자세히
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => navigate(`../detail/${props.club.id}`)}
+          >
+            <Typography fontFamily="Jua">자세히</Typography>
           </Button>
-          <Button size="small" variant="outlined" color="success">
-            참가 신청
+          <Button
+            variant="outlined"
+            onClick={() => navigate(`../post/filter?clubid=${props.club.id}`)}
+            className="infoBtn"
+            color="success"
+            size="small"
+          >
+            <Typography fontFamily="Jua">후기보기</Typography>
           </Button>
           <LikeContainer>
             <LikeNum>{props.club.likes}</LikeNum>
-            <IconButton aria-label="add to favorites"
+            <IconButton
+              aria-label="add to favorites"
               onClick={(e) => {
                 e.stopPropagation();
                 if (props.userId) {
@@ -142,9 +156,10 @@ const ClubCard = (props) => {
                 } else {
                   message.warning("로그인이 필요한 기능입니다.");
                 }
-              }}>
+              }}
+            >
               {props.likedClubs.includes(props.club.id) ? (
-                <FavoriteIcon style={{ color: 'red' }} />
+                <FavoriteIcon style={{ color: "red" }} />
               ) : (
                 <FavoriteIcon />
               )}
@@ -159,11 +174,11 @@ const ClubCard = (props) => {
 export default ClubCard;
 
 const LikeNum = styled.span`
-${customMedia.lessThan("mobile")`
+  ${customMedia.lessThan("mobile")`
   font-size: 14px;
 `}
 
-${customMedia.between("mobile", "largeMobile")`
+  ${customMedia.between("mobile", "largeMobile")`
   font-size: 16px;
 `}
 
@@ -177,9 +192,9 @@ ${customMedia.between("tablet", "desktop")`
 `;
 
 const LikeContainer = styled.div`
-	position: relative;
+  position: relative;
   left: 50px;
-  
+
   ${customMedia.lessThan("mobile")`
     left: 270px;
   `}
