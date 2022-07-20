@@ -201,4 +201,9 @@ public class ClubService {
         memberRepository.deleteAllByClub(club);
         clubRepository.delete(club);
     }
+    
+    @Transactional
+    public List<Club> findAllClubsForPost() {
+        return clubRepository.findAll();
+    }
 }

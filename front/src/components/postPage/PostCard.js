@@ -7,6 +7,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -22,6 +23,8 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 // @mui/joy 설치
 // cmd 관리자권한 front 디렉토리에서 명령어
@@ -30,6 +33,16 @@ import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded
 const cards = [1, 2, 3, 4, 5];
 
 const PostCard = () => {
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Container sx={{ py: 8 }} maxWidth="md">
       <Typography
@@ -89,9 +102,33 @@ const PostCard = () => {
                   color="neutral"
                   size="sm"
                   sx={{ ml: "auto" }}
+                  id="demo-positioned-button"
+                  aria-controls={open ? 'demo-positioned-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
                 >
                   <MoreHoriz />
                 </IconButton>
+                <Menu
+                  id="demo-positioned-menu"
+                  aria-labelledby="demo-positioned-button"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleClose}>Logout</MenuItem>
+                </Menu>
               </Box>
               <CardOverflow>
                 <AspectRatio objectFit="contain">
@@ -166,7 +203,7 @@ const PostCard = () => {
                 >
                   홍길동
                 </Link>{" "}
-                같이 운동해서 재밌었습니다.
+                같이 운동해서 재밌었습니다.wfewefffeefefefefefefefef
               </Typography>
               <Link
                 component="button"
@@ -214,9 +251,11 @@ const PostCard = () => {
             </Card>
           </Grid>
         ))}
+    
       </Grid>
     </Container>
   );
 };
 
 export default PostCard;
+

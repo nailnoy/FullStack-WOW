@@ -48,7 +48,7 @@ const Main = (props) => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [likedClubs, setLikedClubs] = useState([]);
-  const [apply, setApply] = useState("");
+  const [apply, setApply] = useState();
   const [loading, setLoading] = useState(true);
   const [createdAt, setCreatedAt] = useState();
   const [user, setUser] = useState("");
@@ -94,6 +94,7 @@ const Main = (props) => {
           const applyRes = await axios.get("/members/ids", {
             params: { userId: userId },
           });
+
 
           setApply(applyRes.data.joiningClubIdList);
         }
@@ -212,10 +213,6 @@ const Main = (props) => {
     }
   };
 
-  const MoveToUpdate = () => {
-    localStorage.setItem("myClub", JSON.stringify(club));
-    navigate("../update");
-  };
 
   const handleReportUser = async () => {
     try {
@@ -370,7 +367,7 @@ const Main = (props) => {
                   return (
                     <>
                       <Button
-                        onClick={MoveToUpdate}
+                        onClick={()=> navigate(`../clubs/update/${clubId}`)}
                         className="modifyBtn"
                         color="warning"
                         size="large"
@@ -481,6 +478,7 @@ const Main = (props) => {
                     if (club.clubStatus !== "EXPIRED") {
                       if (userId && apply.includes(club.id))
                         return (
+                          <>
                           <Button
                             onClick={() => {
                               handleDeleteApply(club.id);
@@ -490,6 +488,7 @@ const Main = (props) => {
                           >
                             참여취소
                           </Button>
+                          </>
                         );
                       else
                         return (

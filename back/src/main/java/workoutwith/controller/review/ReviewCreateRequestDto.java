@@ -1,4 +1,4 @@
-package workoutwith.controller.post;
+package workoutwith.controller.review;
 
 import workoutwith.domain.*;
 import lombok.Getter;
@@ -8,17 +8,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostCreateRequestDto {
+public class ReviewCreateRequestDto {
 
     private String userId;
-    private String title;
+    private Long clubId;
     private String contents;
     private String imgUrl;
 
 
-    public Post toEntity() {
-        return Post.builder()
-                .title(title)
+    public Review toEntity() {
+        return Review.builder()
                 .contents(contents)
                 .imgUrl(imgUrl)
                 .build();

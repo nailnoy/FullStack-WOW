@@ -1,9 +1,10 @@
 package workoutwith.service;
 
-import workoutwith.common.error.exception.PostNotFoundException;
+import workoutwith.common.error.exception.ClubNotFoundException;
+import workoutwith.common.error.exception.ReviewNotFoundException;
 import workoutwith.common.error.exception.UserNotFoundException;
-import workoutwith.controller.post.PostCreateRequestDto;
-import workoutwith.controller.post.PostUpdateRequestDto;
+import workoutwith.controller.review.ReviewCreateRequestDto;
+import workoutwith.controller.review.ReviewUpdateRequestDto;
 import workoutwith.domain.*;
 import workoutwith.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +18,18 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PostService {
-    private final PostRepository postRepository;
+public class ReviewService {
+    private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
-    private final PostCommentRepository postCommentRepository;
+    private final ClubRepository clubRepository;
+    private final ReviewCommentRepository reviewCommentRepository;
     private final S3Service s3Service;
     private final String imageUrl = "https://cdn.lifestyleasia.com/wp-content/uploads/sites/2/2020/02/25145253/Photo-by-Alfons-Morales-on-Unsplash-scaled-1535x900.jpg";
 
     //모임 생성, 수정할 때 시작일이 오늘 날짜보다 빠르면 예외처리 -> FE 측에서 처리??
 
     @Transactional
-    public Post createPost(PostCreateRequestDto requestDto, MultipartFile file) {
+    public Review createReview(ReviewCreateRequestDto requestDto, MultipartFile file) {
         if (file != null) {
             try {
                 String imgPath = s3Service.upload(file);
@@ -38,63 +40,65 @@ public class PostService {
         } else{
             requestDto.setImgUrl(imageUrl);
         }
-        Post post = requestDto.toEntity();
-        final Post newPost = convertToNewPost(post, requestDto.getUserId());
-        return postRepository.save(newPost);
+        Review review = requestDto.toEntity();
+        final Review newReview = convertToNewReview(review, requestDto.getUserId(), requestDto.getClubId());
+        return reviewRepository.save(newReview);
     }
 
     //club 생성시에만 사용하는 메서드
     //파라미터로 받은 userId 값을 사용해 findById로 찾은 user 객체를 이용, 빌더로 entity 를 생성하는 역할
-    private Post convertToNewPost(final Post post, final String userId) {
+    private Review convertToNewReview(final Review review, final String userId, Long clubId) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        return Post.builder()
+        final Club club = clubRepository.findById(clubId)
+                .orElseThrow(ClubNotFoundException::new);
+        return Review.builder()
                 .user(user)
-                .title(post.getTitle())
-                .contents(post.getContents())
-                .imgUrl(post.getImgUrl())
+                .club(club)
+                .contents(review.getContents())
+                .imgUrl(review.getImgUrl())
                 .build();
     }
 
 
     //검색 조회
     //param 으로 아예 tags 나 keyword 를 포함하지 않을 수도 있기 때문에 ==null 로 비교
-    public List<Post> findAllPosts(String keyword) {
+    public List<Review> findAllReviews(String keyword) {
 
         //모든 모임 조회
-        List<Post> posts = postRepository.findAll();
+        List<Review> reviews = reviewRepository.findAll();
 
         //keyword 필터링 -> clubs 항목들의 제목이 keyword 를 포함하고 있는가
-        List<Post> postSortedByKeyword = new ArrayList<>();
+        List<Review> reviewSortedByKeyword = new ArrayList<>();
 
         if (keyword.isEmpty())
-            postSortedByKeyword = posts;
+        	reviewSortedByKeyword = reviews;
         else {
-            for (Post post : posts) {
-                if (post.getTitle().contains(keyword)) {
-                	postSortedByKeyword.add(post);
+            for (Review review : reviews) {
+                if (review.getContents().contains(keyword)) {
+                	reviewSortedByKeyword.add(review);
                 }
             }
         }
 
-         return postSortedByKeyword;
+         return reviewSortedByKeyword;
 
     }
 
-    public Post findPostById(Long clubId) {
-    	Post post = postRepository.findById(clubId).orElseThrow(PostNotFoundException::new);
-        return post;
+    public Review findReviewById(Long clubId) {
+    	Review review = reviewRepository.findById(clubId).orElseThrow(ReviewNotFoundException::new);
+        return review;
     }
 
-    public Post findPostByUserId(String userId) {
+    public Review findReviewByUserId(String userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Post post = postRepository.findByUser(user).orElse(null);
-        return post;
+        Review review = reviewRepository.findByUser(user).orElse(null);
+        return review;
     }
 
     @Transactional
-    public void updatePost(PostUpdateRequestDto requestDto, String userId, MultipartFile file) {
-        final Post post = findPostByUserId(userId);
+    public void updateReview(ReviewUpdateRequestDto requestDto, String userId, MultipartFile file) {
+        final Review review = findReviewByUserId(userId);
         if (file != null) {
             try {
                 String imgPath = s3Service.upload(file);
@@ -103,17 +107,17 @@ public class PostService {
                 e.printStackTrace();
             }
         } else {
-            requestDto.setImgUrl(post.getImgUrl());
+            requestDto.setImgUrl(review.getImgUrl());
         }
-        post.updateClub(requestDto.getTitle(),
+        review.updateReview(
                 requestDto.getContents(),
                 requestDto.getImgUrl());
     }
 
     @Transactional
-    public void deletePost(String userId) {
-        final Post post = findPostByUserId(userId);
-        postCommentRepository.deleteAllByPost(post);
-        postRepository.delete(post);
+    public void deleteReview(String userId) {
+        final Review review = findReviewByUserId(userId);
+        reviewCommentRepository.deleteAllByReview(review);
+        reviewRepository.delete(review);
     }
 }

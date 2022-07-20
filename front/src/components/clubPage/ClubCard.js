@@ -192,8 +192,8 @@ ${customMedia.between("tablet", "desktop")`
 `;
 
 const LikeContainer = styled.div`
-  position: relative;
-  left: 50px;
+  position: sticky;
+  left: 80%;
 
   ${customMedia.lessThan("mobile")`
     left: 270px;

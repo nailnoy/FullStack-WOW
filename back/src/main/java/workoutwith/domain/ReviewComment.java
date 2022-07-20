@@ -14,16 +14,15 @@ import static javax.persistence.FetchType.EAGER;
 @NoArgsConstructor
 @ToString
 @Getter
-@Table(name = "postcomments")
-public class PostComment extends BaseTime {
+@Table(name = "reviewcomments")
+public class ReviewComment extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "comment_id")
     private Long id;
 
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "review_id")
     @ManyToOne(fetch = EAGER)
-    private Post post;
+    private Review review;
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = EAGER)
@@ -39,8 +38,8 @@ public class PostComment extends BaseTime {
     }
 
     @Builder
-    public PostComment(Post post, User user, String contents) {
-        this.post = post;
+    public ReviewComment(Review review, User user, String contents) {
+        this.review = review;
         this.user = user;
         this.contents = contents;
     }
