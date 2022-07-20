@@ -28,7 +28,7 @@ public class ReviewController {
             ReviewCreateRequestDto reviewCreateRequestDto,
             @RequestParam(value = "img", required = false) MultipartFile file) {
     	Review review = reviewService.createReview(reviewCreateRequestDto, file);
-        return new ResponseEntity("게시글 등록이 완료되었습니다. (clubId: " + review.getId() + ")", HttpStatus.OK);    
+        return new ResponseEntity("게시글 등록이 완료되었습니다. (reviewId: " + review.getId() + ")", HttpStatus.OK);    
     }
 
     //게시글 리스트 조회

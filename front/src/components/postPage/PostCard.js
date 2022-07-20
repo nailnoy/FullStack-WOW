@@ -19,15 +19,13 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
-import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-
 const PostCard = (props) => {
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -36,8 +34,6 @@ const PostCard = (props) => {
   };
 
   return (
- 
-       
           <Grid item key={1} xs={12} sm={6} md={4}>
             <Card
               variant="outlined"
@@ -70,7 +66,7 @@ const PostCard = (props) => {
                 >
                   <Avatar
                     size="sm"
-                    src="/static/logo.png"
+                    src={props.review.userImgUrl}
                     sx={{
                       p: 0.5,
                       border: "2px solid",
@@ -78,7 +74,9 @@ const PostCard = (props) => {
                     }}
                   />
                 </Box>
-                <Typography fontWeight="lg">홍길동</Typography>
+                <Typography fontWeight="lg">
+                  {props.review.userName}
+                  </Typography>
                 <IconButton
                   variant="plain"
                   color="neutral"
@@ -114,10 +112,17 @@ const PostCard = (props) => {
               </Box>
               <CardOverflow>
                 <AspectRatio objectFit="contain">
+                {props.review.imgUrl ? (
                   <img
-                    src="http://drive.google.com/uc?export=view&id=1z3CRSIYjm0c9IlEgk5LSMG2XbkvdqWdA"
-                    alt=""
+                    src={props.review.imgUrl}
+                    alt="default"
                   />
+                  ) : (
+                    <img
+                    src="http://drive.google.com/uc?export=view&id=1z3CRSIYjm0c9IlEgk5LSMG2XbkvdqWdA"
+                    alt="default"
+                  />
+                  )}
                 </AspectRatio>
               </CardOverflow>
               <Box
@@ -153,15 +158,6 @@ const PostCard = (props) => {
                 >
                 </Box>
               </Box>
-              <Link
-                component="button"
-                underline="none"
-                fontSize="sm"
-                fontWeight="lg"
-                textColor="text.primary"
-              >
-                81 Likes
-              </Link>
               <Typography fontSize="sm">
                 <Link
                   component="button"
@@ -169,9 +165,9 @@ const PostCard = (props) => {
                   fontWeight="lg"
                   textColor="text.primary"
                 >
-                  홍길동
+                  {props.review.userName}
                 </Link>{" "}
-                같이 운동해서 재밌었습니다.wfewefffeefefefefefefefef
+                {props.review.contents}
               </Typography>
               <Link
                 component="button"
