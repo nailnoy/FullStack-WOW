@@ -119,7 +119,7 @@ public class    ClubController {
         return new ResponseEntity("운동모임 삭제가 완료되었습니다.", HttpStatus.OK);
     }
     
-    @GetMapping("/post")
+    @GetMapping("/review")
     public ResponseEntity<ClubReviewResponseDto> getClubsForPost() {
     	List<Club> allClubs = clubService.findAllClubsForPost();
     	List<ClubResponseDto> clubResponseDtoList = allClubs.stream()

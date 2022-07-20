@@ -18,21 +18,13 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
-import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-// @mui/joy 설치
-// cmd 관리자권한 front 디렉토리에서 명령어
-// yarn add @mui/joy @emotion/react @emotion/styled
 
-const cards = [1, 2, 3, 4, 5];
-
-const PostCard = () => {
+const PostCard = (props) => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -44,19 +36,9 @@ const PostCard = () => {
   };
 
   return (
-    <Container sx={{ py: 8 }} maxWidth="md">
-      <Typography
-        gutterBottom
-        variant="h6"
-        component="h2"
-        fontFamily="Jua"
-        fontSize="2rem"
-      >
-        등록된 게시글 목록
-      </Typography>
-      <Grid container spacing={4}>
-        {cards.map((card) => (
-          <Grid item key={card} xs={12} sm={6} md={4}>
+ 
+       
+          <Grid item key={1} xs={12} sm={6} md={4}>
             <Card
               variant="outlined"
               sx={{
@@ -141,17 +123,6 @@ const PostCard = () => {
               <Box
                 sx={{ display: "flex", alignItems: "center", mx: -1, my: 1 }}
               >
-                <Box sx={{ width: 0, display: "flex", gap: 0.5 }}>
-                  <IconButton variant="plain" color="neutral" size="sm">
-                    <FavoriteBorder />
-                  </IconButton>
-                  <IconButton variant="plain" color="neutral" size="sm">
-                    <ModeCommentOutlined />
-                  </IconButton>
-                  <IconButton variant="plain" color="neutral" size="sm">
-                    <SendOutlined />
-                  </IconButton>
-                </Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -180,9 +151,6 @@ const PostCard = () => {
                     flexDirection: "row-reverse",
                   }}
                 >
-                  <IconButton variant="plain" color="neutral" size="sm">
-                    <BookmarkBorderRoundedIcon />
-                  </IconButton>
                 </Box>
               </Box>
               <Link
@@ -250,10 +218,8 @@ const PostCard = () => {
               </CardOverflow>
             </Card>
           </Grid>
-        ))}
     
-      </Grid>
-    </Container>
+
   );
 };
 

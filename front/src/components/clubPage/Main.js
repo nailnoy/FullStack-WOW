@@ -6,7 +6,7 @@ import { Container, Typography, Grid } from '@mui/material';
 import { message } from "antd";
 
 import Tags from "./TagFilter";
-import SearchBar from "./SearchBar";
+import SearchBar from "../common/SearchBar";
 import ClubCard from "./ClubCard";
 import Spin from "../common/Spin";
 
@@ -22,7 +22,6 @@ function Main() {
 	const [likedClubs, setLikedClubs] = useState([]);
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
-	const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
 	const userId = localStorage.getItem("user_id");
 
     useEffect(() => {
@@ -68,14 +67,6 @@ function Main() {
 		}
 	};
 
-	const showInfoModal = () => {
-		setIsInfoModalVisible(true);
-	  };
-	
-	  const handleInfoCancel = () => {
-		setIsInfoModalVisible(false);
-	  };
-
 	const handleLikedClubs = (clubId) => {
 		let index = likedClubs.indexOf(clubId);
 
@@ -102,7 +93,7 @@ function Main() {
 				userId: userId,
 			});
 		} catch (err) {
-			message.error("이미 좋아요한 독서모임입니다.");
+			message.error("이미 좋아요한 운동모임입니다.");
 		}
 	};
 
@@ -161,9 +152,6 @@ function Main() {
 										club={club}
 										likedClubs={likedClubs}
 										handleLikedClubs={handleLikedClubs}
-										showInfoModal={showInfoModal}
-										handleInfoCancel={handleInfoCancel}
-										isInfoModalVisible={isInfoModalVisible}
 									/>
 							  ))
 							: ""}

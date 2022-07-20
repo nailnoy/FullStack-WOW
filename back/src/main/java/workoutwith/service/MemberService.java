@@ -28,7 +28,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final ClubRepository clubRepository;
-//    private final MailService mailService;
+    private final MailService mailService;
 
     @Transactional
     public Member apply(MemberCreateRequestDto request) {
@@ -49,22 +49,22 @@ public class MemberService {
                 + "\n\n- WOW팀";
 
         // 메일 전송 - 10초 이상 지연되는 작업
-//        sendAsyncMail(address, subject, text);
+        sendAsyncMail(address, subject, text);
 
         Member member = Member.builder().user(user).club(club).approvalStatus(ApprovalStatus.WAITING).build();
         return memberRepository.save(member);
     }
 
     // 메일 전송 비동기 처리
-//    private void sendAsyncMail(String address, String subject, String text) {
-//        CompletableFuture<Void> future = new CompletableFuture<>();
-//        new Thread(
-//                () -> {
-//                    mailService.mailSend(address, subject, text);
-//                    future.complete(null);
-//                }
-//        ).start();
-//    }
+    private void sendAsyncMail(String address, String subject, String text) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        new Thread(
+                () -> {
+                    mailService.mailSend(address, subject, text);
+                    future.complete(null);
+                }
+        ).start();
+    }
 
     @Transactional
     public void deleteMember(String userId, Long clubId, String deleteStatus) {
@@ -73,8 +73,8 @@ public class MemberService {
         Member member = memberRepository.findByUserAndClub(user, club).orElseThrow(MemberNotFoundException::new);
         memberRepository.delete(member);
 
-//        String address = user.getEmail();
-//        String subject, text;
+        String address = user.getEmail();
+        String subject, text;
 
         // 없으면 참여신청 취소, no 면 거절, out 이면 내보내기
         if (deleteStatus.equals("NO")) {

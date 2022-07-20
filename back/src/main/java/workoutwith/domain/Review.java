@@ -33,7 +33,7 @@ public class Review extends BaseTime {
     @ManyToOne(fetch = EAGER)
     private Club club;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "review")
     private final List<ReviewComment> commentList = new ArrayList<>();
 
     @Lob
