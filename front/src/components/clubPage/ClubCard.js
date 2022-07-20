@@ -129,9 +129,6 @@ const ClubCard = (props) => {
           <Button size="small" variant="outlined" onClick={() => navigate(`../detail/${props.club.id}`)}>
             자세히
           </Button>
-          <Button size="small" variant="outlined" color="success">
-            참가 신청
-          </Button>
           <LikeContainer>
             <LikeNum>{props.club.likes}</LikeNum>
             <IconButton aria-label="add to favorites"
@@ -177,23 +174,7 @@ ${customMedia.between("tablet", "desktop")`
 `;
 
 const LikeContainer = styled.div`
-	position: relative;
-  left: 50px;
+	position: sticky;
+  left: 80%;
   
-  ${customMedia.lessThan("mobile")`
-    left: 270px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-      left: 270px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-      left: 70px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-  left: 50px;
-
-  `}
 `;

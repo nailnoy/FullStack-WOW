@@ -1,4 +1,4 @@
-package workoutwith.controller.post;
+package workoutwith.controller.review;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,10 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostUpdateRequestDto {
+public class ReviewUpdateRequestDto {
 
-    private String title;
     private String contents;
     private String imgUrl;
-    private String tags;
 }

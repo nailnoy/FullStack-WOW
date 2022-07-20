@@ -25,7 +25,7 @@ const App = () => {
 					<Route exact path="/myPage" element={<MyPage/>} />
 					<Route exact path="/detail/:id" element={<ClubView/>} />
 					<Route exact path="/clubs/create" element={<CreateClub/>} />
-					<Route exact path="/clubs/update" element={<UpdateClub/>} />
+					<Route exact path="/clubs/update/:id" element={<UpdateClub/>} />
 
 				</Routes>
 			</ScrollToTop>

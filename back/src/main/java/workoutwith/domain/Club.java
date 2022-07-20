@@ -34,6 +34,9 @@ public class Club extends BaseTime {
 
     @OneToMany(mappedBy = "club")
     private final List<Member> memberList = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "club")
+    private final List<Review> reviewList = new ArrayList<>();
 
     @Column(length = 2000, nullable = false)
     @Size(max = 2000)

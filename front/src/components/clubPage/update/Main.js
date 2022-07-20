@@ -1,14 +1,14 @@
-import React, { useRef, createRef, useState, useCallback } from "react";
+import React, { useRef, createRef, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import Spin from "../../common/Spin";
 
 import { customMedia } from "../../../GlobalStyles";
-import PostEditor from "../../common/PostEditor";
 import moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 import MapContainer from "../../common/MapContainer";
-import { FormSelect } from "../../common/FormSelect";
-import { useNavigate } from "react-router-dom";
+
 
 
 import {
@@ -50,13 +50,31 @@ const Main = () => {
 	const [preview, setPreview] = useState("");
 	const [startDate, setStartDate] = useState("");
 	const [endDate, setEndDate] = useState("");
+	const [loading, setLoading] = useState(true);
+	const [club, setClub] = useState("");
 	const userId = localStorage.getItem("user_id");
+	const clubId = useParams().id;
 	const fullAddress = streetAddress + " " + detailAddress;
-	const myClub = JSON.parse(localStorage.getItem("myClub"));
+	
 
 	const editorRef = createRef();
 
 	const ref = useRef();
+
+	useEffect(() => {
+		const fetchData = async () => {
+		  try {
+			const res = await axios.get(`/clubs/${clubId}`);
+	
+			setClub(res.data);
+
+			setLoading(false);
+		  } catch (err) {
+			console.log(err);
+		  }
+		};
+		fetchData();
+	  }, []);
 
 	const onChange = (e) => {
 		setInputText(e.target.value);
@@ -141,7 +159,7 @@ const Main = () => {
 
 			if (res.status === 200) {
 				message.success("운동모임이 성공적으로 수정되었습니다!");
-				localStorage.removeItem("myClub");
+				localStorage.removeItem("club");
 				navigate(0);
 			}
 			else {
@@ -173,6 +191,12 @@ const Main = () => {
 	const disabledDate = (current) => current && current < moment().endOf("day");
 
 	return (
+		<>
+		{loading ? (
+			<SpinContainer>
+			  <Spin />
+			</SpinContainer>
+		  ) : (
 		<Wrapper>
 			<StyledForm
 				form={editForm}
@@ -184,7 +208,7 @@ const Main = () => {
 				<Row gutter={32}>
 					<Col span={16}>
 						<Form.Item
-							initialValue={myClub.title}
+							initialValue={club.title}
 							label="이름"
 							name="title"
 							rules={[{ required: true, message: "모임 이름을 입력하세요." }]}
@@ -192,7 +216,7 @@ const Main = () => {
 							<StyledInput placeholder="이름" />
 						</Form.Item>
 						<Form.Item
-							initialValue={myClub.contents}
+							initialValue={club.contents}
 							label="한 줄 소개"
 							name="contents"
 							rules={[
@@ -213,7 +237,7 @@ const Main = () => {
 							<Row>
 								<PersonnelRow>
 									<Form.Item
-										initialValue={myClub.minPersonnel}
+										initialValue={club.minPersonnel}
 										name="minPersonnel"
 									>
 										<StyledInputNumber min={2} placeholder={2} />
@@ -222,7 +246,7 @@ const Main = () => {
 								</PersonnelRow>
 								<PersonnelRow>
 									<Form.Item
-										initialValue={myClub.maxPersonnel}
+										initialValue={club.maxPersonnel}
 										name="maxPersonnel"
 									>
 										<StyledInputNumber min={2} placeholder={2} />
@@ -233,8 +257,8 @@ const Main = () => {
 						</Form.Item>
 						<Form.Item
 							initialValue={[
-								moment(myClub.startDate),
-								moment(myClub.endDate),
+								moment(club.startDate),
+								moment(club.endDate),
 							]}
 							label="진행 기간"
 							name="date"
@@ -288,7 +312,7 @@ const Main = () => {
 				</Row>
 				<Col span={16}>
 					<Form.Item
-						initialValue={myClub.tags}
+						initialValue={club.tags}
 						label="태그"
 						name="tag"
 						rules={[
@@ -304,9 +328,9 @@ const Main = () => {
 							<Form.Item
 								name="addressStreet"
 								initialValue={
-									myClub.addressStreet === "undefined"
+									club.addressStreet === "undefined"
 										? ""
-										: myClub.addressStreet
+										: club.addressStreet
 								}
 							>
 								<StyledInput
@@ -318,9 +342,9 @@ const Main = () => {
 							<Form.Item
 								name="addressDetail"
 								initialValue={
-									myClub.addressDetail === "undefined"
+									club.addressDetail === "undefined"
 										? ""
-										: myClub.addressDetail
+										: club.addressDetail
 								}
 							>
 								<StyledInput placeholder="상세 주소" />
@@ -341,7 +365,7 @@ const Main = () => {
 						height="79vh"
 						initialEditType="markdown"
 						hideModeSwitch="true"
-						initialValue={myClub.description}
+						initialValue={club.description}
 						ref={editorRef}
 						plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
 					/>
@@ -353,6 +377,8 @@ const Main = () => {
 
 			</StyledForm>
 		</Wrapper>
+		)}
+		</>
 	)
 }
 export default Main;
@@ -600,32 +626,25 @@ const FileInput = styled.div`
   `}
 `;
 
-const StyledTextArea = styled(TextArea)`
-	font-size: 16px;
-	width: 700px;
-	background-color: #f6f6f6;
-	border: 1px solid #94989b;
-	border-radius: 5px;
-  
-	${customMedia.lessThan("mobile")`
-    font-size: 10px;
+const SpinContainer = styled.div`
+  width: 100%;
+  height: 80vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${customMedia.lessThan("mobile")`
+    height: 40vh;
   `}
 
   ${customMedia.between("mobile", "largeMobile")`
-    font-size: 10px;
+    height: 40vh;
   `}
-  
-  ${customMedia.between("largeMobile", "tablet")`
-    font-size: 12px;
-  `}
-  
-  ${customMedia.between("tablet", "desktop")`
-    font-size: 14px;
-  `}
-`;
 
-const TagRow = styled(Row)`
-	margin-top: 20px;
+	${customMedia.between("largeMobile", "tablet")`
+    height: 40vh;
+  `}
 `;
 
 const Title = styled.div`

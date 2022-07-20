@@ -1,7 +1,7 @@
-package workoutwith.controller.post;
+package workoutwith.controller.review;
 
-import workoutwith.domain.Post;
-import workoutwith.service.PostService;
+import workoutwith.domain.Review;
+import workoutwith.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,53 +18,53 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
-public class PostController {
+public class ReviewController {
 
-    private final PostService postService;
+    private final ReviewService reviewService;
 
     //게시글 생성
     @PostMapping
-    public ResponseEntity<PostCreateRequestDto> createPost(
-            PostCreateRequestDto postCreateRequestDto,
+    public ResponseEntity<ReviewCreateRequestDto> createReview(
+            ReviewCreateRequestDto reviewCreateRequestDto,
             @RequestParam(value = "img", required = false) MultipartFile file) {
-    	Post post = postService.createPost(postCreateRequestDto, file);
-        return new ResponseEntity("게시글 등록이 완료되었습니다. (clubId: " + post.getId() + ")", HttpStatus.OK);    
+    	Review review = reviewService.createReview(reviewCreateRequestDto, file);
+        return new ResponseEntity("게시글 등록이 완료되었습니다. (clubId: " + review.getId() + ")", HttpStatus.OK);    
     }
 
     //게시글 리스트 조회
     @GetMapping
-    public ResponseEntity<PostPageResponseDto> getPosts(
+    public ResponseEntity<ReviewPageResponseDto> getReview(
             @RequestParam(value = "keyword") String keyword,
             @PageableDefault(size = 9) Pageable pageable) {
-        List<Post> allPosts = postService.findAllPosts(keyword);
+        List<Review> allReviews = reviewService.findAllReviews(keyword);
         //page=0부터 동작하는 게 default이지만, yml 설정을 통해 1부터 시작하게 할 수 있음. 그러나 여전히 0이어도 동작은 한다.
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), allPosts.size());
-        Page<Post> page = new PageImpl<>(allPosts.subList(start, end), pageable, allPosts.size());
-        List<PostResponseDto> clubResponseDtoList = page.stream()
-                .map(PostResponseDto::new)  //조회한 클럽 리스트 항목 하나하나를 ClubResponseDto와 매핑해 줌
+        int end = Math.min((start + pageable.getPageSize()), allReviews.size());
+        Page<Review> page = new PageImpl<>(allReviews.subList(start, end), pageable, allReviews.size());
+        List<ReviewResponseDto> reviewResponseDtoList = page.stream()
+                .map(ReviewResponseDto::new)  //조회한 클럽 리스트 항목 하나하나를 ClubResponseDto와 매핑해 줌
                 .collect(Collectors.toList());  //스트림에서 작업한 결과를 담은 리스트로 반환
         //Collectors.joining(delimeter, prefix, suffix)로 스트링으로 조합할 수 있음
-        PostPageResponseDto pageResponseDto = new PostPageResponseDto((long) allPosts.size(), clubResponseDtoList);
+        ReviewPageResponseDto pageResponseDto = new ReviewPageResponseDto((long) allReviews.size(), reviewResponseDtoList);
         return new ResponseEntity<>(pageResponseDto, HttpStatus.OK);
     }
 
     //게시글 상세조회
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDetailResponseDto> getPostDetail(
-            @PathVariable Long postId) {
+    public ResponseEntity<ReviewDetailResponseDto> getReviewDetail(
+            @PathVariable Long reviewId) {
         return ResponseEntity.ok(
-                new PostDetailResponseDto(postService.findPostById(postId))
+                new ReviewDetailResponseDto(reviewService.findReviewById(reviewId))
         );
     }
 
     //사용자가 만든 게시글 조회
     @GetMapping("/users/{userId}")
-    public ResponseEntity<PostDetailResponseDto> getUserPost(
+    public ResponseEntity<ReviewDetailResponseDto> getUserReview(
             @PathVariable String userId) {
-        Post post = postService.findPostByUserId(userId);
-        if (post != null) {
-            return ResponseEntity.ok(new PostDetailResponseDto(post));
+        Review review = reviewService.findReviewByUserId(userId);
+        if (review != null) {
+            return ResponseEntity.ok(new ReviewDetailResponseDto(review));
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -72,12 +72,12 @@ public class PostController {
 
     // 모임 수정 (my page)
     @PutMapping("/users/{userId}")
-    public ResponseEntity<Void> updateClub(
-            PostUpdateRequestDto postUpdateRequestDto,
+    public ResponseEntity<Void> updateReview(
+            ReviewUpdateRequestDto reviewUpdateRequestDto,
             @PathVariable String userId,
             @RequestParam(value = "img", required = false) MultipartFile file) {
         try {
-            postService.updatePost(postUpdateRequestDto, userId, file);
+        	reviewService.updateReview(reviewUpdateRequestDto, userId, file);
             return new ResponseEntity("게시글 수정이 완료되었습니다.", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,9 +86,9 @@ public class PostController {
 
     // 모임 삭제 (my page)
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<Void> deleteClub(
+    public ResponseEntity<Void> deleteReview(
             @PathVariable String userId) {
-        postService.deletePost(userId);
+    	reviewService.deleteReview(userId);
         return new ResponseEntity("게시글 삭제가 완료되었습니다.", HttpStatus.OK);
     }
 

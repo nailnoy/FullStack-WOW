@@ -11,29 +11,30 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
 @ToString(exclude = {"commentList"})
-@Table(name = "posts")
+@Table(name = "reviews")
 @Getter
-public class Post extends BaseTime {
+public class Review extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //데이터베이스에 위임(자동생성, auto_increment)
-    //@Column(name = "club_id")
     private Long id;
 
     @JoinColumn(name = "user_id")
     @OneToOne(fetch = LAZY)
     private User user;
+    
+    @JoinColumn(name = "club_id")
+    @ManyToOne(fetch = EAGER)
+    private Club club;
 
     @OneToMany(mappedBy = "post")
-    private final List<PostComment> commentList = new ArrayList<>();
-
-    @Column(nullable = false)
-    private String title;
+    private final List<ReviewComment> commentList = new ArrayList<>();
 
     @Lob
     private String imgUrl;
@@ -43,16 +44,15 @@ public class Post extends BaseTime {
 
 
     @Builder
-    public Post(User user, String title, String contents, String imgUrl, int likes) {
+    public Review(User user, Club club, String title, String contents, String imgUrl, int likes) {
         this.user = user;
-        this.title = title;
+        this.club = club;
         this.contents = contents;
         this.imgUrl = imgUrl;
     }
 
     //TODO: 파라미터 줄이는 방법 구상
-    public void updateClub(String title, String contents, String imgUrl) {
-        this.title = title;
+    public void updateReview(String contents, String imgUrl) {
         this.contents = contents;
         this.imgUrl = imgUrl;
     }

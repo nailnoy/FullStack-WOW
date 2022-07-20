@@ -24,7 +24,6 @@ import { Viewer } from "@toast-ui/react-editor";
 import CommentView from "./CommentView";
 import { useNavigate } from "react-router-dom";
 import MapContainer from "../../common/MapContainer";
-import Spin from "../../common/Spin";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism.css";
@@ -48,7 +47,7 @@ const Main = (props) => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [likedClubs, setLikedClubs] = useState([]);
-  const [apply, setApply] = useState("");
+  const [apply, setApply] = useState();
   const [loading, setLoading] = useState(true);
   const [createdAt, setCreatedAt] = useState();
   const [user, setUser] = useState("");
@@ -93,6 +92,7 @@ const Main = (props) => {
           const applyRes = await axios.get("/members/ids", {
             params: { userId: userId },
           });
+
 
           setApply(applyRes.data.joiningClubIdList);
         }
@@ -212,10 +212,6 @@ const Main = (props) => {
     }
   };
 
-  const MoveToUpdate = () => {
-    localStorage.setItem("myClub", JSON.stringify(club));
-    navigate("../update");
-  };
 
   const handleReportUser = async () => {
     try {
@@ -317,12 +313,7 @@ const Main = (props) => {
               >
                 <Typography fontFamily="Jua">상세정보</Typography>
               </Button>
-              <Button
-                onClick={MoveToUpdate}
-                className="modifyBtn"
-                color="warning"
-                size="large"
-              >
+             
                 <StyledModal
                   visible={isInfoModalVisible}
                   onCancel={() => handleInfoCancel()}
@@ -367,6 +358,12 @@ const Main = (props) => {
                   </Container>
 
                 </StyledModal>
+                <Button
+                onClick={()=> navigate(`../clubs/update/${clubId}`)}
+                className="modifyBtn"
+                color="warning"
+                size="large"
+              >
                 <Typography fontFamily="Jua">수정</Typography>
               </Button>
               <Button
@@ -472,6 +469,7 @@ const Main = (props) => {
                     if (club.clubStatus !== "EXPIRED") {
                       if (userId && apply.includes(club.id))
                         return (
+                          <>
                           <Button
                             onClick={handleDeleteApply(club.id)}
                             className="deleteBtn"
@@ -479,6 +477,7 @@ const Main = (props) => {
                           >
                             참여취소
                           </Button>
+                          </>
                         );
                       else
                         return (

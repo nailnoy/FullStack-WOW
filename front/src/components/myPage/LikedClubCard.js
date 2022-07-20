@@ -126,7 +126,7 @@ const LikedClubCard = (props) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" variant="outlined" onClick={() => navigate(`${props.club.id}`)}>
+          <Button size="small" variant="outlined" onClick={() => navigate(`../detail/${props.club.clubId}`)}>
             자세히
           </Button>
           <Button size="small" variant="outlined" color="success">
@@ -138,7 +138,7 @@ const LikedClubCard = (props) => {
               onClick={(e) => {
                 e.stopPropagation();
                 if (props.userId) {
-                  props.handleLikedClubs(props.club.id);
+                  props.handleLikeDelete(props.club.clubId);
                 } else {
                   message.warning("로그인이 필요한 기능입니다.");
                 }

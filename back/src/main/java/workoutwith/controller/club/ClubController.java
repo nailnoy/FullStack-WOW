@@ -101,5 +101,15 @@ public class    ClubController {
         clubService.deleteClub(userId);
         return new ResponseEntity("운동모임 삭제가 완료되었습니다.", HttpStatus.OK);
     }
+    
+    @GetMapping("/post")
+    public ResponseEntity<ClubReviewResponseDto> getClubsForPost() {
+    	List<Club> allClubs = clubService.findAllClubsForPost();
+    	List<ClubResponseDto> clubResponseDtoList = allClubs.stream()
+                 .map(ClubResponseDto::new)  //조회한 클럽 리스트 항목 하나하나를 ClubResponseDto와 매핑해 줌
+                 .collect(Collectors.toList());
+    	ClubReviewResponseDto reviewResponseDto = new ClubReviewResponseDto(clubResponseDtoList);
+    	return new ResponseEntity<>(reviewResponseDto, HttpStatus.OK);
+    }
 
 }
