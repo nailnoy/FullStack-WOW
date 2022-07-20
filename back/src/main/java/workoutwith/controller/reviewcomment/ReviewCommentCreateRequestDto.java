@@ -1,6 +1,5 @@
 package workoutwith.controller.reviewcomment;
 
-import workoutwith.domain.Comment;
 import workoutwith.domain.ReviewComment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

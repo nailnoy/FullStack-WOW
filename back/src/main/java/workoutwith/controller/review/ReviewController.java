@@ -85,10 +85,10 @@ public class ReviewController {
     }
 
     // 모임 삭제 (my page)
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(
-            @PathVariable String userId) {
-    	reviewService.deleteReview(userId);
+            @PathVariable Long reviewId) {
+    	reviewService.deleteReview(reviewId);
         return new ResponseEntity("게시글 삭제가 완료되었습니다.", HttpStatus.OK);
     }
 
