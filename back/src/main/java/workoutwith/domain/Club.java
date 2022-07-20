@@ -20,7 +20,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,26 +31,22 @@ import lombok.ToString;
 @ToString(exclude = {"commentList", "memberList"})
 @Table(name = "clubs")
 @Getter
-@ApiModel(value="모임 정보", description = "모임 정보를 보유한 Domain Class")
+
 public class Club extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //데이터베이스에 위임(자동생성, auto_increment)
-    @ApiModelProperty(example="1")
     //@Column(name = "club_id")
     private Long id;
 
     @JoinColumn(name = "user_id")
     @OneToOne(fetch = LAZY)
-    @ApiModelProperty(example="11")
     private User user;
 
     @OneToMany(mappedBy = "club")
-    @ApiModelProperty(example="??댓글 리스트")
     private final List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
-    @ApiModelProperty(example="??참가자 리스트")
     private final List<Member> memberList = new ArrayList<>();
     
     @OneToMany(mappedBy = "club")
@@ -59,45 +54,33 @@ public class Club extends BaseTime {
 
     @Column(length = 2000, nullable = false)
     @Size(max = 2000)
-    @ApiModelProperty(example="설명")
     private String description;
 
     @Column(nullable = false)
-    @ApiModelProperty(example="제목")
     private String title;
 
     @Lob
-    @ApiModelProperty(example="대표 이미지url")
     private String imgUrl;
 
     @Column(nullable = false)
-    @ApiModelProperty(example="한줄 설명")
     private String contents;
 
     @Column(nullable = false)
-    @ApiModelProperty(example="2022-07-20")
     private LocalDate startDate;
 
     @Column(nullable = false)
-    @ApiModelProperty(example="2022-07-22")
     private LocalDate endDate;
 
-    
-    @ApiModelProperty(example="태그명")
     private String tags;
 
     @Column(nullable = false)
-    @ApiModelProperty(example="3")
     private int minPersonnel;
 
     @Column(nullable = false)
-    @ApiModelProperty(example="4")
     private int maxPersonnel;
 
-    @ApiModelProperty(example="123")
     private String addressDetail;
 
-    @ApiModelProperty(example="와우시 운동로")
     private String addressStreet;
 
     @ApiModelProperty(example="1")

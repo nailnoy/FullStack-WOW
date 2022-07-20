@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
 import workoutwith.domain.Club;
 import workoutwith.service.ClubService;
 
@@ -43,7 +44,7 @@ public class    ClubController {
     @PostMapping
     public ResponseEntity<ClubCreateRequestDto> createClub(
             ClubCreateRequestDto clubCreateRequestDto,
-            @RequestParam(value = "img", required = false) MultipartFile file) {
+             @ApiIgnore @RequestParam(value = "img", required = false) MultipartFile file) {
         //이 유저가 만든 독서모임이 있는지 체크(한사람당 한 개)
         //400 에러 -> 잘못된 요청
         if (clubService.findClubByUserId(clubCreateRequestDto.getUserId()) != null) {
