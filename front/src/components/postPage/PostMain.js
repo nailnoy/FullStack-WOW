@@ -1,9 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 import {
   Modal,
@@ -12,39 +10,62 @@ import {
   Form,
   Row,
   Skeleton,
-  Button,
   Select,
+  message
 } from "antd";
 
-import PostCard from "./PostCard";
-import { Pagination } from "@mui/material";
-import SearchBar from "../clubPage/SearchBar";
+import {
+  Container,
+  Typography,
+  Pagination,
+  Button,
+  Grid,
+  Fab
+} from "@mui/material";
 
-import styled from "styled-components";
-import Fab from '@mui/material/Fab';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+
+import Spin from "../common/Spin";
+import PostCard from "./PostCard";
+import SearchBar from "../common/SearchBar";
 import { customMedia } from "../../GlobalStyles";
 
 function PostMain() {
   const ref = useRef();
+  const navigate = useNavigate();
 
   const [clubs, setClubs] = useState();
+  const [reviews, setReviews] = useState();
   const [editForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imgFile, setImgFile] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [preview, setPreview] = useState("");
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     fetchData();
-  }, [userId]);
+    setLoading(false);
+  }, [page, keyword, userId]);
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("/clubs/post");
-      setClubs(res.data.clubList);
-      console.log(res.data.clubList);
+      const clubRes = await axios.get("/clubs/review");
+      setClubs(clubRes.data.clubList);
+
+      const res = await axios.get("/reviews", {
+        params: {
+          keyword: keyword,
+          page: page,
+        },
+      });
+
+      setReviews(res.data.reviewList);
+      console.log(res.data.reviewList);
+
     } catch (err) {
       console.log(err);
     }
@@ -83,9 +104,39 @@ function PostMain() {
   };
 
 
+  const sendData = async (values) => {
+    const formData = new FormData();
+
+    formData.append("userId", userId);
+    formData.append("clubId", values.club);
+    formData.append("contents", values.contents);
+    formData.append("img", imgFile);
+
+    try {
+      const res = await axios.post(`/reviews`, formData);
+
+      if (res.status === 200) {
+        message.success("후기가 성공적으로 생성되었습니다!");
+        navigate(0);
+      }
+      else {
+        message.error("후기 생성에 실패했습니다.")
+      };
+    } catch (err) {
+      if (
+        err.response.data.message ===
+        "Maximum upload size exceeded; nested exception is java.lang.IllegalStateException: org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException: The field img exceeds its maximum permitted size of 1048576 bytes."
+      )
+        message.warning(
+          "사진 용량이 초과되었습니다! 사진을 다시 등록해주세요."
+        );
+    }
+  };
+
+
   const onFinish = async (values) => {
     try {
-      // sendData(values);
+      sendData(values);
     } catch (err) {
       console.log(err);
     }
@@ -98,142 +149,168 @@ function PostMain() {
   return (
     <>
       <main>
-        <Container sx={{ pt: 8 }} maxWidth="md">
-          <Typography
-            gutterBottom
-            variant="h6"
-            component="h2"
-            fontFamily="Jua"
-            fontSize="2rem"
-            textAlign="center"
-          >
-            게시글 검색
-          </Typography>
-        </Container>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <Container sx={{ py: 1 }} maxWidth="xs">
-            <SearchBar />
-          </Container>
+        {loading ? (
+          <SpinContainer>
+            <Spin />
+          </SpinContainer>
+        ) : (
+          <>
+            <Container sx={{ pt: 8 }} maxWidth="md">
+              <Typography
+                gutterBottom
+                variant="h6"
+                component="h2"
+                fontFamily="Jua"
+                fontSize="2rem"
+                textAlign="center"
+              >
+                게시글 검색
+              </Typography>
+            </Container>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Container sx={{ py: 1 }} maxWidth="xs">
+                <SearchBar keyword={keyword} setKeyword={setKeyword} />
+              </Container>
 
-          <Container sx={{ py: 1 }} maxWidth="xs">
-            <Button
-              size="large"
-              onClick="Box"
-              variant="outlined"
+            </div>
+            <Container sx={{ py: 8 }} maxWidth="md">
+              <Typography
+                gutterBottom
+                variant="h6"
+                component="h2"
+                fontFamily="Jua"
+                fontSize="2rem"
+              >
+                등록된 게시글 목록
+              </Typography>
+              <Grid container spacing={4}>
+              {reviews
+							? reviews.map((review) => (
+                <PostCard
+                    key={review.id}
+										userId={userId}
+										review={review} />
+                ))
+                : ""}
+              </Grid>
+            </Container>
+            <Pagination page={3} />
+
+            <FabContainer>
+              <Fab color="primary" aria-label="add" onClick={showModal} >
+                <AddIcon />
+              </Fab>
+            </FabContainer>
+
+            <StyledModal
+              visible={isModalVisible}
+              onCancel={() => handleCancel()}
             >
-              게시글 작성
-            </Button>
-          </Container>
-        </div>
-        <PostCard />
-        <Pagination page={3} />
+              <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
+                <StyledForm
+                  form={editForm}
+                  name="editForm"
+                  layout="vertical"
+                  onFinish={onFinish}
+                  onFinishFailed={onFinishFailed}
+                >
+                  <Row gutter={32}>
+                    <Col span={24}>
+                      <Form.Item
+                        initialValue={""}
+                        label="모임"
+                        name="club"
+                        rules={[{ required: true, message: "모임을 선택해주세요." }]}
+                      >
+                        <Select
+                          style={{
+                            width: 120,
+                          }}
+                          onChange={handleChange}
+                        >
+                          {reviews
+                            ? clubs.map((club) => (
+                              <Option value={club.id}>{club.title}</Option>
 
-        <FabContainer>
-          <Fab color="primary" aria-label="add" onClick={showModal} >
-            <AddIcon />
-          </Fab>
-        </FabContainer>
+                            ))
+                            : ""}
+                        </Select>
+                      </Form.Item>
+                    </Col>
 
-        <StyledModal
-          visible={isModalVisible}
-          onCancel={() => handleCancel()}
-        >
-          <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-            <StyledForm
-              form={editForm}
-              name="editForm"
-              layout="vertical"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-              <Row gutter={32}>
-                <Col span={24}>
-                  <Form.Item
-                    initialValue={""}
-                    label="모임"
-                    name="post"
-                    rules={[{ required: true, message: "모임을 선택해주세요." }]}
-                  >
-                    <Select
-                      style={{
-                        width: 120,
-                      }}
-                      onChange={handleChange}
+                    <Col span={24}>
+                      <Form.Item
+                        label="사진"
+                        name="img"
+                        rules={[
+                          { required: false, message: "모임의 사진을 업로드하세요." },
+                        ]}
+                        style={{ textAlign: "center" }}
+                      >
+
+                        {!preview ? (
+                          <>
+                            <SkeletonImg />
+                          </>
+                        ) : (
+                          <>
+                            <PreviewImage
+                              src={preview}
+                              alt="Preview image"
+                            ></PreviewImage>
+                          </>
+                        )}
+                        <FileInput>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImgChange}
+                            ref={ref}
+                          />
+                        </FileInput>
+                        <Button>
+                          <DeleteIcon onClick={handleImgDelete} alt="Trash icon" />
+                        </Button>
+
+                      </Form.Item>
+
+                    </Col>
+                    <Col span={24}>
+                      <Form.Item
+                        initialValue={""}
+                        label="내용"
+                        name="contents"
+                        rules={[{ required: true, message: "후기를 입력하세요." }]}
+                      >
+                        <StyledTextArea
+                          rows={10}
+                          placeholder={
+                            "후기를 남겨주세요."
+                          }
+                        />
+
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  <ButtonRow>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      type="primary"
+                      htmlType="summit"
                     >
-                      {clubs
-						            	? clubs.map((club) => (
-                      <Option value={club.id}>{club.title}</Option>
-                      
-                      ))
-                      : ""}
-                    </Select>
-                  </Form.Item>
-                </Col>
-
-                <Col span={24}>
-                  <Form.Item
-                    label="사진"
-                    name="img"
-                    rules={[
-                      { required: false, message: "모임의 사진을 업로드하세요." },
-                    ]}
-                    style={{ textAlign: "center" }}
-                  >
-
-                    {!preview ? (
-                      <>
-                        <SkeletonImg />
-                      </>
-                    ) : (
-                      <>
-                        <PreviewImage
-                          src={preview}
-                          alt="Preview image"
-                        ></PreviewImage>
-                      </>
-                    )}
-                    <FileInput>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImgChange}
-                        ref={ref}
-                      />
-                    </FileInput>
-                    <Button>
-                      <DeleteIcon onClick={handleImgDelete} alt="Trash icon" />
+                      <Typography fontFamily="Jua">작성</Typography>
                     </Button>
+                  </ButtonRow>
 
-                  </Form.Item>
+                </StyledForm>
+              </Container>
 
-                </Col>
-                <Col span={24}>
-                  <Form.Item
-                    initialValue={""}
-                    label="내용"
-                    name="contents"
-                    rules={[{ required: true, message: "후기를 입력하세요." }]}
-                  >
-                    <StyledTextArea
-                      rows={10}
-                      placeholder={
-                        "후기를 남겨주세요."
-                      }
-                    />
-
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <ButtonRow>
-                <FilledBtn type="primary" htmlType="summit" >작성</FilledBtn>
-              </ButtonRow>
-
-            </StyledForm>
-          </Container>
-
-        </StyledModal>
-
+            </StyledModal>
+          </>
+        )}
 
       </main>
     </>
@@ -405,31 +482,6 @@ const SkeletonImg = styled(Skeleton.Image)`
 	}
 `;
 
-const FilledBtn = styled(Button)`
-	& {
-		color: #ffffff;
-		background-color: #1890ff;
-		border: none;
-		border-radius: 6px;
-    outline: none;
-    
-    ${customMedia.lessThan("mobile")`
-      font-size: 10px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-      font-size: 10px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
-      font-size: 12px;
-    `}
-
-    ${customMedia.between("tablet", "desktop")`
-      font-size: 16px;
-    `}
-	}
-`;
 
 const StyledTextArea = styled(TextArea)`
 	font-size: 16px;
@@ -455,3 +507,11 @@ const StyledTextArea = styled(TextArea)`
   `}
 `;
 
+const SpinContainer = styled.div`
+	width: 100%;
+	height: 80vh;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;

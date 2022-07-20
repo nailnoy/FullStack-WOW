@@ -194,21 +194,4 @@ ${customMedia.between("tablet", "desktop")`
 const LikeContainer = styled.div`
   position: sticky;
   left: 80%;
-
-  ${customMedia.lessThan("mobile")`
-    left: 270px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-      left: 270px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-      left: 70px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-  left: 50px;
-
-  `}
 `;

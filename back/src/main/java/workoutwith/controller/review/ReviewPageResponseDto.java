@@ -13,7 +13,7 @@ public class ReviewPageResponseDto {
     private Long totalCount;
     private List<ReviewResponseDto> reviewList;
 
-    public ReviewPageResponseDto(Long totalCount, List<ReviewResponseDto> review) {
+    public ReviewPageResponseDto(Long totalCount, List<ReviewResponseDto> reviewList) {
         this.totalCount = totalCount;
         this.reviewList = reviewList;
     }
