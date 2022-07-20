@@ -1,19 +1,30 @@
 package workoutwith.controller.club;
 
-import workoutwith.domain.Club;
-import workoutwith.service.ClubService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import workoutwith.domain.Club;
+import workoutwith.service.ClubService;
 
 @RestController
 @RequestMapping("/clubs")
@@ -23,6 +34,12 @@ public class    ClubController {
     private final ClubService clubService;
 
     //모임 생성
+    @ApiOperation(value="모임 생성", notes="모임 등록, 한 계정에 한 모임만 생성 가능")
+    @ApiResponses({
+    	@ApiResponse(code=200, message="저장 완료"),
+    	@ApiResponse(code=404, message="Not Found"),
+    	@ApiResponse(code=500, message="Internal Server Error")
+    })
     @PostMapping
     public ResponseEntity<ClubCreateRequestDto> createClub(
             ClubCreateRequestDto clubCreateRequestDto,

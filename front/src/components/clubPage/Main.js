@@ -22,6 +22,7 @@ function Main() {
 	const [likedClubs, setLikedClubs] = useState([]);
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
+	const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
 	const userId = localStorage.getItem("user_id");
 
     useEffect(() => {
@@ -66,6 +67,14 @@ function Main() {
 			console.log(err);
 		}
 	};
+
+	const showInfoModal = () => {
+		setIsInfoModalVisible(true);
+	  };
+	
+	  const handleInfoCancel = () => {
+		setIsInfoModalVisible(false);
+	  };
 
 	const handleLikedClubs = (clubId) => {
 		let index = likedClubs.indexOf(clubId);
@@ -152,6 +161,9 @@ function Main() {
 										club={club}
 										likedClubs={likedClubs}
 										handleLikedClubs={handleLikedClubs}
+										showInfoModal={showInfoModal}
+										handleInfoCancel={handleInfoCancel}
+										isInfoModalVisible={isInfoModalVisible}
 									/>
 							  ))
 							: ""}

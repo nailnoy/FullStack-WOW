@@ -15,9 +15,9 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/react-editor";
@@ -36,6 +36,7 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import "tui-color-picker/dist/tui-color-picker.css";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 import { width } from "@mui/system";
+import { CompareSharp } from "@mui/icons-material";
 
 const Main = (props) => {
   const navigate = useNavigate();
@@ -54,7 +55,9 @@ const Main = (props) => {
   const clubId = useParams().id;
   const userId = localStorage.getItem("user_id");
   const userImg = localStorage.getItem("user_image");
-  const reportHistory = [].concat(JSON.parse(localStorage.getItem("report_history")));
+  const reportHistory = [].concat(
+    JSON.parse(localStorage.getItem("report_history"))
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +65,6 @@ const Main = (props) => {
         const res = await axios.get(`/clubs/${clubId}`);
 
         setClub(res.data);
-        console.log(res.data);
         let tempCeatedAt = new Date(res.data.createdAt);
 
         setCreatedAt(
@@ -107,7 +109,6 @@ const Main = (props) => {
 
   const showInfoModal = () => {
     setIsInfoModalVisible(true);
-
   };
 
   const handleInfoCancel = () => {
@@ -217,11 +218,17 @@ const Main = (props) => {
     try {
       const getRes = await axios.get(`/users/${club.userId}`);
       if (getRes.status === 200) {
-        const reportData = { authority: Number(getRes.data.authority), declaration: Number(getRes.data.declaration) };
+        const reportData = {
+          authority: Number(getRes.data.authority),
+          declaration: Number(getRes.data.declaration),
+        };
         const res = await axios.put(`/users/report/${club.userId}`, reportData);
         if (res.status === 200) {
           message.success("신고가 완료되었습니다.");
-          localStorage.setItem("report_history", JSON.stringify(reportHistory.concat([clubId])));
+          localStorage.setItem(
+            "report_history",
+            JSON.stringify(reportHistory.concat([clubId]))
+          );
         } else {
           message.error("신고에 실패하였습니다.");
         }
@@ -243,22 +250,18 @@ const Main = (props) => {
       ) : (
         <>
           <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-
             <Box
               className="headerLogo"
               display="flex"
               sx={{ pb: 3, color: "text.secondary" }}
             >
-              {/* {ViewContents.noteId}/{ViewContents.title} */}
               글번호 / {club.id}
             </Box>
             <Box
               id="btnBox"
-              //   className={ ViewContents.noteId === "admin" || UserAuth === false ? "noneDisplay" : "onDisplay" }
               display="flex"
               justifyContent="right"
             >
-
               {(() => {
                 if (!reportHistory.includes(clubId)) {
                   return (
@@ -299,11 +302,10 @@ const Main = (props) => {
                         >
                           <Typography fontFamily="Jua">취소</Typography>
                         </Button>
-
                       </StyledModal>
-                    </>)
-
-                } else return
+                    </>
+                  );
+                } else return;
               })()}
               <Button
                 onClick={showInfoModal}
@@ -313,97 +315,102 @@ const Main = (props) => {
               >
                 <Typography fontFamily="Jua">상세정보</Typography>
               </Button>
-             
-                <StyledModal
-                  visible={isInfoModalVisible}
-                  onCancel={() => handleInfoCancel()}
+              <StyledModal
+                visible={isInfoModalVisible}
+                onCancel={() => handleInfoCancel()}
+              >
+                <Container
+                  sx={{ p: 8 }}
+                  maxWidth="md"
+                  className="containerWrap"
                 >
-                  <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
-                    <Typography
-                      variant="h5"
-                      component="div"
-                      className="count"
-                      fontFamily="Jua"
-                    >
-                      참여 인원
-                    </Typography>
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    className="count"
+                    fontFamily="Jua"
+                  >
+                    참여 인원
+                  </Typography>
 
-                    <Typography
-                      variant="subtitle1"
-                      component="div"
-                      className="count"
-                      fontFamily="Jua"
-                    >
-                      - {club.minPersonnel}인 ~ {club.maxPersonnel}인
-                    </Typography>
-                    <br />
-                    <Typography
-                      variant="h5"
-                      component="div"
-                      className="count"
-                      fontFamily="Jua"
-                    >
-                      진행 기간
-                    </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    component="div"
+                    className="count"
+                    fontFamily="Jua"
+                  >
+                    - {club.minPersonnel}인 ~ {club.maxPersonnel}인
+                  </Typography>
+                  <br />
+                  <Typography
+                    variant="h5"
+                    component="div"
+                    className="count"
+                    fontFamily="Jua"
+                  >
+                    진행 기간
+                  </Typography>
 
-                    <Typography
-                      variant="subtitle1"
-                      component="div"
-                      className="count"
-                      fontFamily="Jua"
-                    >
-                      - {club.startDate} ~ {club.endDate}
-                    </Typography>
-                    <br />
-                  </Container>
-
-                </StyledModal>
-                <Button
-                onClick={()=> navigate(`../clubs/update/${clubId}`)}
-                className="modifyBtn"
-                color="warning"
-                size="large"
-              >
-                <Typography fontFamily="Jua">수정</Typography>
-              </Button>
-              <Button
-                onClick={handleDeleteClub}
-                className="deleteBtn"
-                color="error"
-                size="large"
-              >
-                <Typography fontFamily="Jua">삭제</Typography>
-              </Button>
+                  <Typography
+                    variant="subtitle1"
+                    component="div"
+                    className="count"
+                    fontFamily="Jua"
+                  >
+                    - {club.startDate} ~ {club.endDate}
+                  </Typography>
+                  <br />
+                </Container>
+              </StyledModal>
+              {(() => {
+                if (club.userId === userId) {
+                  return (
+                    <>
+                      <Button
+                        onClick={()=> navigate(`../clubs/update/${clubId}`)}
+                        className="modifyBtn"
+                        color="warning"
+                        size="large"
+                      >
+                        <Typography fontFamily="Jua">수정</Typography>
+                      </Button>
+                      <Button
+                        onClick={handleDeleteClub}
+                        className="deleteBtn"
+                        color="error"
+                        size="large"
+                      >
+                        <Typography fontFamily="Jua">삭제</Typography>
+                      </Button>
+                    </>
+                  );
+                } else return;
+              })()}
             </Box>
-
-            <section>
-              <Typography
-                variant="h4"
-                component="div"
-                className="title"
-                fontFamily="Jua"
-              >
-                {/* {ViewContents.title} */}
-                {club.title}
-              </Typography>
-              {/* <Divider /> */}
-              <Typography
-                component="div"
-                className="date"
-                fontFamily="Jua"
-                fontSize="11px"
-                sx={{ color: "text.secondary" }}
-              >
-                {/* {ViewContents.date} */}
-                {createdAt}
-              </Typography>
-              <Divider />
-              {/* <Viewer initialValue={ViewContents.text}/> */}
-              <Viewer initialValue={club.description || ''} />
-              <Divider />
-            </section>
+            <Typography
+              variant="h4"
+              component="div"
+              className="title"
+              fontFamily="Jua"
+            >
+              {club.title}
+            </Typography>
+            <Typography
+              component="div"
+              className="date"
+              fontFamily="Jua"
+              fontSize="11px"
+              sx={{ color: "text.secondary" }}
+            >
+              {createdAt}
+            </Typography>
+            <Divider />
+            <Box sx={{ minHeight: '250px' }}>
+              <Viewer initialValue={club.description || ""} />
+            </Box>
+            <Divider />
             {(() => {
-              if (club.addressStreet !== '') {
+              if (club.addressStreet !== "") {
                 return (
                   <>
                     <Typography
@@ -430,7 +437,9 @@ const Main = (props) => {
                     </Typography>
                     <MapWrapper>
                       <MapContainer
-                        searchSpot={club.addressStreet + " " + club.addressDetail}
+                        searchSpot={
+                          club.addressStreet + " " + club.addressDetail
+                        }
                       />
                     </MapWrapper>
                   </>
@@ -471,7 +480,9 @@ const Main = (props) => {
                         return (
                           <>
                           <Button
-                            onClick={handleDeleteApply(club.id)}
+                            onClick={() => {
+                              handleDeleteApply(club.id);
+                            }}
                             className="deleteBtn"
                             color="error"
                           >
@@ -510,9 +521,8 @@ const Main = (props) => {
               </ButtonGroup>
             </Box>
           </Container>
-          <Container sx={{ p: 8 }} maxWidth="md" className="containerCmt">
+          <Container maxWidth="md" className="containerCmt">
             <CommentView />
-
           </Container>
         </>
       )}

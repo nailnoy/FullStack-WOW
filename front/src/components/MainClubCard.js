@@ -103,7 +103,7 @@ const MainClubCard = () => {
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  모집 제목
+                  모집 제목 모집 제목 모집 제목 모집 제목 모집 제목 모집 제목 모집 제목
                 </Typography>
                 <Typography
                   fontFamily="Jua"
