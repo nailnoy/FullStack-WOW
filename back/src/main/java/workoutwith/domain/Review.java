@@ -26,7 +26,7 @@ public class Review extends BaseTime {
     private Long id;
 
     @JoinColumn(name = "user_id")
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = EAGER)
     private User user;
     
     @JoinColumn(name = "club_id")
