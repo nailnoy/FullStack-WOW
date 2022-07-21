@@ -3,16 +3,19 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { customMedia } from "../../GlobalStyles";
 
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
+import {
+  Typography,
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Box,
+  IconButton,
+} from "@mui/material";
+
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import Box from "@mui/material/Box";
 import { message } from "antd";
 
 const ClubCard = (props) => {
