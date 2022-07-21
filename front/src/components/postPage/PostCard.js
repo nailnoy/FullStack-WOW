@@ -1,13 +1,4 @@
 import React from "react";
-import Container from "@mui/material/Container";
-// import Typography from '@mui/material/Typography';
-import Grid from "@mui/material/Grid";
-// import Card from '@mui/material/Card';
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-
 import AspectRatio from "@mui/joy/AspectRatio";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -19,17 +10,17 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Modal,
+  Button,
+  Grid,
+  Menu,
+  MenuItem
 } from "@mui/material";
-import { width } from "@mui/system";
 
 const PostCard = (props) => {
   console.log(props.review);
