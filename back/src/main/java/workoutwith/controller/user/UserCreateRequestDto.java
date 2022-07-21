@@ -1,7 +1,11 @@
 package workoutwith.controller.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import workoutwith.domain.AuthorityStatus;
 import workoutwith.domain.User;
-import lombok.*;
 
 @Getter
 @Builder
@@ -13,6 +17,7 @@ public class UserCreateRequestDto {
     private String name;
     private String email;
     private String imgUrl;
+    private AuthorityStatus authority;
 
     public User toEntity() {
         return User.builder()
@@ -20,6 +25,7 @@ public class UserCreateRequestDto {
                 .name(name)
                 .email(email)
                 .imgUrl(imgUrl)
+                .authority(AuthorityStatus.DEFAULT)
                 .build();
     }
 }
