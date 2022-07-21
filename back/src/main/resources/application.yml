@@ -3,8 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/playdata
     username: root
-    password: dl616263
-  
+    password: playdata 
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
@@ -37,15 +36,17 @@ spring:
                      enable : true 
 
 logging:
+#  file:
+#    name: src/main/resources/logtest.log
   level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type: TRACE
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type: TRACE
     com: #failed to connect to service endpoint
       amazonaws:
         util:
-          EC2MetadataUtils: error
+          EC2MetadataUtils: 
 
 cloud:
   aws:
@@ -55,5 +56,7 @@ cloud:
       static: ap-northeast-2
     credentials:
       instance-profile: true
+      access-key: 
+      secret-key: 
     stack:
       auto: false

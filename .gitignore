@@ -2,3 +2,4 @@
 # next.js
 node_modules
 .next
+back/src/main/resources/s3key.yml
