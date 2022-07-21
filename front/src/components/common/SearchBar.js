@@ -14,7 +14,7 @@ const SearchBar = (props) => {
 				allowClear
 				enterButton
 				size="large"
-				placeholder="운동모임 검색"
+				placeholder="검색"
 				onSearch={onSearch}
 				onPressEnter={(e) => {
 					onSearch(e.target.value);

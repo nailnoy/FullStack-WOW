@@ -26,14 +26,14 @@ public class Review extends BaseTime {
     private Long id;
 
     @JoinColumn(name = "user_id")
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = EAGER)
     private User user;
     
     @JoinColumn(name = "club_id")
     @ManyToOne(fetch = EAGER)
     private Club club;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "review")
     private final List<ReviewComment> commentList = new ArrayList<>();
 
     @Lob
