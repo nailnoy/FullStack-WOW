@@ -10,6 +10,8 @@ import {
 	MenuItem,
 	FormControl,
 	Select,
+	Checkbox,
+	FormControlLabel,
 } from '@mui/material';
 import { Row, message } from "antd";
 
@@ -18,13 +20,13 @@ import SearchBar from "../../common/SearchBar";
 import ClubCard from "../../common/ClubCard";
 import Spin from "../../common/Spin";
 import Pagination from "../../common/Pagination";
+import useinput from "../../../hooks/useinput";
 import { customMedia } from "../../../GlobalStyles";
 
 
 function Main() {
 	const [clubs, setClubs] = useState();
 	const [sortBy, setSortBy] = useState("createdAt");
-	const [clubStatus, setClubStatus] = useState("");
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [tags, setTags] = useState([]);
 	const [keyword, setKeyword] = useState("");
@@ -32,6 +34,8 @@ function Main() {
 	const [total, setTotal] = useState(0);
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
+	const [clubStatus, onChangeClubStatus] = useinput('');
+
 	const userId = localStorage.getItem("user_id");
 
 	useEffect(() => {
@@ -63,6 +67,7 @@ function Main() {
 
 			setClubs(res.data.clubList);
 			setTotal(res.data.totalCount);
+			console.log(res.data.clubList);
 
 			if (userId) {
 				const likedClubRes = await axios.get("/likedClubs/ids", {
@@ -138,30 +143,40 @@ function Main() {
 							</Typography>
 						</Container>
 
-						<Container sx={{ py: 1 }} maxWidth="xs">
+						<Container sx={{ py: 1, display: "flex", justifyContent: "center" }} maxWidth="md">
 							<SearchBar keyword={keyword} setKeyword={setKeyword} />
+							<FormControlLabel 
+								sx={{ ml: 2 }}
+								label="모집 중만"
+								control={
+									<Checkbox
+										checked={clubStatus}
+										onChange={onChangeClubStatus}
+									/>
+								}
+							/>
 						</Container>
 
-						<Container sx={{ py: 1, mb: 2,display: "flex" }} maxWidth="xs">
-								<Tags
-									selectedTags={selectedTags}
-									setSelectedTags={setSelectedTags}
-									tags={tags}
-									setTags={setTags}
-									clubs={clubs}
-								/>
-								<FormControl sx={{ ml: 2, minWidth: 100 }} size="small">
-									<InputLabel id="SortBy">정렬</InputLabel>
-									<Select
-										id="sortFliter"
-										label="SortBy"
-										value={sortBy}
-										onChange={(e) => { setSortBy(e.target.value) }}
-									>
-										<MenuItem value="createdAt">최신순</MenuItem>
-										<MenuItem value="likes">좋아요순</MenuItem>
-									</Select>
-								</FormControl>
+						<Container sx={{ py: 1, mb: 2, display: "flex" }} maxWidth="xs">
+							<Tags
+								selectedTags={selectedTags}
+								setSelectedTags={setSelectedTags}
+								tags={tags}
+								setTags={setTags}
+								clubs={clubs}
+							/>
+							<FormControl sx={{ ml: 2, minWidth: 100 }} size="small">
+								<InputLabel id="SortBy">정렬</InputLabel>
+								<Select
+									id="sortFliter"
+									label="SortBy"
+									value={sortBy}
+									onChange={(e) => { setSortBy(e.target.value) }}
+								>
+									<MenuItem value="createdAt">최신순</MenuItem>
+									<MenuItem value="likes">좋아요순</MenuItem>
+								</Select>
+							</FormControl>
 						</Container>
 
 						<Container sx={{ py: 0 }} maxWidth="md">

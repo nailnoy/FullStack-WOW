@@ -103,91 +103,91 @@ const CommentView = (props) => {
 
   return (
     <>
-      {loading ? (
-        <SpinContainer>
-          <Spin />
-        </SpinContainer>
-      ) : (
-        <>
-          <Container sx={{ pb: 2 }}>
-            <Typography
-              sx={{
-                fontFamily: "jua",
-                fontSize: "24px",
-                fontWeight: "500",
-              }}
-            >
-              댓글 ({total})
-            </Typography>
-          </Container>
-          <Container>
-            <Box
-              sx={{
-                border: 1,
-                borderRadius: '10px',
-                margin: '0 auto',
-                padding: '10px',
-                display: 'flex',
-              }}
-            >
-              <ProfileIcon>
-                {userImg ? (
-                  <img src={userImg} alt="User profile" />
-                ) : (
-                  <img src={profile} alt="User profile icon" />
-                )}
-              </ProfileIcon>
-              <StyledInput
-                value={postComment}
-                placeholder="댓글을 입력하세요..."
-                onChange={(e) => {
-                  setPostComment(e.target.value);
-                }}
-              />
-              <Button
-                variant="contained"
-                onClick={() => {
-                  if (userId) {
-                    handlePostComment();
-                    onReset();
-                  } else {
-                    message.warning("로그인이 필요한 기능입니다.");
-                  }
-                }}
-              >
-                <Typography fontFamily="Jua">등록</Typography>
-              </Button>
-            </Box>
-            <List >
-              {comments
-                ? comments.map((comment) => (
-                  <ListItem sx={{ my: 1, width: 'md' }}>
-                    <Comment
-                      key={comment.id}
-                      comment={comment}
-                      userId={userId}
-                      setUpdateComment={setUpdateComment}
-                      editable={editable}
-                      setEditable={setEditable}
-                      handleUpdateComment={handleUpdateComment}
-                      handleDeleteComment={handleDeleteComment}
-                    />
-                  </ListItem>
-                ))
-                : ""}
-            </List>
-          </Container>
-          <PaginationRow>
-            <Pagination
-              total={total}
-              pageSize={5}
-              current={page}
-              onChange={(page) => setPage(page)}
-            />
-          </PaginationRow>
-        </>
-      )}
+				{loading ? (
+					<SpinContainer>
+						<Spin />
+					</SpinContainer>
+				) : (
+    <>
+      <Container sx={{ pb: 2 }}>
+        <Typography
+          sx={{
+            fontFamily: "jua",
+            fontSize: "24px",
+            fontWeight: "500",
+          }}
+        >
+          댓글 ({total})
+        </Typography>
+      </Container>
+      <Container>
+        <Box
+          sx={{
+            border: 1,
+            borderRadius: '10px',
+            margin: '0 auto',
+            padding: '10px',
+            display: 'flex',
+          }}
+        >
+          <ProfileIcon>
+            {userImg ? (
+              <img src={userImg} alt="User profile" />
+            ) : (
+              <img src={profile} alt="User profile icon" />
+            )}
+          </ProfileIcon>
+          <StyledInput
+            value={postComment}
+            placeholder="댓글을 입력하세요..."
+            onChange={(e) => {
+              setPostComment(e.target.value);
+            }}
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (userId) {
+                handlePostComment();
+                onReset();
+              } else {
+                message.warning("로그인이 필요한 기능입니다.");
+              }
+            }}
+          >
+            <Typography fontFamily="Jua">등록</Typography>
+          </Button>
+        </Box>
+        <List >
+          {comments
+            ? comments.map((comment) => (
+              <ListItem sx={{ my: 1, width: 'md' }}>
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  userId={userId}
+                  setUpdateComment={setUpdateComment}
+                  editable={editable}
+                  setEditable={setEditable}
+                  handleUpdateComment={handleUpdateComment}
+                  handleDeleteComment={handleDeleteComment}
+                />
+              </ListItem>
+            ))
+            : ""}
+        </List>
+      </Container>
+      <PaginationRow>
+        <Pagination
+          total={total}
+          pageSize={5}
+          current={page}
+          onChange={(page) => setPage(page)}
+        />
+      </PaginationRow>
     </>
+    )}
+  </>
   );
 };
 

@@ -34,5 +34,5 @@ const SearchBarContainer = styled.div`
 `;
 
 const StyledSearchBar = styled(Search)`
-  width: 500px`;
+  width: 350px`;
   

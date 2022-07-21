@@ -24,14 +24,16 @@ import { customMedia } from "../../../GlobalStyles";
 import ReviewCreate from "../create/Main";
 
 function PostMain() {
+  const params = new URLSearchParams(window.location.search);
   const [clubs, setClubs] = useState();
   const [reviews, setReviews] = useState();
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("user_id");
+
 
   useEffect(() => {
     fetchData();
@@ -52,6 +54,10 @@ function PostMain() {
 
       setReviews(res.data.reviewList);
       setTotal(res.data.totalCount);
+
+      if (params.get("title")){
+        setKeyword(params.get("title"))
+      }
 
     } catch (err) {
       console.log(err);

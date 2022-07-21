@@ -140,7 +140,7 @@ const ClubCard = (props) => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => navigate(`../post/filter?clubid=${props.club.id}`)}
+            onClick={() => navigate(`../reviews?title=${props.club.title}`)}
             className="infoBtn"
             color="success"
             size="small"
