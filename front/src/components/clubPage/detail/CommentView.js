@@ -208,8 +208,6 @@ const CommentView = (props) => {
         </>
       )}
     </>
-    )}
-  </>
   );
 };
 
