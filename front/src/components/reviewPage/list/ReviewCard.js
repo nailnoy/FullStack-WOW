@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
 import { message } from "antd";
+import Spin from "../../common/Spin";
+import styled from "styled-components";
 
 import { Grid, Menu, MenuItem } from "@mui/material";
 
@@ -26,16 +28,27 @@ import ReviewDetail from "../detail/Main";
 
 const ReviewCard = (props) => {
   const navigate = useNavigate();
-
+  const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
-
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [postComment, setPostComment] = useState("");
+  const userId = localStorage.getItem("user_id");
+  const open = Boolean(anchorEl);
   const reportHistory = [].concat(
     JSON.parse(localStorage.getItem("report_history_review"))
   );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setUser(await axios.get(`/users/${userId}`));
+    
+    setLoading(false);
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,6 +74,15 @@ const ReviewCard = (props) => {
     setIsUpdateModalVisible(false);
   };
 
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+      
+    }else{
+      return true;
+    }
+  };
+  
   const handleReportUser = async () => {
     try {
       const getRes = await axios.get(`/users/${props.review.userId}`);
@@ -112,6 +134,12 @@ const ReviewCard = (props) => {
 
 
   return (
+    <>
+    {loading ? (
+      <SpinContainer>
+        <Spin />
+      </SpinContainer>
+    ) : (
     <Grid item xs={12} sm={6} md={4}>
       <Card
         variant="outlined"
@@ -121,10 +149,10 @@ const ReviewCard = (props) => {
           display: "flex",
           flexDirection: "column",
         }}
-      >
+        >
         <Box
           sx={{ display: "flex", alignItems: "center", pb: 1.5, gap: 1 }}
-        >
+          >
           <Box
             sx={{
               position: "relative",
@@ -138,10 +166,10 @@ const ReviewCard = (props) => {
                 m: "-2px",
                 borderRadius: "50%",
                 background:
-                  "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
+                "linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)",
               },
             }}
-          >
+            >
             <Avatar
               size="sm"
               src={props.review.userImgUrl}
@@ -149,7 +177,7 @@ const ReviewCard = (props) => {
                 border: "2px solid",
                 borderColor: "background.body",
               }}
-            />
+              />
           </Box>
           <Typography fontWeight="lg">
             {props.review.userName}
@@ -164,7 +192,7 @@ const ReviewCard = (props) => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-          >
+            >
             <MoreHoriz />
           </IconButton>
           <Menu
@@ -181,12 +209,22 @@ const ReviewCard = (props) => {
               vertical: 'top',
               horizontal: 'left',
             }}
-          >
+            >
             {(() => {
               if (props.review.userId === props.userId) {
                 return (
                   <>
-                    <MenuItem onClick={showUpdateModal}>수정</MenuItem>
+                    <MenuItem onClick={() =>{
+                      if(checkAthority()){
+                        props.setEditable(props.comment.id);
+                        showUpdateModal();
+                      } else {
+                        message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                      }
+                      }}
+                      >
+                        수정
+                      </MenuItem>
                     <MenuItem
                       onClick={() => props.handleDeleteReview(props.review.id)}>
                       삭제
@@ -200,29 +238,29 @@ const ReviewCard = (props) => {
               if (!reportHistory.includes(props.review.id)) {
                 return (
                   <MenuItem onClick={handleReportUser}>신고</MenuItem>
-                );
-              } else return;
-            })()}
+                  );
+                } else return;
+              })()}
           </Menu>
         </Box>
         <CardOverflow>
           <AspectRatio objectFit="contain">
             {props.review.imgUrl ? (
               <img
-                src={props.review.imgUrl}
-                alt="default"
+              src={props.review.imgUrl}
+              alt="default"
               />
-            ) : (
+              ) : (
               <img
-                src="http://drive.google.com/uc?export=view&id=1z3CRSIYjm0c9IlEgk5LSMG2XbkvdqWdA"
-                alt="default"
+              src="http://drive.google.com/uc?export=view&id=1z3CRSIYjm0c9IlEgk5LSMG2XbkvdqWdA"
+              alt="default"
               />
             )}
           </AspectRatio>
         </CardOverflow>
         <Box
           sx={{ display: "flex", alignItems: "center", mx: -1, my: 1 }}
-        >
+          >
           <Box
             sx={{
               display: "flex",
@@ -230,19 +268,19 @@ const ReviewCard = (props) => {
               gap: 0.5,
               mx: "auto",
             }}
-          >
+            >
             {[...Array(5)].map((_, index) => (
               <Box
-                key={index}
-                sx={{
-                  borderRadius: "50%",
-                  width: `max(${6 - index}px, 3px)`,
-                  height: `max(${6 - index}px, 3px)`,
-                  bgcolor:
-                    index === 0 ? "primary.solidBg" : "background.level3",
-                }}
+              key={index}
+              sx={{
+                borderRadius: "50%",
+                width: `max(${6 - index}px, 3px)`,
+                height: `max(${6 - index}px, 3px)`,
+                bgcolor:
+                index === 0 ? "primary.solidBg" : "background.level3",
+              }}
               />
-            ))}
+              ))}
           </Box>
           <Box
             sx={{
@@ -250,7 +288,7 @@ const ReviewCard = (props) => {
               display: "flex",
               flexDirection: "row-reverse",
             }}
-          >
+            >
           </Box>
         </Box>
         <Typography
@@ -263,14 +301,14 @@ const ReviewCard = (props) => {
             WebkitBoxOrient: "vertical",
             minHeight: "70px"
           }}
-        >
+          >
           <Link
             component="button"
             color="neutral"
             fontWeight="lg"
             textColor="text.primary"
             onClick={() => navigate(`../detail/${props.review.clubId}`)}
-          >
+            >
             {props.review.clubTitle} 의 후기
           </Link>{" "}
           {props.review.contents}
@@ -282,7 +320,7 @@ const ReviewCard = (props) => {
           startDecorator="…"
           sx={{ color: "text.tertiary" }}
           onClick={showModal}
-        >
+          >
           더보기
         </Link>
         <ReviewDetail
@@ -297,7 +335,7 @@ const ReviewCard = (props) => {
           underline="none"
           fontSize="10px"
           sx={{ color: "text.tertiary", my: 0.5 }}
-        >
+          >
           {moment(props.review.createdAt).fromNow()}
         </Link>
         <CardOverflow sx={{ p: "var(--Card-padding)", display: "flex" }}>
@@ -306,7 +344,7 @@ const ReviewCard = (props) => {
             variant="plain"
             color="neutral"
             sx={{ ml: -1 }}
-          >
+            >
             <Face />
           </IconButton>
           <Input
@@ -316,9 +354,13 @@ const ReviewCard = (props) => {
             placeholder="댓글을 입력하세요..."
             sx={{ flexGrow: 1, mr: 1, "--Input-focusedThickness": "0px" }}
             onChange={(e) => {
-              setPostComment(e.target.value);
+              if(checkAthority()){
+                setPostComment(e.target.value);
+              } else {
+                message.error("신고 누적으로 인해 이용이 불가능 합니다");
+              }
             }}
-          />
+            />
           <Link
             bgcolor="lightblue"
             variant="outlined"
@@ -327,13 +369,17 @@ const ReviewCard = (props) => {
             fontSize="sm"
             onClick={() => {
               if (props.userId) {
-                handlePostComment();
-                onReset();
+                if(checkAthority()){
+                  handlePostComment();
+                  onReset();
+                } else {
+                  message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                }
               } else {
                 message.warning("로그인이 필요한 기능입니다.");
               }
             }}
-          >
+            >
             댓글
           </Link>
         </CardOverflow>
@@ -346,7 +392,18 @@ const ReviewCard = (props) => {
         isUpdateModalVisible={isUpdateModalVisible}
         handleCancelUpdate={handleCancelUpdate} />
     </Grid>
+        )}
+      </>
   );
 };
 
 export default ReviewCard;
+
+const SpinContainer = styled.div`
+	width: 100%;
+	height: 80vh;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;

@@ -31,6 +31,7 @@ function PostMain() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState("");
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
@@ -52,11 +53,22 @@ function PostMain() {
 
       setReviews(res.data.reviewList);
       setTotal(res.data.totalCount);
+      setUser(await axios.get(`/users/${userId}`));
 
     } catch (err) {
       console.log(err);
     }
   };
+
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+
+    }else{
+      return true;
+    }
+  };
+
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -140,7 +152,14 @@ function PostMain() {
               </Grid>
             </Container>
             <FabContainer>
-              <Fab color="primary" aria-label="add" onClick={showModal} >
+              <Fab color="primary" aria-label="add" onClick={() =>{
+                if(checkAthority()){
+                  showModal();
+                } else {
+                  message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                }
+              }} 
+              >
                 <AddIcon />
               </Fab>
             </FabContainer>

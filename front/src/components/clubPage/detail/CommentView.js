@@ -20,6 +20,7 @@ const CommentView = (props) => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState("");
   const clubId = useParams().id;
   const userId = localStorage.getItem("user_id");
   const userImg = localStorage.getItem("user_image");
@@ -32,10 +33,21 @@ const CommentView = (props) => {
     const res = await axios.get(`/comments/clubs/${clubId}`, {
       params: { page: page },
     });
-
+    
     setComments(res.data.commentList);
     setTotal(res.data.totalCount);
+    
+    setUser(await axios.get(`/users/${userId}`));
+    
     setLoading(false);
+  };
+
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+    }else{
+      return true;
+    }
   };
 
   const handlePostComment = async () => {
@@ -141,15 +153,23 @@ const CommentView = (props) => {
                 value={postComment}
                 placeholder="댓글을 입력하세요..."
                 onChange={(e) => {
-                  setPostComment(e.target.value);
+                  if(checkAthority()){
+                    setPostComment(e.target.value);
+                  } else {
+                    message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                  }
                 }}
               />
               <Button
                 variant="contained"
                 onClick={() => {
                   if (userId) {
-                    handlePostComment();
-                    onReset();
+                    if(checkAthority()){
+                      handlePostComment();
+                      onReset();
+                    } else {
+                      message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                    }
                   } else {
                     message.warning("로그인이 필요한 기능입니다.");
                   }

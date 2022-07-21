@@ -34,6 +34,7 @@ public class UserService {
     		reportDto.setAuthority(AuthorityStatus.BANNED);
     		reportDto.setDeclaration(user.getDeclaration()+1);
     	}else {
+    		reportDto.setAuthority(AuthorityStatus.DEFAULT);
     		reportDto.setDeclaration(user.getDeclaration()+1);
     	}
         user.reportUser(reportDto.getAuthority(),

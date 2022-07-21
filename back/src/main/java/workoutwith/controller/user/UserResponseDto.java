@@ -1,8 +1,12 @@
 package workoutwith.controller.user;
 
-import workoutwith.domain.User;
-import lombok.*;
 import org.springframework.beans.BeanUtils;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import workoutwith.domain.AuthorityStatus;
+import workoutwith.domain.User;
 
 @Getter
 @Setter
@@ -13,7 +17,7 @@ public class UserResponseDto { //DTO : 로직x. 순수한 데이터 객체, gett
     private String name;
     private String email;
     private String imgUrl;
-    private int authority;
+    private AuthorityStatus authority;
     private int declaration;
 
     public UserResponseDto(User user) {
