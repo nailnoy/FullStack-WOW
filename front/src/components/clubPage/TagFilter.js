@@ -41,7 +41,7 @@ const Tags = (props) => {
             placeholder="원하시는 운동을 입력해보세요" 
             />
             )}
-            sx={{ width: '398px' }}
+            sx={{ width: '275px'}}
             />
         </FilterContainer>
     );

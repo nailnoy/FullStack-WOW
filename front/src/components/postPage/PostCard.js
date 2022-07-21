@@ -6,7 +6,7 @@ import { message } from "antd";
 
 import { Grid, Menu, MenuItem } from "@mui/material";
 
-import { 
+import {
   Avatar,
   Box,
   Link,
@@ -27,10 +27,12 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import PostUpdate from "./PostUpdate";
 
 const PostCard = (props) => {
   console.log(props.review);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -52,6 +54,15 @@ const PostCard = (props) => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const showUpdateModal = () => {
+    setIsUpdateModalVisible(true);
+    handleClose();
+  };
+
+  const handleCancelUpdate = () => {
+    setIsUpdateModalVisible(false);
   };
 
   const handleReportUser = async () => {
@@ -180,7 +191,7 @@ const PostCard = (props) => {
               if (props.review.userId === props.userId) {
                 return (
                   <>
-                    <MenuItem onClick={handleClose}>수정</MenuItem>
+                    <MenuItem onClick={showUpdateModal}>수정</MenuItem>
                     <MenuItem
                       onClick={() => props.handleDeleteReview(props.review.id)}>
                       삭제
@@ -189,7 +200,7 @@ const PostCard = (props) => {
                 );
               } else return;
             })()}
-            <MenuItem onClick={handleClose}>자세히</MenuItem>
+            <MenuItem onClick={showModal}>자세히</MenuItem>
             {(() => {
               if (!reportHistory.includes(props.review.id)) {
                 return (
@@ -253,8 +264,9 @@ const PostCard = (props) => {
             color="neutral"
             fontWeight="lg"
             textColor="text.primary"
+            onClick={() => props.navigate(`../detail/${props.review.clubId}`)}
           >
-            {props.review.userName}
+            {props.review.clubTitle} 의 후기
           </Link>{" "}
           {props.review.contents}
         </Typography>
@@ -280,22 +292,28 @@ const PostCard = (props) => {
         >
           <DialogTitle id="scroll-dialog-title">
             <Grid container spacing={0}>
-              <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }}/>
+              <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }} />
               {props.review.userName}님의 후기
             </Grid>
           </DialogTitle>
           <DialogContent dividers>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1} fontFamily="Jua">
-              <AspectRatio sx={{p: 1, pb: 2 }}>
-                <img src={props.review.imgUrl}/>
+              <AspectRatio sx={{ p: 1, pb: 2 }}>
+                <img src={props.review.imgUrl} />
               </AspectRatio>
               {props.review.contents}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button color="error" onClick={handleCancel}>
-              신고하기
-            </Button>
+            {(() => {
+              if (!reportHistory.includes(props.review.id)) {
+                return (
+                  <Button color="error" onClick={handleReportUser}>
+                    신고하기
+                  </Button>
+                );
+              } else return;
+            })()}
             <Button color="primary" onClick={handleCancel}>
               돌아가기
             </Button>
@@ -347,6 +365,12 @@ const PostCard = (props) => {
           </Link>
         </CardOverflow>
       </Card>
+      <PostUpdate
+        userId={props.userId}
+        review={props.review}
+        clubs={props.clubs}
+        isUpdateModalVisible={isUpdateModalVisible}
+        handleCancelUpdate={handleCancelUpdate} />
     </Grid>
   );
 };

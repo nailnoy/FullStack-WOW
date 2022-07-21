@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReviewUpdateRequestDto {
 
+	private Long clubId;
     private String contents;
     private String imgUrl;
 }

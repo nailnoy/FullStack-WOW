@@ -210,7 +210,9 @@ function PostMain() {
                       key={review.id}
                       userId={userId}
                       review={review}
-                      handleDeleteReview={handleDeleteReview} />
+                      clubs={clubs}
+                      handleDeleteReview={handleDeleteReview}
+                      navigate={navigate} />
                   ))
                   : ""}
               </Grid>
@@ -248,7 +250,7 @@ function PostMain() {
                           onChange={handleChange}
                         >
                           <Option value="" selected disabled>참여한 모임을 선택해주세요</Option>
-                          {reviews
+                          {clubs
                             ? clubs.map((club) => (
                               <Option value={club.id}>{club.title}</Option>
 

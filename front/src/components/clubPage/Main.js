@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-import { Container, Typography, Grid } from '@mui/material';
+import {
+	Container,
+	Box,
+	Typography,
+	Grid,
+	InputLabel,
+	MenuItem,
+	FormControl,
+	Select,
+} from '@mui/material';
 import { Row, message } from "antd";
 
 import Tags from "./TagFilter";
@@ -14,7 +23,7 @@ import { customMedia } from "../../GlobalStyles";
 
 
 function Main() {
-    const [clubs, setClubs] = useState();
+	const [clubs, setClubs] = useState();
 	const [sortBy, setSortBy] = useState("createdAt");
 	const [clubStatus, setClubStatus] = useState("");
 	const [selectedTags, setSelectedTags] = useState([]);
@@ -26,7 +35,7 @@ function Main() {
 	const [loading, setLoading] = useState(true);
 	const userId = localStorage.getItem("user_id");
 
-    useEffect(() => {
+	useEffect(() => {
 		fetchData();
 		setLoading(false);
 	}, [clubStatus, page, total, keyword, selectedTags, sortBy, userId]);
@@ -45,17 +54,17 @@ function Main() {
 				},
 			});
 
-			if(res.data.clubList.length > tags.length){
-				for (let i=0;i<res.data.clubList.length;i++){
+			if (res.data.clubList.length > tags.length) {
+				for (let i = 0; i < res.data.clubList.length; i++) {
 					setTags((prevState) => {
-						return [...prevState, { tags : res.data.clubList[i].tags }]
+						return [...prevState, { tags: res.data.clubList[i].tags }]
 					});
 				}
 			};
 
 			setClubs(res.data.clubList);
 			setTotal(res.data.totalCount);
-			
+
 			if (userId) {
 				const likedClubRes = await axios.get("/likedClubs/ids", {
 					params: {
@@ -109,69 +118,83 @@ function Main() {
 		}
 	};
 
-    return (
-        <>
-            <main>
-            {loading ? (
-                <SpinContainer>
-                <Spin />
-            </SpinContainer>
-        ) : (
-            <>
-                <Container sx={{ pt: 8 }} maxWidth="md">
-                    <Typography
-                        gutterBottom variant="h6"
-                        component="h2"
-                        fontFamily="Jua"
-                        fontSize="2rem"
-                        textAlign="center"
-                    >
-                        운동 모임 찾기
-                    </Typography>
-                </Container>
+	return (
+		<>
+			<main>
+				{loading ? (
+					<SpinContainer>
+						<Spin />
+					</SpinContainer>
+				) : (
+					<>
+						<Container sx={{ pt: 8 }} maxWidth="md">
+							<Typography
+								gutterBottom variant="h6"
+								component="h2"
+								fontFamily="Jua"
+								fontSize="2rem"
+								textAlign="center"
+							>
+								운동 모임 찾기
+							</Typography>
+						</Container>
 
-                <Container sx={{ py: 1 }} maxWidth="xs">
-                    <SearchBar keyword={keyword} setKeyword={setKeyword} />
-                </Container>
+						<Container sx={{ py: 1 }} maxWidth="xs">
+							<SearchBar keyword={keyword} setKeyword={setKeyword} />
+						</Container>
 
-                <Container sx={{ py: 1 }} maxWidth="xs">
-                    <Tags 
-					selectedTags={selectedTags}
-					setSelectedTags={setSelectedTags}
-					tags={tags}
-					setTags={setTags}
-					clubs={clubs}
-					/>
-                </Container>
 
-                <Container sx={{ py: 0 }} maxWidth="md">
-                    <Grid container spacing={4}>
-                    {clubs
-							? clubs.map((club) => (
-									<ClubCard
-										key={club.id}
-										userId={userId}
-										club={club}
-										likedClubs={likedClubs}
-										handleLikedClubs={handleLikedClubs}
-									/>
-							  ))
-							: ""}
-                </Grid>
-                </Container>
-				<PaginationRow>
-        <Pagination
-          total={total}
-          pageSize={9}
-          current={page}
-          onChange={(page) => setPage(page)}
-        />
-      </PaginationRow>
-                </>
-        )}
-            </main>
-        </>
-    );
+
+						<Container sx={{ py: 1, mb: 2,display: "flex" }} maxWidth="xs">
+								<Tags
+									selectedTags={selectedTags}
+									setSelectedTags={setSelectedTags}
+									tags={tags}
+									setTags={setTags}
+									clubs={clubs}
+								/>
+								<FormControl sx={{ ml: 2, minWidth: 100 }} size="small">
+									<InputLabel id="SortBy">정렬</InputLabel>
+									<Select
+										id="sortFliter"
+										label="SortBy"
+										value={sortBy}
+										onChange={(e) => { setSortBy(e.target.value) }}
+									>
+										<MenuItem value="createdAt">최신순</MenuItem>
+										<MenuItem value="likes">좋아요순</MenuItem>
+									</Select>
+								</FormControl>
+						</Container>
+
+						<Container sx={{ py: 0 }} maxWidth="md">
+							<Grid container spacing={4}>
+								{clubs
+									? clubs.map((club) => (
+										<ClubCard
+											key={club.id}
+											userId={userId}
+											club={club}
+											likedClubs={likedClubs}
+											handleLikedClubs={handleLikedClubs}
+										/>
+									))
+									: ""}
+							</Grid>
+						</Container>
+						<PaginationRow>
+							<Pagination
+								total={total}
+								pageSize={9}
+								current={page}
+								onChange={(page) => setPage(page)}
+							/>
+						</PaginationRow>
+					</>
+				)}
+			</main>
+		</>
+	);
 };
 
 export default Main;

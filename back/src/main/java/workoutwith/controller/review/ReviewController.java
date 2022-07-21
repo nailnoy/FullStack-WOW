@@ -50,7 +50,7 @@ public class ReviewController {
     }
 
     //게시글 상세조회
-    @GetMapping("/{postId}")
+    @GetMapping("/{reviewId}")
     public ResponseEntity<ReviewDetailResponseDto> getReviewDetail(
             @PathVariable Long reviewId) {
         return ResponseEntity.ok(
@@ -71,13 +71,13 @@ public class ReviewController {
     }
 
     // 모임 수정 (my page)
-    @PutMapping("/users/{userId}")
+    @PutMapping("/{reviewId}")
     public ResponseEntity<Void> updateReview(
             ReviewUpdateRequestDto reviewUpdateRequestDto,
-            @PathVariable String userId,
+            @PathVariable Long reviewId,
             @RequestParam(value = "img", required = false) MultipartFile file) {
         try {
-        	reviewService.updateReview(reviewUpdateRequestDto, userId, file);
+        	reviewService.updateReview(reviewUpdateRequestDto, reviewId, file);
             return new ResponseEntity("게시글 수정이 완료되었습니다.", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

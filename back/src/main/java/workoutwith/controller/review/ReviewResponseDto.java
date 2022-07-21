@@ -17,6 +17,7 @@ public class ReviewResponseDto {
     private Long id;                    //게시글 아이디
     private String userId;
     private Long clubId;
+    private String clubTitle;
     private String userImgUrl;
     private String userName; // 유저 이름
     private String contents;            //게시글 한줄소개
@@ -28,6 +29,7 @@ public class ReviewResponseDto {
     public ReviewResponseDto(Review review) {
         BeanUtils.copyProperties(review, this);
         this.clubId = review.getClub().getId();
+        this.clubTitle = review.getClub().getTitle();
         this.userId = review.getUser().getId();
         this.userName = review.getUser().getName();
         this.userImgUrl = review.getUser().getImgUrl();

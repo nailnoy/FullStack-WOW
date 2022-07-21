@@ -97,8 +97,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReview(ReviewUpdateRequestDto requestDto, String userId, MultipartFile file) {
-        final Review review = findReviewByUserId(userId);
+    public void updateReview(ReviewUpdateRequestDto requestDto, Long reviewId, MultipartFile file) {
+        final Review review = findReviewById(reviewId);
+        final Club club = clubRepository.findById(requestDto.getClubId())
+                .orElseThrow(ClubNotFoundException::new);
         if (file != null) {
             try {
                 String imgPath = s3Service.upload(file);
@@ -110,6 +112,7 @@ public class ReviewService {
             requestDto.setImgUrl(review.getImgUrl());
         }
         review.updateReview(
+        		club,
                 requestDto.getContents(),
                 requestDto.getImgUrl());
     }

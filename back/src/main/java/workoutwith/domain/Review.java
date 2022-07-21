@@ -52,8 +52,9 @@ public class Review extends BaseTime {
     }
 
     //TODO: 파라미터 줄이는 방법 구상
-    public void updateReview(String contents, String imgUrl) {
-        this.contents = contents;
+    public void updateReview(Club club, String contents, String imgUrl) {
+        this.club = club;
+    	this.contents = contents;
         this.imgUrl = imgUrl;
     }
 }
