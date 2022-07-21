@@ -115,8 +115,8 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteReview(String userId) {
-        final Review review = findReviewByUserId(userId);
+    public void deleteReview(Long reviewId) {
+        final Review review = findReviewById(reviewId);
         reviewCommentRepository.deleteAllByReview(review);
         reviewRepository.delete(review);
     }

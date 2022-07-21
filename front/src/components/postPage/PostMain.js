@@ -17,7 +17,6 @@ import {
 import {
   Container,
   Typography,
-  Pagination,
   Button,
   Grid,
   Fab,
@@ -30,6 +29,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Spin from "../common/Spin";
 import PostCard from "./PostCard";
 import SearchBar from "../common/SearchBar";
+import Pagination from "../common/Pagination";
 import { customMedia } from "../../GlobalStyles";
 
 function PostMain() {
@@ -43,6 +43,7 @@ function PostMain() {
   const [imgFile, setImgFile] = useState("");
   const [keyword, setKeyword] = useState("");
   const [preview, setPreview] = useState("");
+  const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem("user_id");
@@ -50,7 +51,7 @@ function PostMain() {
   useEffect(() => {
     fetchData();
     setLoading(false);
-  }, [page, keyword, userId]);
+  }, [page, keyword, total, userId]);
 
   const fetchData = async () => {
     try {
@@ -65,7 +66,7 @@ function PostMain() {
       });
 
       setReviews(res.data.reviewList);
-      console.log(res.data.reviewList);
+      setTotal(res.data.totalCount);
 
     } catch (err) {
       console.log(err);
@@ -104,6 +105,22 @@ function PostMain() {
     setPreview();
   };
 
+  const handleDeleteReview = async (id) => {
+    try {
+      const deleteRes = await axios.delete(`/reviews/${id}`);
+
+      if (deleteRes.status === 200) {
+        message.success("후기가 성공적으로 삭제되었습니다.");
+      } else {
+        message.error("후기 삭제에 실패하였습니다.");
+      }
+    } catch (err) {
+      console.log(err);
+      message.error("로그인이 필요한 기능입니다.");
+    } finally {
+      fetchData();
+    }
+  };
 
   const sendData = async (values) => {
     const formData = new FormData();
@@ -172,6 +189,7 @@ function PostMain() {
               <Container sx={{ py: 1 }} maxWidth="xs">
                 <SearchBar keyword={keyword} setKeyword={setKeyword} />
               </Container>
+              
 
             </div>
             <Container sx={{ py: 8 }} maxWidth="md">
@@ -185,19 +203,18 @@ function PostMain() {
                 등록된 게시글 목록
               </Typography>
               <Grid container spacing={4}>
-              {reviews
-							? reviews.map((review) => (
-                <PostCard
-                    key={review.id}
-										userId={userId}
-										review={review}
-                />
-                ))
-                : ""}
+
+                {reviews
+                  ? reviews.map((review) => (
+                    <PostCard
+                      key={review.id}
+                      userId={userId}
+                      review={review}
+                      handleDeleteReview={handleDeleteReview} />
+                  ))
+                  : ""}
               </Grid>
             </Container>
-            <Pagination page={3} />
-
             <FabContainer>
               <Fab color="primary" aria-label="add" onClick={showModal} >
                 <AddIcon />
@@ -318,8 +335,17 @@ function PostMain() {
               </Container>
 
             </StyledModal>
+            <PaginationRow>
+              <Pagination
+                total={total}
+                pageSize={9}
+                current={page}
+                onChange={(page) => setPage(page)}
+              />
+            </PaginationRow>
           </>
         )}
+
 
       </main>
     </>
@@ -523,6 +549,24 @@ const SpinContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+const PaginationRow = styled(Row)`
+  width: 100%;
+  margin-top: 48px;
+  justify-content: center;
+
+  ${customMedia.lessThan("mobile")`
+    margin-top: 24px;
+  `}
+
+  ${customMedia.between("mobile", "largeMobile")`
+    margin-top: 24px;
+  `}
+
+	${customMedia.between("mobile", "tablet")`
+    margin-top: 24px;
+    `}
 `;
 
 const StyledInput = styled.input`

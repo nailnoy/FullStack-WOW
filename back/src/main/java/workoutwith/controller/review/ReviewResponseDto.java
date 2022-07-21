@@ -4,6 +4,9 @@ import workoutwith.domain.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+
 import org.springframework.beans.BeanUtils;
 
 @Getter
@@ -18,6 +21,7 @@ public class ReviewResponseDto {
     private String userName; // 유저 이름
     private String contents;            //게시글 한줄소개
     private String imgUrl;              //게시글 썸네일 이미지
+    private LocalDateTime createdAt; // 생성 날짜
     private int likes;                  //게시글 좋아요 수
 
 

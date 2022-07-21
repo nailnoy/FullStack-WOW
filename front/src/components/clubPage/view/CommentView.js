@@ -46,13 +46,12 @@ const CommentView = (props) => {
     };
     fetchData();
     fetchCmtData();
-}, [userImg, total, page]);
+  }, [userImg, total, page]);
 
-const fetchCmtData = async () => {
-	const res = await axios.get(`/comments/clubs/${clubId}`, {
-		params: { page: page },
+  const fetchCmtData = async () => {
+    const res = await axios.get(`/comments/clubs/${clubId}`, {
+      params: { page: page },
     });
-	console.log(res);
 
     setComments(res.data.commentList);
     setTotal(res.data.totalCount);
@@ -122,28 +121,28 @@ const fetchCmtData = async () => {
   };
 
   return (
-	<>
+    <>
       <Container sx={{ pb: 2 }}>
         <Typography
-		sx={{
-		fontFamily: "jua",
-		fontSize: "24px",
-		fontWeight: "500",
-		}}
-		>
-			댓글 ({total})
-		</Typography>
+          sx={{
+            fontFamily: "jua",
+            fontSize: "24px",
+            fontWeight: "500",
+          }}
+        >
+          댓글 ({total})
+        </Typography>
       </Container>
       <Container>
         <Box
-		sx={{
-			border: 1,
-			borderRadius: '10px',
-			margin: '0 auto',
-			padding: '10px',
-			display: 'flex',
-		}}
-		>
+          sx={{
+            border: 1,
+            borderRadius: '10px',
+            margin: '0 auto',
+            padding: '10px',
+            display: 'flex',
+          }}
+        >
           <ProfileIcon>
             {userImg ? (
               <img src={userImg} alt="User profile" />
@@ -159,7 +158,7 @@ const fetchCmtData = async () => {
             }}
           />
           <Button
-		  variant="contained"
+            variant="contained"
             onClick={() => {
               if (userId) {
                 handlePostComment();
@@ -172,24 +171,24 @@ const fetchCmtData = async () => {
             등록
           </Button>
         </Box>
-		<List >
+        <List >
           {comments
             ? comments.map((comment) => (
-				<ListItem sx={{ my: 1, width: 'md' }}>
-				<Comment
-				key={comment.id}
-				comment={comment}
-				userId={userId}
-				setUpdateComment={setUpdateComment}
-				editable={editable}
-				setEditable={setEditable}
-				handleUpdateComment={handleUpdateComment}
-				handleDeleteComment={handleDeleteComment}
+              <ListItem sx={{ my: 1, width: 'md' }}>
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  userId={userId}
+                  setUpdateComment={setUpdateComment}
+                  editable={editable}
+                  setEditable={setEditable}
+                  handleUpdateComment={handleUpdateComment}
+                  handleDeleteComment={handleDeleteComment}
                 />
-				</ListItem>
-				))
-				: ""}
-		</List>
+              </ListItem>
+            ))
+            : ""}
+        </List>
       </Container>
       <PaginationRow>
         <Pagination

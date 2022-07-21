@@ -3,13 +3,14 @@ import axios from "axios";
 import styled from "styled-components";
 
 import { Container, Typography, Grid } from '@mui/material';
-import { message } from "antd";
+import { Row, message } from "antd";
 
 import Tags from "./TagFilter";
 import SearchBar from "../common/SearchBar";
 import ClubCard from "./ClubCard";
 import Spin from "../common/Spin";
-
+import Pagination from "../common/Pagination";
+import { customMedia } from "../../GlobalStyles";
 
 
 function Main() {
@@ -20,6 +21,7 @@ function Main() {
 	const [tags, setTags] = useState([]);
 	const [keyword, setKeyword] = useState("");
 	const [likedClubs, setLikedClubs] = useState([]);
+	const [total, setTotal] = useState(0);
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
 	const userId = localStorage.getItem("user_id");
@@ -27,7 +29,7 @@ function Main() {
     useEffect(() => {
 		fetchData();
 		setLoading(false);
-	}, [clubStatus, page, keyword, selectedTags, sortBy, userId]);
+	}, [clubStatus, page, total, keyword, selectedTags, sortBy, userId]);
 
 	const fetchData = async () => {
 		const sendTags = selectedTags.join(", ");
@@ -52,8 +54,8 @@ function Main() {
 			};
 
 			setClubs(res.data.clubList);
-
-
+			setTotal(res.data.totalCount);
+			
 			if (userId) {
 				const likedClubRes = await axios.get("/likedClubs/ids", {
 					params: {
@@ -157,6 +159,14 @@ function Main() {
 							: ""}
                 </Grid>
                 </Container>
+				<PaginationRow>
+        <Pagination
+          total={total}
+          pageSize={9}
+          current={page}
+          onChange={(page) => setPage(page)}
+        />
+      </PaginationRow>
                 </>
         )}
             </main>
@@ -173,4 +183,22 @@ const SpinContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+const PaginationRow = styled(Row)`
+  width: 100%;
+  margin-top: 48px;
+  justify-content: center;
+
+  ${customMedia.lessThan("mobile")`
+    margin-top: 24px;
+  `}
+
+  ${customMedia.between("mobile", "largeMobile")`
+    margin-top: 24px;
+  `}
+
+	${customMedia.between("mobile", "tablet")`
+    margin-top: 24px;
+  `}
 `;

@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import moment from "moment";
+import "moment/locale/ko";
+import { message } from "antd";
+
+import { Grid, Menu, MenuItem } from "@mui/material";
+
+import { 
+  Avatar,
+  Box,
+  Link,
+  Input,
+  Typography,
+} from "@mui/joy";
 import AspectRatio from "@mui/joy/AspectRatio";
-import Avatar from "@mui/joy/Avatar";
-import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
-import Link from "@mui/joy/Link";
 import IconButton from "@mui/joy/IconButton";
-import Input from "@mui/joy/Input";
-import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
 import {
@@ -16,18 +25,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button,
-  Grid,
-  Menu,
-  MenuItem
+  Button
 } from "@mui/material";
 
 const PostCard = (props) => {
   console.log(props.review);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [postComment, setPostComment] = useState("");
+  const reportHistory = [].concat(
+    JSON.parse(localStorage.getItem("report_history_review"))
+  );
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,6 +54,57 @@ const PostCard = (props) => {
     setIsModalVisible(false);
   };
 
+  const handleReportUser = async () => {
+    try {
+      const getRes = await axios.get(`/users/${props.review.userId}`);
+      if (getRes.status === 200) {
+        const reportData = {
+          authority: Number(getRes.data.authority),
+          declaration: Number(getRes.data.declaration),
+        };
+        const res = await axios.put(`/users/report/${props.review.userId}`, reportData);
+        if (res.status === 200) {
+          message.success("신고가 완료되었습니다.");
+          localStorage.setItem(
+            "report_history_review",
+            JSON.stringify(reportHistory.concat([props.review.id]))
+          );
+        } else {
+          message.error("신고에 실패하였습니다.");
+        }
+      } else {
+        message.error("게시글의 회원 정보를 찾을 수 없습니다.");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handlePostComment = async () => {
+    const data = {
+      userId: props.userId,
+      reviewId: Number(props.review.id),
+      contents: postComment,
+    };
+
+    try {
+      const res = await axios.post("/reviewcomments", data);
+
+      if (res.status === 200) {
+        message.success("댓글이 성공적으로 등록되었습니다.");
+      } else {
+        message.error("댓글 등록에 실패했습니다.");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onReset = () => {
+    setPostComment("");
+  };
+
+
   return (
     <Grid item key={1} xs={12} sm={6} md={4}>
       <Card
@@ -55,7 +116,9 @@ const PostCard = (props) => {
           flexDirection: "column",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", pb: 1.5, gap: 1 }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", pb: 1.5, gap: 1 }}
+        >
           <Box
             sx={{
               position: "relative",
@@ -77,22 +140,23 @@ const PostCard = (props) => {
               size="sm"
               src={props.review.userImgUrl}
               sx={{
-                p: 0.5,
                 border: "2px solid",
                 borderColor: "background.body",
               }}
             />
           </Box>
-          <Typography fontWeight="lg">{props.review.userName}</Typography>
+          <Typography fontWeight="lg">
+            {props.review.userName}
+          </Typography>
           <IconButton
             variant="plain"
             color="neutral"
             size="sm"
             sx={{ ml: "auto" }}
             id="demo-positioned-button"
-            aria-controls={open ? "demo-positioned-menu" : undefined}
+            aria-controls={open ? 'demo-positioned-menu' : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+            aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
             <MoreHoriz />
@@ -104,23 +168,44 @@ const PostCard = (props) => {
             open={open}
             onClose={handleClose}
             anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
+              vertical: 'top',
+              horizontal: 'left',
             }}
             transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
+              vertical: 'top',
+              horizontal: 'left',
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            {(() => {
+              if (props.review.userId === props.userId) {
+                return (
+                  <>
+                    <MenuItem onClick={handleClose}>수정</MenuItem>
+                    <MenuItem
+                      onClick={() => props.handleDeleteReview(props.review.id)}>
+                      삭제
+                    </MenuItem>
+                  </>
+                );
+              } else return;
+            })()}
+            <MenuItem onClick={handleClose}>자세히</MenuItem>
+            {(() => {
+              if (!reportHistory.includes(props.review.id)) {
+                return (
+                  <MenuItem onClick={handleReportUser}>신고</MenuItem>
+                );
+              } else return;
+            })()}
           </Menu>
         </Box>
         <CardOverflow>
           <AspectRatio objectFit="contain">
             {props.review.imgUrl ? (
-              <img src={props.review.imgUrl} alt="default" />
+              <img
+                src={props.review.imgUrl}
+                alt="default"
+              />
             ) : (
               <img
                 src="http://drive.google.com/uc?export=view&id=1z3CRSIYjm0c9IlEgk5LSMG2XbkvdqWdA"
@@ -129,7 +214,9 @@ const PostCard = (props) => {
             )}
           </AspectRatio>
         </CardOverflow>
-        <Box sx={{ display: "flex", alignItems: "center", mx: -1, my: 1 }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", mx: -1, my: 1 }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -157,7 +244,8 @@ const PostCard = (props) => {
               display: "flex",
               flexDirection: "row-reverse",
             }}
-          ></Box>
+          >
+          </Box>
         </Box>
         <Typography 
         fontSize="sm"
@@ -216,39 +304,54 @@ const PostCard = (props) => {
           </DialogContent>
           <DialogActions>
             <Button color="error" onClick={handleCancel}>
-              신고하기
+              <Typography fontFamily="Jua">신고하기</Typography>
             </Button>
             <Button color="primary" onClick={handleCancel}>
-              돌아가기
+             <Typography fontFamily="Jua">돌아가기</Typography>
             </Button>
           </DialogActions>
         </Dialog>
-
         <Link
           component="button"
           underline="none"
           fontSize="10px"
           sx={{ color: "text.tertiary", my: 0.5 }}
         >
-          2 DAYS AGO
+          {moment(props.review.createdAt).fromNow()}
         </Link>
         <CardOverflow sx={{ p: "var(--Card-padding)", display: "flex" }}>
-          <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
+          <IconButton
+            size="sm"
+            variant="plain"
+            color="neutral"
+            sx={{ ml: -1 }}
+          >
             <Face />
           </IconButton>
           <Input
+            value={postComment}
             variant="plain"
             size="sm"
-            placeholder="Add a comment…"
+            placeholder="댓글을 입력하세요..."
             sx={{ flexGrow: 1, mr: 1, "--Input-focusedThickness": "0px" }}
+            onChange={(e) => {
+              setPostComment(e.target.value);
+            }}
           />
           <Link
             bgcolor="lightblue"
             variant="outlined"
-            // disabled
             underline="none"
             role="button"
             fontSize="sm"
+            onClick={() => {
+              if (props.userId) {
+                handlePostComment();
+                onReset();
+              } else {
+                message.warning("로그인이 필요한 기능입니다.");
+              }
+            }}
           >
             댓글
           </Link>
