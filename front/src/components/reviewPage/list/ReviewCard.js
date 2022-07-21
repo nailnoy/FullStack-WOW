@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
 import { message } from "antd";
-import CommentView from "./CommentView";
 
 import { Grid, Menu, MenuItem } from "@mui/material";
 
@@ -20,18 +20,13 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import IconButton from "@mui/joy/IconButton";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
-  Container
-} from "@mui/material";
-import PostUpdate from "./PostUpdate";
 
-const PostCard = (props) => {
+import ReviewUpdate from "../update/Main";
+import ReviewDetail from "../detail/Main";
+
+const ReviewCard = (props) => {
+  const navigate = useNavigate();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
@@ -118,7 +113,7 @@ const PostCard = (props) => {
 
 
   return (
-    <Grid item key={1} xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4}>
       <Card
         variant="outlined"
         sx={{
@@ -259,23 +254,23 @@ const PostCard = (props) => {
           >
           </Box>
         </Box>
-        <Typography 
-        fontSize="sm"
-        sx={{
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          display: "-webkit-box",
-          WebkitLineClamp: "3",
-          WebkitBoxOrient: "vertical",
-          minHeight: "70px"
-        }}
+        <Typography
+          fontSize="sm"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+            minHeight: "70px"
+          }}
         >
           <Link
             component="button"
             color="neutral"
             fontWeight="lg"
             textColor="text.primary"
-            onClick={() => props.navigate(`../detail/${props.review.clubId}`)}
+            onClick={() => navigate(`../detail/${props.review.clubId}`)}
           >
             {props.review.clubTitle} 의 후기
           </Link>{" "}
@@ -291,43 +286,13 @@ const PostCard = (props) => {
         >
           더보기
         </Link>
-        <Dialog
-          open={isModalVisible}
-          onClose={() => handleCancel()}
-          scroll="body"
-          aria-labelledby="scroll-dialog-title"
-          aria-describedby="scroll-dialog-description"
-          maxWidth="md"
-          fullWidth={true}
-        >
-          <DialogTitle id="scroll-dialog-title">
-            <Grid container spacing={0} justifyContent="space-between">
-              <Box display="grid" gridAutoFlow="column" sx={{mt:1}}>
-                <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }}/>
-                {props.review.userName}님의 후기
-              </Box>
-              <Box sx={{mt:0.5}}>
-                <Button color="error" onClick={handleReportUser}>
-                  <Typography fontFamily="Jua">신고하기</Typography>
-                </Button>
-                <Button color="primary" onClick={handleCancel}>
-                  <Typography fontFamily="Jua">돌아가기</Typography>
-                </Button>
-              </Box>
-            </Grid>
-          </DialogTitle>
-          <DialogContent dividers>
-            <DialogContentText id="scroll-dialog-description" tabIndex={-1} fontFamily="Jua">
-              <AspectRatio objectFit="contain" sx={{ p: 1, pb: 2 }}>
-                <img src={props.review.imgUrl} />
-              </AspectRatio>
-              {props.review.contents}
-            </DialogContentText>
-          </DialogContent>
-          <DialogContent >
-            <CommentView reviewId={props.review.id}/>
-          </DialogContent>
-        </Dialog>
+        <ReviewDetail
+          key={props.review.id}
+          review={props.review}
+          isModalVisible={isModalVisible}
+          handleCancel={handleCancel}
+          handleReportUser={handleReportUser}
+          reportHistory={reportHistory} />
         <Link
           component="button"
           underline="none"
@@ -374,7 +339,8 @@ const PostCard = (props) => {
           </Link>
         </CardOverflow>
       </Card>
-      <PostUpdate
+      <ReviewUpdate
+        key={props.review.id}
         userId={props.userId}
         review={props.review}
         clubs={props.clubs}
@@ -384,4 +350,4 @@ const PostCard = (props) => {
   );
 };
 
-export default PostCard;
+export default ReviewCard;

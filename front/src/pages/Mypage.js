@@ -1,17 +1,13 @@
 import React from "react";
-import Footer from '../components/Footer';
-import Nav from '../components/Nav';
 import Main from '../components/myPage/Main'
+import AppLayout from "../components/common/AppLayout";
 
 const Profile = () => {
-   
     return (
-        <>
-            <Nav/>
-            <Main/>
-            <Footer/>
-        </>
-    );
-};
+        <AppLayout>
+          <Main/>
+        </AppLayout>
+      );
+    };
 
 export default Profile;

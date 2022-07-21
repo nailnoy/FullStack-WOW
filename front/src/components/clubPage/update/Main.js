@@ -111,6 +111,7 @@ const Main = () => {
 	const handleImgDelete = () => {
 		ref.current.value = "";
 		setPreview();
+		setImgFile();
 	};
 
 	const sendData = async (values) => {
@@ -383,7 +384,6 @@ const Main = () => {
 }
 export default Main;
 
-const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 const Wrapper = styled.section`

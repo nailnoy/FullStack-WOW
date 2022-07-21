@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 import {
 	Container,
-	Box,
 	Typography,
 	Grid,
 	InputLabel,
@@ -15,11 +14,11 @@ import {
 import { Row, message } from "antd";
 
 import Tags from "./TagFilter";
-import SearchBar from "../common/SearchBar";
-import ClubCard from "./ClubCard";
-import Spin from "../common/Spin";
-import Pagination from "../common/Pagination";
-import { customMedia } from "../../GlobalStyles";
+import SearchBar from "../../common/SearchBar";
+import ClubCard from "../../common/ClubCard";
+import Spin from "../../common/Spin";
+import Pagination from "../../common/Pagination";
+import { customMedia } from "../../../GlobalStyles";
 
 
 function Main() {
@@ -142,8 +141,6 @@ function Main() {
 						<Container sx={{ py: 1 }} maxWidth="xs">
 							<SearchBar keyword={keyword} setKeyword={setKeyword} />
 						</Container>
-
-
 
 						<Container sx={{ py: 1, mb: 2,display: "flex" }} maxWidth="xs">
 								<Tags

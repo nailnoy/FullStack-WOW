@@ -1,20 +1,15 @@
 import React from "react";
 import Main from "../components/clubPage/create/Main";
-import Footer from "../components/Footer";
-import Nav from "../components/Nav";
+import AppLayout from "../components/common/AppLayout";
 
-
-function ClubPost(props) {
-
+function CreateClub(props) {
     return (
-        <>
-            <Nav/>
-            <Main/>
-            <Footer />
-        </>
+        <AppLayout>
+          <Main/>
+        </AppLayout>
+      );
+    };
+    
 
-    )
-}
-
-export default ClubPost;
+export default CreateClub;
 

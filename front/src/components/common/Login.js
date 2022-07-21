@@ -4,7 +4,7 @@ import { gapi } from 'gapi-script';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
-import { customMedia } from "../GlobalStyles";
+import { customMedia } from "../../GlobalStyles";
 
 const Login = ({ ...props }) => {
 	const navigate = useNavigate();

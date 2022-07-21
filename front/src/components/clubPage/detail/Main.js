@@ -44,17 +44,12 @@ const Main = (props) => {
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
   const [club, setClub] = useState("");
-  const [editable, setEditable] = useState();
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
   const [likedClubs, setLikedClubs] = useState([]);
   const [apply, setApply] = useState();
   const [loading, setLoading] = useState(true);
   const [createdAt, setCreatedAt] = useState();
-  const [user, setUser] = useState("");
   const clubId = useParams().id;
   const userId = localStorage.getItem("user_id");
-  const userImg = localStorage.getItem("user_image");
   const reportHistory = [].concat(
     JSON.parse(localStorage.getItem("report_history"))
   );
@@ -105,7 +100,7 @@ const Main = (props) => {
       }
     };
     fetchData();
-  }, [userImg, total, page]);
+  }, []);
 
   const showInfoModal = () => {
     setIsInfoModalVisible(true);
@@ -530,28 +525,6 @@ const Main = (props) => {
   );
 };
 export default Main;
-
-const Wrapper = styled.div`
-  width: 1200px;
-  margin: 0 auto;
-  flex: 1;
-
-  ${customMedia.lessThan("mobile")`
-    width: 295px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    width: 363px;
-  `}
-
-	${customMedia.between("largeMobile", "tablet")`
-    width: 610px;
-  `}
-
-	${customMedia.between("tablet", "desktop")`
-    width: 880px;
-  `}
-`;
 
 const SpinContainer = styled.div`
   width: 100%;

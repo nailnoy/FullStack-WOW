@@ -8,7 +8,7 @@ const Tags = (props) => {
 	let removeDuplicatesTags = [...new Set(strTags)].map(JSON.parse);
 
   const handleSelectTags = (e) => {
-    if(e.target.innerText != undefined){
+    if(e.target.innerText !== undefined){
       let tagName = e.target.innerText;
       // let index = props.selectedTags.indexOf(tagName);
       console.log(tagName);
@@ -48,16 +48,6 @@ const Tags = (props) => {
   }
 
   export default Tags;
-
-  const categories = [
-    {category: '축구'},
-    {category: '농구'},
-    {category: '야구'},
-    {category: '필라테스'},
-    {category: '헬스'},
-    {category: '조깅'}
-  ];
-
 
   const FilterContainer = styled.div`
     display: flex;

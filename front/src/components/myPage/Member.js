@@ -155,38 +155,4 @@ const MemberEmail = styled.div`
   `}
 `;
 
-const MemberBtn = styled(Button)`
-	font-size: 16px;
-	font-weight: bold;
-	color: #ffffff;
-	background-color: #ff6701;
-	border: none;
-	border-radius: 6px;
-  margin-right: 55px;
-  
-  ${customMedia.lessThan("mobile")`
-    font-size: 10px;
-    padding: 3px 7px;
-    margin-right: 7px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    font-size: 10px;
-    padding: 3px 7px;
-    margin-right: 7px;
-  `}
-
-  ${customMedia.between("largeMobile", "tablet")`
-    font-size: 12px;
-    padding: 5px 10px;
-    margin-right: 15px;
-  `}
-
-  ${customMedia.between("tablet", "desktop")`
-    font-size: 14px;
-    padding: 5px 15px;
-    margin-right: 25px;
-  `}
-`;
-
 export default Member;

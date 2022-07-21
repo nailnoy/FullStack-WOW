@@ -171,38 +171,3 @@ const PendingMemberEmail = styled.div`
   `}
 `;
 
-const PendingMemberBtn = styled.button`
-	font-size: 16px;
-	font-weight: bold;
-	color: #ffffff;
-	background-color: #ff6701;
-	border: none;
-	border-radius: 6px;
-	padding: 10px 20px;
-	margin-right: 55px;
-  cursor: pointer;
-  
-  ${customMedia.lessThan("mobile")`
-    font-size: 8px;
-    padding: 2px 5px;
-    margin-right: 7px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    font-size: 8px;
-    padding: 2px 5px;
-    margin-right: 7px;
-  `}
-
-  ${customMedia.between("largeMobile", "tablet")`
-    font-size: 12px;
-    padding: 5px 10px;
-    margin-right: 15px;
-  `}
-
-  ${customMedia.between("tablet", "desktop")`
-    font-size: 14px;
-    padding: 5px 15px;
-    margin-right: 25px;
-  `}
-`;
