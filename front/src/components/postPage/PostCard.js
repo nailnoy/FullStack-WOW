@@ -318,7 +318,7 @@ const PostCard = (props) => {
           </DialogTitle>
           <DialogContent dividers>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1} fontFamily="Jua">
-              <AspectRatio sx={{ p: 1, pb: 2 }}>
+              <AspectRatio objectFit="contain" sx={{ p: 1, pb: 2 }}>
                 <img src={props.review.imgUrl} />
               </AspectRatio>
               {props.review.contents}
