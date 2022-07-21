@@ -12,6 +12,7 @@ import {
   Link,
   Input,
   Typography,
+  Button
 } from "@mui/joy";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Card from "@mui/joy/Card";
@@ -19,9 +20,18 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import IconButton from "@mui/joy/IconButton";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
-
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 const PostCard = (props) => {
+  console.log(props.review);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [postComment, setPostComment] = useState("");
@@ -34,6 +44,14 @@ const PostCard = (props) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   const handleReportUser = async () => {
@@ -69,7 +87,6 @@ const PostCard = (props) => {
       contents: postComment,
     };
 
-    console.log(data);
     try {
       const res = await axios.post("/reviewcomments", data);
 
@@ -247,9 +264,43 @@ const PostCard = (props) => {
           fontSize="sm"
           startDecorator="…"
           sx={{ color: "text.tertiary" }}
+          onClick={showModal}
         >
           더보기
         </Link>
+        <Dialog
+          open={isModalVisible}
+          onClose={() => handleCancel()}
+          scroll="body"
+          autoScrollBodyContent={false}
+          aria-labelledby="scroll-dialog-title"
+          aria-describedby="scroll-dialog-description"
+          maxWidth="md"
+          fullWidth={true}
+        >
+          <DialogTitle id="scroll-dialog-title">
+            <Grid container spacing={0}>
+              <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }}/>
+              {props.review.userName}님의 후기
+            </Grid>
+          </DialogTitle>
+          <DialogContent dividers>
+            <DialogContentText id="scroll-dialog-description" tabIndex={-1} fontFamily="Jua">
+              <AspectRatio sx={{p: 1, pb: 2 }}>
+                <img src={props.review.imgUrl}/>
+              </AspectRatio>
+              {props.review.contents}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="error" onClick={handleCancel}>
+              신고하기
+            </Button>
+            <Button color="primary" onClick={handleCancel}>
+              돌아가기
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Link
           component="button"
           underline="none"
@@ -297,10 +348,7 @@ const PostCard = (props) => {
         </CardOverflow>
       </Card>
     </Grid>
-
-
   );
 };
 
 export default PostCard;
-

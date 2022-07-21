@@ -77,23 +77,23 @@ public class MemberService {
         String subject, text;
 
         // 없으면 참여신청 취소, no 면 거절, out 이면 내보내기
-        if (deleteStatus.equals("NO")) {
-            subject = "[WOW] " + user.getName() + "님, " + club.getTitle()
-                    + " 운동모임 참여 신청이 거절되었습니다.";
-            text = "안녕하세요, " + user.getName() + "님.\n\n요청하신 " + club.getTitle()
-                    + " 운동모임의 참여 신청이 거절되었습니다.\n"
-                    + "아쉽지만 다른 운동모임에 참여 신청 부탁드립니다.\n\n감사합니다."
-                    + "\n\n- WOW팀";
-            sendAsyncMail(address, subject, text);
-        } else if (deleteStatus.equals("OUT")) {
-            subject = "[WOW] " + user.getName() + "님, " + club.getTitle()
-                    + " 운동모임의 참여자에서 내보내기 되었습니다.";
-            text = "안녕하세요, " + user.getName() + "님.\n\n" + club.getTitle()
-                    + " 운동모임 참여자 목록에서 내보내기 된 내역이 확인되었습니다.\n"
-                    + "아쉽지만 다른 운동모임에 참여 신청 부탁드립니다.\n\n감사합니다."
-                    + "\n\n- WOW팀";
-            sendAsyncMail(address, subject, text);
-        }
+//        if (deleteStatus.equals("NO")) {
+//            subject = "[WOW] " + user.getName() + "님, " + club.getTitle()
+//                    + " 운동모임 참여 신청이 거절되었습니다.";
+//            text = "안녕하세요, " + user.getName() + "님.\n\n요청하신 " + club.getTitle()
+//                    + " 운동모임의 참여 신청이 거절되었습니다.\n"
+//                    + "아쉽지만 다른 운동모임에 참여 신청 부탁드립니다.\n\n감사합니다."
+//                    + "\n\n- WOW팀";
+//            sendAsyncMail(address, subject, text);
+//        } else if (deleteStatus.equals("OUT")) {
+//            subject = "[WOW] " + user.getName() + "님, " + club.getTitle()
+//                    + " 운동모임의 참여자에서 내보내기 되었습니다.";
+//            text = "안녕하세요, " + user.getName() + "님.\n\n" + club.getTitle()
+//                    + " 운동모임 참여자 목록에서 내보내기 된 내역이 확인되었습니다.\n"
+//                    + "아쉽지만 다른 운동모임에 참여 신청 부탁드립니다.\n\n감사합니다."
+//                    + "\n\n- WOW팀";
+//            sendAsyncMail(address, subject, text);
+//        }
     }
 
     @Transactional
@@ -110,7 +110,7 @@ public class MemberService {
                 + "운동모임의 참여 신청이 승인되었습니다.\n"
                 + "즐거운 모임 가지시길 바랍니다.\n\n감사합니다."
                 + "\n\n- WOW팀";
-        sendAsyncMail(address, subject, text);
+//        sendAsyncMail(address, subject, text);
 
     }
 

@@ -19,7 +19,8 @@ import {
   Typography,
   Button,
   Grid,
-  Fab
+  Fab,
+  Box
 } from "@mui/material";
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -202,6 +203,7 @@ function PostMain() {
                 등록된 게시글 목록
               </Typography>
               <Grid container spacing={4}>
+
                 {reviews
                   ? reviews.map((review) => (
                     <PostCard
@@ -213,7 +215,6 @@ function PostMain() {
                   : ""}
               </Grid>
             </Container>
-
             <FabContainer>
               <Fab color="primary" aria-label="add" onClick={showModal} >
                 <AddIcon />
@@ -224,7 +225,7 @@ function PostMain() {
               visible={isModalVisible}
               onCancel={() => handleCancel()}
             >
-              <Container sx={{ p: 8 }} maxWidth="md" className="containerWrap">
+              <Container sx={{ px: 8, pt: 8, }} maxWidth="md" className="containerWrap">
                 <StyledForm
                   form={editForm}
                   name="editForm"
@@ -242,10 +243,11 @@ function PostMain() {
                       >
                         <Select
                           style={{
-                            width: 120,
+                            width: 250,
                           }}
                           onChange={handleChange}
                         >
+                          <Option value="" selected disabled>참여한 모임을 선택해주세요</Option>
                           {reviews
                             ? clubs.map((club) => (
                               <Option value={club.id}>{club.title}</Option>
@@ -278,17 +280,23 @@ function PostMain() {
                             ></PreviewImage>
                           </>
                         )}
+                        <Grid 
+                        container spacing={0} 
+                        justifyContent="center"
+                        sx={{ py: 2, pl: 5.5, pr: 1 }}
+                        >
                         <FileInput>
-                          <input
+                          <StyledInput
                             type="file"
                             accept="image/*"
                             onChange={handleImgChange}
                             ref={ref}
-                          />
+                            />
                         </FileInput>
                         <Button>
                           <DeleteIcon onClick={handleImgDelete} alt="Trash icon" />
                         </Button>
+                            </Grid>
 
                       </Form.Item>
 
@@ -313,7 +321,7 @@ function PostMain() {
 
                   <ButtonRow>
                     <Button
-                      size="small"
+                      size="large"
                       variant="contained"
                       color="primary"
                       type="primary"
@@ -377,23 +385,23 @@ const StyledModal = styled(Modal)`
 const StyledForm = styled(Form)`
 
 	.ant-form-item-label > label {
-		font-size: 18px;
+		font-size: 24px;
     font-weight: bold;
     
     ${customMedia.lessThan("mobile")`
-      font-size: 10px;
-    `}
-
-    ${customMedia.between("mobile", "largeMobile")`
-    font-size: 10px;
-    `}
-
-    ${customMedia.between("largeMobile", "tablet")`
       font-size: 14px;
     `}
 
+    ${customMedia.between("mobile", "largeMobile")`
+    font-size: 14px;
+    `}
+
+    ${customMedia.between("largeMobile", "tablet")`
+      font-size: 18px;
+    `}
+
     ${customMedia.between("tablet", "desktop")`
-      font-size: 16px;
+      font-size: 20px;
     `}
 	}
 
@@ -558,5 +566,34 @@ const PaginationRow = styled(Row)`
 
 	${customMedia.between("mobile", "tablet")`
     margin-top: 24px;
+    `}
+`;
+
+const StyledInput = styled.input`
+  max-width: 230px;
+  overflow: hidden;
+  position: relative;
+
+  ${customMedia.lessThan("mobile")`
+    font-size: 10px;
+    padding: 0;
+    width: 130px;
+  `}
+
+  ${customMedia.between("mobile", "largeMobile")`
+    font-size: 10px;
+    padding: 0;
+    width: 130px;
+  `}
+
+  ${customMedia.between("largeMobile", "tablet")`
+    font-size: 12px;
+    padding: 3px;
+    width: 170px;
+  `}
+
+  ${customMedia.between("tablet", "desktop")`
+    font-size: 14px;
+    padding: 5px;
   `}
 `;
