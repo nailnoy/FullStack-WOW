@@ -16,7 +16,6 @@ import Box from "@mui/material/Box";
 import { message } from "antd";
 
 const ClubCard = (props) => {
-  console.log(props.club);
   const navigate = useNavigate();
 
   return (

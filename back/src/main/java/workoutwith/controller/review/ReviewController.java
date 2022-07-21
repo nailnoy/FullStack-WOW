@@ -50,7 +50,8 @@ public class ReviewController {
     }
 
     //게시글 상세조회
-    @GetMapping("/{postId}")
+    @GetMapping("/{reviewId}")
+//    @GetMapping("/{postId}")
     public ResponseEntity<ReviewDetailResponseDto> getReviewDetail(
             @PathVariable Long reviewId) {
         return ResponseEntity.ok(

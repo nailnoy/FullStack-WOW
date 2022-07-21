@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Row, message } from "antd";
 import styled from "styled-components";
-import { customMedia } from "../../../GlobalStyles";
+import { customMedia } from "../../GlobalStyles";
 import { useParams } from "react-router-dom";
 
 import Comment from "./Comment";
-import Pagination from "../../common/Pagination";
-import profile from "../../../images/icons/profile.png";
+import Pagination from "../common/Pagination";
+import profile from "../../images/icons/profile.png";
 import { Box, Button, Container, List, ListItem, Typography } from "@mui/material";
 
 const CommentView = (props) => {
-  const [club, setClub] = useState();
+  const [reivew, setReview] = useState();
   const [comments, setComments] = useState();
   const [postComment, setPostComment] = useState("");
   const [updateComment, setUpdateComment] = useState("");
@@ -27,17 +27,9 @@ const CommentView = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/clubs/${clubId}`);
+        const res = await axios.get(`/reviews/${props.reviewId}`);
 
-        setClub(res.data);
-
-        if (userId) {
-          const applyRes = await axios.get("/members/ids", {
-            params: { userId: userId },
-          });
-
-          setApply(applyRes.data.joiningClubIdList);
-        }
+        setReview(res.data);
 
         setLoading(false);
       } catch (err) {
@@ -49,7 +41,7 @@ const CommentView = (props) => {
   }, [userImg, total, page]);
 
   const fetchCmtData = async () => {
-    const res = await axios.get(`/comments/clubs/${clubId}`, {
+    const res = await axios.get(`/reviewcomments/reviews/${props.reviewId}`, {
       params: { page: page },
     });
 
@@ -60,12 +52,12 @@ const CommentView = (props) => {
   const handlePostComment = async () => {
     const data = {
       userId: userId,
-      clubId: Number(clubId),
+      reviewId: Number(props.reviewId),
       contents: postComment,
     };
 
     try {
-      const res = await axios.post("/comments", data);
+      const res = await axios.post("/reviewcomments", data);
 
       if (res.status === 200) {
         message.success("댓글이 성공적으로 등록되었습니다.");
@@ -86,7 +78,7 @@ const CommentView = (props) => {
     };
 
     try {
-      const res = await axios.put(`/comments/${id}`, data);
+      const res = await axios.put(`/reviewcomments/${id}`, data);
 
       if (res.status === 200) {
         message.success("댓글이 성공적으로 수정되었습니다.");
