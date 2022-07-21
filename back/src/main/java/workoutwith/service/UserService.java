@@ -1,6 +1,7 @@
 package workoutwith.service;
 
 import workoutwith.controller.user.UserReportDto;
+import workoutwith.domain.AuthorityStatus;
 import workoutwith.domain.User;
 import workoutwith.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class UserService {
     public void reportUser(UserReportDto reportDto, String userId) {
     	final User user = searchUser(userId);
     	if(user.getDeclaration() > 2) {
-    		reportDto.setAuthority(1);
+    		reportDto.setAuthority(AuthorityStatus.BANNED);
+    		reportDto.setDeclaration(user.getDeclaration()+1);
     	}else {
     		reportDto.setDeclaration(user.getDeclaration()+1);
     	}

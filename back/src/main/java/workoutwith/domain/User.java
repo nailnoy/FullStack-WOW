@@ -1,17 +1,23 @@
 package workoutwith.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import static javax.persistence.FetchType.LAZY;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.LAZY;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor //파라미터 x 생성자 자동 생성
@@ -36,8 +42,9 @@ public class User {
     @OneToOne(mappedBy = "user", fetch = LAZY)
     private Club club; // 내가 만든 모임
     
+    @Enumerated(EnumType.STRING)
     @Column
-    private int authority;
+    private AuthorityStatus authority;
     
     @Column
     private int declaration;
@@ -65,7 +72,7 @@ public class User {
         this.imgUrl = imgUrl;
     }
     
-    public void reportUser(int authority, int declaration) {   //변수에 final -> 이 변수는 수정 불가
+    public void reportUser(AuthorityStatus authority, int declaration) {   //변수에 final -> 이 변수는 수정 불가
         this.authority = authority;
         this.declaration = declaration;
     }
