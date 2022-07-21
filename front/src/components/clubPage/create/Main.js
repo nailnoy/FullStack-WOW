@@ -1,4 +1,4 @@
-import React, { useRef, createRef, useState, useCallback } from "react";
+import React, { useRef, createRef, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -91,6 +91,7 @@ const Main = (props) => {
 	const handleImgDelete = () => {
 		ref.current.value = "";
 		setPreview();
+		setImgFile();
 	};
 
 	const sendData = async (values) => {
@@ -341,7 +342,6 @@ const Main = (props) => {
 }
 export default Main;
 
-const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 const Wrapper = styled.section`
@@ -582,34 +582,6 @@ const FileInput = styled.div`
     font-size: 14px;
     padding: 5px;
   `}
-`;
-
-const StyledTextArea = styled(TextArea)`
-	font-size: 16px;
-	width: 700px;
-	background-color: #f6f6f6;
-	border: 1px solid #94989b;
-	border-radius: 5px;
-  
-	${customMedia.lessThan("mobile")`
-    font-size: 10px;
-  `}
-
-  ${customMedia.between("mobile", "largeMobile")`
-    font-size: 10px;
-  `}
-  
-  ${customMedia.between("largeMobile", "tablet")`
-    font-size: 12px;
-  `}
-  
-  ${customMedia.between("tablet", "desktop")`
-    font-size: 14px;
-  `}
-`;
-
-const TagRow = styled(Row)`
-	margin-top: 20px;
 `;
 
 const Title = styled.div`

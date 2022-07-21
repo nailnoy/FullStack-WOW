@@ -4,7 +4,6 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
 import { message } from "antd";
-import CommentView from "../postPage/CommentView";
 
 import { Grid, Menu, MenuItem } from "@mui/material";
 
@@ -21,20 +20,11 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import IconButton from "@mui/joy/IconButton";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import Face from "@mui/icons-material/Face";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button,
-  Container
-} from "@mui/material";
 
+import ReviewUpdate from "../update/Main";
+import ReviewDetail from "../detail/Main";
 
-import PostUpdate from "../postPage/PostUpdate";
-
-const PostCard = (props) => {
+const ReviewCard = (props) => {
   const navigate = useNavigate();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -296,49 +286,13 @@ const PostCard = (props) => {
         >
           더보기
         </Link>
-        <Dialog
-          open={isModalVisible}
-          onClose={() => handleCancel()}
-          scroll="body"
-          aria-labelledby="scroll-dialog-title"
-          aria-describedby="scroll-dialog-description"
-          maxWidth="md"
-          fullWidth={true}
-        >
-          <DialogTitle id="scroll-dialog-title">
-            <Grid container spacing={0} justifyContent="space-between">
-              <Box display="grid" gridAutoFlow="column" sx={{ mt: 1 }}>
-                <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }} />
-                {props.review.userName}님의 후기
-              </Box>
-              <Box sx={{ mt: 0.5 }}>
-                {(() => {
-                  if (!reportHistory.includes(props.review.id)) {
-                    return (
-                      <Button color="error" onClick={handleReportUser}>
-                        <Typography fontFamily="Jua">신고하기</Typography>
-                      </Button>
-                    );
-                  } else return;
-                })()}
-                <Button color="primary" onClick={handleCancel}>
-                  <Typography fontFamily="Jua">돌아가기</Typography>
-                </Button>
-              </Box>
-            </Grid>
-          </DialogTitle>
-          <DialogContent dividers>
-            <DialogContentText id="scroll-dialog-description" tabIndex={-1} fontFamily="Jua">
-              <AspectRatio sx={{ p: 1, pb: 2 }}>
-                <img src={props.review.imgUrl} />
-              </AspectRatio>
-              {props.review.contents}
-            </DialogContentText>
-          </DialogContent>
-          <DialogContent >
-            <CommentView reviewId={props.review.id} />
-          </DialogContent>
-        </Dialog>
+        <ReviewDetail
+          key={props.review.id}
+          review={props.review}
+          isModalVisible={isModalVisible}
+          handleCancel={handleCancel}
+          handleReportUser={handleReportUser}
+          reportHistory={reportHistory} />
         <Link
           component="button"
           underline="none"
@@ -385,7 +339,7 @@ const PostCard = (props) => {
           </Link>
         </CardOverflow>
       </Card>
-      <PostUpdate
+      <ReviewUpdate
         key={props.review.id}
         userId={props.userId}
         review={props.review}
@@ -396,4 +350,4 @@ const PostCard = (props) => {
   );
 };
 
-export default PostCard;
+export default ReviewCard;

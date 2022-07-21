@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
-import { customMedia } from "../../GlobalStyles";
+import { customMedia } from "../../../GlobalStyles";
 import { Box, Button, Typography } from "@mui/material";
 
 const Comment = (props) => {

@@ -7,8 +7,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Login from './Login';
 
-
-
 const Nav = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isLoggedIn, setLoggedIn] = useState(false);
@@ -76,13 +74,13 @@ const Nav = () => {
                         <Link
                             variant="button"
                             color="inherit"
-                            href="/post"
+                            href="/reviews"
                             underline="none"
                             fontFamily="Jua"
                             fontSize="1.5rem"
                             sx={{ my: 1, mx: 1.5 }}
                         >
-                            게시판
+                            후기
                         </Link>
                         {!isLoggedIn ? 
                         (
