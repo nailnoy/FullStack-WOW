@@ -3,6 +3,7 @@ import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
 import { message } from "antd";
+import CommentView from "./CommentView";
 
 import { Grid, Menu, MenuItem } from "@mui/material";
 
@@ -12,7 +13,6 @@ import {
   Link,
   Input,
   Typography,
-  Button
 } from "@mui/joy";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Card from "@mui/joy/Card";
@@ -26,11 +26,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Button,
+  Container
 } from "@mui/material";
 import PostUpdate from "./PostUpdate";
 
 const PostCard = (props) => {
-  console.log(props.review);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
@@ -258,7 +259,17 @@ const PostCard = (props) => {
           >
           </Box>
         </Box>
-        <Typography fontSize="sm">
+        <Typography 
+        fontSize="sm"
+        sx={{
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          display: "-webkit-box",
+          WebkitLineClamp: "3",
+          WebkitBoxOrient: "vertical",
+          minHeight: "70px"
+        }}
+        >
           <Link
             component="button"
             color="neutral"
@@ -284,16 +295,25 @@ const PostCard = (props) => {
           open={isModalVisible}
           onClose={() => handleCancel()}
           scroll="body"
-          autoScrollBodyContent={false}
           aria-labelledby="scroll-dialog-title"
           aria-describedby="scroll-dialog-description"
           maxWidth="md"
           fullWidth={true}
         >
           <DialogTitle id="scroll-dialog-title">
-            <Grid container spacing={0}>
-              <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }} />
-              {props.review.userName}님의 후기
+            <Grid container spacing={0} justifyContent="space-between">
+              <Box display="grid" gridAutoFlow="column" sx={{mt:1}}>
+                <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }}/>
+                {props.review.userName}님의 후기
+              </Box>
+              <Box sx={{mt:0.5}}>
+                <Button color="error" onClick={handleReportUser}>
+                  <Typography fontFamily="Jua">신고하기</Typography>
+                </Button>
+                <Button color="primary" onClick={handleCancel}>
+                  <Typography fontFamily="Jua">돌아가기</Typography>
+                </Button>
+              </Box>
             </Grid>
           </DialogTitle>
           <DialogContent dividers>
@@ -304,20 +324,9 @@ const PostCard = (props) => {
               {props.review.contents}
             </DialogContentText>
           </DialogContent>
-          <DialogActions>
-            {(() => {
-              if (!reportHistory.includes(props.review.id)) {
-                return (
-                  <Button color="error" onClick={handleReportUser}>
-                    신고하기
-                  </Button>
-                );
-              } else return;
-            })()}
-            <Button color="primary" onClick={handleCancel}>
-              돌아가기
-            </Button>
-          </DialogActions>
+          <DialogContent >
+            <CommentView reviewId={props.review.id}/>
+          </DialogContent>
         </Dialog>
         <Link
           component="button"

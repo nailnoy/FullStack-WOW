@@ -55,9 +55,9 @@ public class ReviewCommentController {
     }
 
     // 모임상세 댓글 전체 조회
-    @GetMapping("/reviews/{clubId}")
+    @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewCommentPageResponseDto> getClubComments(
-            @PathVariable("clubId") Long reviewId, @RequestParam("page") int page) {
+            @PathVariable("reviewId") Long reviewId, @RequestParam("page") int page) {
         Page<ReviewComment> allReviewComments = reviewCommentService.findAllReviewComments(reviewId, page);
         Long totalCount = allReviewComments.getTotalElements();
         List<ReviewCommentResponseDto> response = allReviewComments
