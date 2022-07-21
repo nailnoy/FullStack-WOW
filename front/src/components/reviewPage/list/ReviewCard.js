@@ -66,7 +66,6 @@ const ReviewCard = (props) => {
       const getRes = await axios.get(`/users/${props.review.userId}`);
       if (getRes.status === 200) {
         const reportData = {
-          authority: Number(getRes.data.authority),
           declaration: Number(getRes.data.declaration),
         };
         const res = await axios.put(`/users/report/${props.review.userId}`, reportData);
@@ -80,7 +79,7 @@ const ReviewCard = (props) => {
           message.error("신고에 실패하였습니다.");
         }
       } else {
-        message.error("게시글의 회원 정보를 찾을 수 없습니다.");
+        message.error("후기의 회원 정보를 찾을 수 없습니다.");
       }
     } catch (err) {
       console.log(err);

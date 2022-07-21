@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/playdata
     username: root
-    password: playdata 
+    password: dl616263
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
     hibernate:
-      ddl-auto: create #create #none #update #validate
+      ddl-auto: none #create #none #update #validate
     properties:
       hibernate:
         #        show_sql: true

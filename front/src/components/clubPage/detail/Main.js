@@ -214,7 +214,6 @@ const Main = (props) => {
       const getRes = await axios.get(`/users/${club.userId}`);
       if (getRes.status === 200) {
         const reportData = {
-          authority: Number(getRes.data.authority),
           declaration: Number(getRes.data.declaration),
         };
         const res = await axios.put(`/users/report/${club.userId}`, reportData);

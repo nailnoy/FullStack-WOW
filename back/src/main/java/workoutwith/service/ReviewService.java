@@ -76,7 +76,7 @@ public class ReviewService {
         	reviewSortedByKeyword = reviews;
         else {
             for (Review review : reviews) {
-                if (review.getContents().contains(keyword)) {
+                if (review.getClub().getTitle().contains(keyword)) {
                 	reviewSortedByKeyword.add(review);
                 }
             }
