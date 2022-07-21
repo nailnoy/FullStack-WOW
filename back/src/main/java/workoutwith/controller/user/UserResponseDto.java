@@ -5,6 +5,12 @@ import workoutwith.domain.User;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import workoutwith.domain.AuthorityStatus;
+import workoutwith.domain.User;
+
 @Getter
 @Setter
 @NoArgsConstructor

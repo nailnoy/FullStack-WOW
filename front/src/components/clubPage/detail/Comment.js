@@ -1,15 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import { customMedia } from "../../../GlobalStyles";
 import { Box, Button, Typography } from "@mui/material";
+import Spin from "../../common/Spin";
 
 const Comment = (props) => {
   const createdAt = new Date(props.comment.createdAt).toLocaleString();
   const updatedAt = new Date(props.comment.updatedAt).toLocaleString();
+  const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
+  const userId = localStorage.getItem("user_id");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setUser(await axios.get(`/users/${userId}`));
+    
+    setLoading(false);
+  };
+
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+
+    }else{
+      return true;
+    }
+  };
 
   return (
-    <CmtContainer>
+    <>
+    {loading ? (
+      <SpinContainer>
+        <Spin />
+      </SpinContainer>
+    ) : (
+      <CmtContainer>
       <ProfileIcon>
         <img src={props.comment.userImgUrl} alt="User profile" />
       </ProfileIcon>
@@ -21,7 +51,7 @@ const Comment = (props) => {
           bgcolor: "aliceblue",
           borderRadius: "10px",
         }}
-      >
+        >
         <CmtWriter>{props.comment.userName}</CmtWriter>
         <CmtDate>{createdAt !== updatedAt ? updatedAt : createdAt}</CmtDate>
         <CmtUpdateCheck>
@@ -29,28 +59,34 @@ const Comment = (props) => {
         </CmtUpdateCheck>
         {props.comment.userId === props.userId ? (
           <Button
-            size="small"
-            variant="text"
-            color="warning"
-            onClick={() => props.setEditable(props.comment.id)}
+          size="small"
+          variant="text"
+          color="warning"
+          onClick={() => {
+            if(checkAthority()){
+              props.setEditable(props.comment.id)
+            } else {
+              message.error("신고 누적으로 인해 이용이 불가능 합니다");
+            }
+          }}
           >
             <Typography fontFamily="Jua">수정</Typography> 
           </Button>
         ) : (
           ""
-        )}
+          )}
         {props.comment.userId === props.userId ? (
           <Button
-            size="small"
-            variant="text"
-            color="error"
-            onClick={() => props.handleDeleteComment(props.comment.id)}
+          size="small"
+          variant="text"
+          color="error"
+          onClick={() => props.handleDeleteComment(props.comment.id)}
           >
             <Typography fontFamily="Jua">삭제</Typography>
           </Button>
         ) : (
           ""
-        )}
+          )}
         <CmtText>
           {props.editable === props.comment.id ? (
             <>
@@ -60,27 +96,38 @@ const Comment = (props) => {
                   console.log(e.target.value);
                   props.setUpdateComment(e.target.value);
                 }}
-              />
+                />
               <ConfirmBtn
                 onClick={() => {
                   props.handleUpdateComment(props.comment.id);
                   props.setEditable();
                 }}
-              >
+                >
                 확인
               </ConfirmBtn>
               <CancelBtn onClick={() => props.setEditable()}>취소</CancelBtn>
             </>
           ) : (
             props.comment.contents
-          )}
+            )}
         </CmtText>
       </Box>
     </CmtContainer>
+    )}
+    </>
   );
 };
 
 export default Comment;
+
+const SpinContainer = styled.div`
+	width: 100%;
+	height: 80vh;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
 
 const CmtContainer = styled.div`
   display: flex;

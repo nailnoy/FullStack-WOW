@@ -1,14 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import { customMedia } from "../../../GlobalStyles";
 import { Box, Button, Typography } from "@mui/material";
+import Spin from "../../common/Spin";
 
 const Comment = (props) => {
   const createdAt = new Date(props.comment.createdAt).toLocaleString();
   const updatedAt = new Date(props.comment.updatedAt).toLocaleString();
+  const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
+  const userId = localStorage.getItem("user_id");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setUser(await axios.get(`/users/${userId}`));
+    
+    setLoading(false);
+  };
+
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+
+    }else{
+      return true;
+    }
+  };
 
   return (
+    <>
+    {loading ? (
+      <SpinContainer>
+        <Spin />
+      </SpinContainer>
+    ) : (
     <CmtContainer>
       <ProfileIcon>
         <img src={props.comment.userImgUrl} alt="User profile" />
@@ -32,7 +62,13 @@ const Comment = (props) => {
             size="small"
             variant="text"
             color="warning"
-            onClick={() => props.setEditable(props.comment.id)}
+            onClick={() => {
+              if(checkAthority()){
+                props.setEditable(props.comment.id)
+              } else {
+                message.error("신고 누적으로 인해 이용이 불가능 합니다");
+              }
+            }}
           >
             <Typography fontFamily="Jua">수정</Typography> 
           </Button>
@@ -77,10 +113,21 @@ const Comment = (props) => {
         </CmtText>
       </Box>
     </CmtContainer>
+      )}
+    </>
   );
 };
 
 export default Comment;
+
+const SpinContainer = styled.div`
+	width: 100%;
+	height: 80vh;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
 
 const CmtContainer = styled.div`
   display: flex;
