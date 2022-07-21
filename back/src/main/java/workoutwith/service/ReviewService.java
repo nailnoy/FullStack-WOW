@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -81,7 +82,8 @@ public class ReviewService {
             }
         }
 
-         return reviewSortedByKeyword;
+         return reviewSortedByKeyword.stream().sorted(Comparator.comparing(Review::getCreatedAt).reversed())
+                 .collect(Collectors.toList());
 
     }
 

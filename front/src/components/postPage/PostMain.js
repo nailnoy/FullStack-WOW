@@ -27,7 +27,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
 import Spin from "../common/Spin";
-import PostCard from "./PostCard";
+import PostCard from "../common/ReviewCard";
 import SearchBar from "../common/SearchBar";
 import Pagination from "../common/Pagination";
 import { customMedia } from "../../GlobalStyles";
@@ -211,8 +211,7 @@ function PostMain() {
                       userId={userId}
                       review={review}
                       clubs={clubs}
-                      handleDeleteReview={handleDeleteReview}
-                      navigate={navigate} />
+                      handleDeleteReview={handleDeleteReview}/>
                   ))
                   : ""}
               </Grid>

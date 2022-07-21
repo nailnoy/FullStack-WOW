@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import "moment/locale/ko";
 import { message } from "antd";
-import CommentView from "./CommentView";
+import CommentView from "../postPage/CommentView";
 
 import { Grid, Menu, MenuItem } from "@mui/material";
 
@@ -29,9 +30,13 @@ import {
   Button,
   Container
 } from "@mui/material";
-import PostUpdate from "./PostUpdate";
+
+
+import PostUpdate from "../postPage/PostUpdate";
 
 const PostCard = (props) => {
+  const navigate = useNavigate();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
 
@@ -118,7 +123,7 @@ const PostCard = (props) => {
 
 
   return (
-    <Grid item key={1} xs={12} sm={6} md={4}>
+    <Grid item xs={12} sm={6} md={4}>
       <Card
         variant="outlined"
         sx={{
@@ -259,23 +264,23 @@ const PostCard = (props) => {
           >
           </Box>
         </Box>
-        <Typography 
-        fontSize="sm"
-        sx={{
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          display: "-webkit-box",
-          WebkitLineClamp: "3",
-          WebkitBoxOrient: "vertical",
-          minHeight: "70px"
-        }}
+        <Typography
+          fontSize="sm"
+          sx={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+            minHeight: "70px"
+          }}
         >
           <Link
             component="button"
             color="neutral"
             fontWeight="lg"
             textColor="text.primary"
-            onClick={() => props.navigate(`../detail/${props.review.clubId}`)}
+            onClick={() => navigate(`../detail/${props.review.clubId}`)}
           >
             {props.review.clubTitle} 의 후기
           </Link>{" "}
@@ -302,14 +307,20 @@ const PostCard = (props) => {
         >
           <DialogTitle id="scroll-dialog-title">
             <Grid container spacing={0} justifyContent="space-between">
-              <Box display="grid" gridAutoFlow="column" sx={{mt:1}}>
-                <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }}/>
+              <Box display="grid" gridAutoFlow="column" sx={{ mt: 1 }}>
+                <Avatar src={props.review.userImgUrl} sx={{ width: 24, height: 24, mr: 1, mt: 0.5 }} />
                 {props.review.userName}님의 후기
               </Box>
-              <Box sx={{mt:0.5}}>
-                <Button color="error" onClick={handleReportUser}>
-                  <Typography fontFamily="Jua">신고하기</Typography>
-                </Button>
+              <Box sx={{ mt: 0.5 }}>
+                {(() => {
+                  if (!reportHistory.includes(props.review.id)) {
+                    return (
+                      <Button color="error" onClick={handleReportUser}>
+                        <Typography fontFamily="Jua">신고하기</Typography>
+                      </Button>
+                    );
+                  } else return;
+                })()}
                 <Button color="primary" onClick={handleCancel}>
                   <Typography fontFamily="Jua">돌아가기</Typography>
                 </Button>
@@ -325,7 +336,7 @@ const PostCard = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogContent >
-            <CommentView reviewId={props.review.id}/>
+            <CommentView reviewId={props.review.id} />
           </DialogContent>
         </Dialog>
         <Link
@@ -375,6 +386,7 @@ const PostCard = (props) => {
         </CardOverflow>
       </Card>
       <PostUpdate
+        key={props.review.id}
         userId={props.userId}
         review={props.review}
         clubs={props.clubs}

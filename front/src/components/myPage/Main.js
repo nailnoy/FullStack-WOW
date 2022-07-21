@@ -336,7 +336,7 @@ const Main = () => {
 							)}
 						</TabPane>
 
-						<TabPane tab="독서모임 관리" key="4">
+						<TabPane tab="운동모임 관리" key="4">
 							{myClub ? (
 								<TabContainer gutter={[0, 100]}>
 									<Box>

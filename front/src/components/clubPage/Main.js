@@ -16,7 +16,7 @@ import { Row, message } from "antd";
 
 import Tags from "./TagFilter";
 import SearchBar from "../common/SearchBar";
-import ClubCard from "./ClubCard";
+import ClubCard from "../common/ClubCard";
 import Spin from "../common/Spin";
 import Pagination from "../common/Pagination";
 import { customMedia } from "../../GlobalStyles";
