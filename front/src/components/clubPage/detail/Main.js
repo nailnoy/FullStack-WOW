@@ -48,6 +48,7 @@ const Main = (props) => {
   const [apply, setApply] = useState();
   const [loading, setLoading] = useState(true);
   const [createdAt, setCreatedAt] = useState();
+  const [user, setUser] = useState("");
   const clubId = useParams().id;
   const userId = localStorage.getItem("user_id");
   const reportHistory = [].concat(
@@ -60,6 +61,9 @@ const Main = (props) => {
         const res = await axios.get(`/clubs/${clubId}`);
 
         setClub(res.data);
+        
+        setUser(await axios.get(`/users/${userId}`));
+
         let tempCeatedAt = new Date(res.data.createdAt);
 
         setCreatedAt(
@@ -132,6 +136,15 @@ const Main = (props) => {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+
+    }else{
+      return true;
     }
   };
 
@@ -361,7 +374,13 @@ const Main = (props) => {
                   return (
                     <>
                       <Button
-                        onClick={()=> navigate(`../clubs/update/${clubId}`)}
+                        onClick={()=> {
+                          if(checkAthority()){
+                            navigate(`../clubs/update/${clubId}`)
+                          } else {
+                            message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                          }
+                        }}
                         className="modifyBtn"
                         color="warning"
                         size="large"
