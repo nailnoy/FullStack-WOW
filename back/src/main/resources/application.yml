@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/playdata
     username: root
-    password: playdata
+    password: dl616263
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher

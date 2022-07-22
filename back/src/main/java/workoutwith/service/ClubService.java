@@ -1,6 +1,7 @@
 package workoutwith.service;
 
 import workoutwith.common.error.exception.ClubNotFoundException;
+import workoutwith.common.error.exception.ReviewNotFoundException;
 import workoutwith.common.error.exception.UserNotFoundException;
 import workoutwith.controller.club.ClubCreateRequestDto;
 import workoutwith.controller.club.ClubUpdateRequestDto;
@@ -25,6 +26,8 @@ public class ClubService {
     private final CommentRepository commentRepository;
     private final LikedClubRepository likedClubRepository;
     private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
+    private final ReviewCommentRepository reviewCommentRepository;
     private final S3Service s3Service;
     private final String imageUrl = "https://velog.velcdn.com/images/zolyer/post/d8620848-232a-47c5-a6db-2283b9fe4d28/image.jpeg";
 
@@ -196,9 +199,12 @@ public class ClubService {
     @Transactional
     public void deleteClub(String userId) {
         final Club club = findClubByUserId(userId);
+        Review review = reviewRepository.findByClub(club).orElse(null);
         commentRepository.deleteAllByClub(club);
         likedClubRepository.deleteByClub(club);
         memberRepository.deleteAllByClub(club);
+        reviewCommentRepository.deleteAllByReview(review);
+        reviewRepository.deleteAllByClub(club);
         clubRepository.delete(club);
     }
     
