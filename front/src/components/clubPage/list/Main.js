@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -12,7 +13,9 @@ import {
 	Select,
 	Checkbox,
 	FormControlLabel,
+	Fab,
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { Row, message } from "antd";
 
 import Tags from "./TagFilter";
@@ -25,6 +28,7 @@ import { customMedia } from "../../../GlobalStyles";
 
 
 function Main() {
+	const navigate = useNavigate();
 	const [clubs, setClubs] = useState();
 	const [sortBy, setSortBy] = useState("createdAt");
 	const [selectedTags, setSelectedTags] = useState([]);
@@ -35,6 +39,7 @@ function Main() {
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
 	const [clubStatus, onChangeClubStatus] = useinput('');
+	const [user, setUser] = useState("");
 
 	const userId = localStorage.getItem("user_id");
 
@@ -67,7 +72,6 @@ function Main() {
 
 			setClubs(res.data.clubList);
 			setTotal(res.data.totalCount);
-			console.log(res.data.clubList);
 
 			if (userId) {
 				const likedClubRes = await axios.get("/likedClubs/ids", {
@@ -77,10 +81,22 @@ function Main() {
 				});
 				setLikedClubs(likedClubRes.data.likedClubIdList);
 			}
+
+			setUser(await axios.get(`/users/${userId}`));
+
 		} catch (err) {
 			console.log(err);
 		}
 	};
+
+	const checkAthority = () => {
+		if(user.data.authority == "BANNED"){
+		  return false;
+	
+		}else{
+		  return true;
+		}
+	  };
 
 	const handleLikedClubs = (clubId) => {
 		let index = likedClubs.indexOf(clubId);
@@ -123,90 +139,115 @@ function Main() {
 	};
 
 	return (
-		<>
-			<main>
-				{loading ? (
-					<SpinContainer>
-						<Spin />
-					</SpinContainer>
-				) : (
-					<>
-						<Container sx={{ pt: 8 }} maxWidth="md">
-							<Typography
-								gutterBottom variant="h6"
-								component="h2"
-								fontFamily="Jua"
-								fontSize="2rem"
-								textAlign="center"
-							>
-								운동 모임 찾기
-							</Typography>
-						</Container>
+    <>
+      <main>
+        {loading ? (
+          <SpinContainer>
+            <Spin />
+          </SpinContainer>
+        ) : (
+          <>
+            <Container sx={{ pt: 8 }} maxWidth="md">
+              <Typography
+                gutterBottom
+                variant="h6"
+                component="h2"
+                fontFamily="Jua"
+                fontSize="2rem"
+                textAlign="center"
+              >
+                운동 모임 찾기
+              </Typography>
+            </Container>
 
-						<Container sx={{ py: 1, display: "flex", justifyContent: "center" }} maxWidth="md">
-							<SearchBar keyword={keyword} setKeyword={setKeyword} />
-							<FormControlLabel 
-								sx={{ ml: 2 }}
-								label="모집 중만"
-								control={
-									<Checkbox
-										checked={clubStatus}
-										onChange={onChangeClubStatus}
-									/>
-								}
-							/>
-						</Container>
+            <Container
+              sx={{ py: 1, display: "flex", justifyContent: "center" }}
+              maxWidth="md"
+            >
+              <SearchBar keyword={keyword} setKeyword={setKeyword} />
+              <FormControlLabel
+                sx={{ ml: 2 }}
+                label="모집 중만"
+                control={
+                  <Checkbox
+                    checked={clubStatus}
+                    onChange={onChangeClubStatus}
+                  />
+                }
+              />
+            </Container>
 
-						<Container sx={{ py: 1, mb: 2, display: "flex" }} maxWidth="xs">
-							<Tags
-								selectedTags={selectedTags}
-								setSelectedTags={setSelectedTags}
-								tags={tags}
-								setTags={setTags}
-								clubs={clubs}
-							/>
-							<FormControl sx={{ ml: 2, minWidth: 100 }} size="small">
-								<InputLabel id="SortBy">정렬</InputLabel>
-								<Select
-									id="sortFliter"
-									label="SortBy"
-									value={sortBy}
-									onChange={(e) => { setSortBy(e.target.value) }}
-								>
-									<MenuItem value="createdAt">최신순</MenuItem>
-									<MenuItem value="likes">좋아요순</MenuItem>
-								</Select>
-							</FormControl>
-						</Container>
+            <Container sx={{ py: 1, mb: 2, display: "flex" }} maxWidth="xs">
+              <Tags
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+                tags={tags}
+                setTags={setTags}
+                clubs={clubs}
+              />
+              <FormControl sx={{ ml: 2, minWidth: 100 }} size="small">
+                <InputLabel id="SortBy">정렬</InputLabel>
+                <Select
+                  id="sortFliter"
+                  label="SortBy"
+                  value={sortBy}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                  }}
+                >
+                  <MenuItem value="createdAt">최신순</MenuItem>
+                  <MenuItem value="likes">좋아요순</MenuItem>
+                </Select>
+              </FormControl>
+            </Container>
 
-						<Container sx={{ py: 0 }} maxWidth="md">
-							<Grid container spacing={4}>
-								{clubs
-									? clubs.map((club) => (
-										<ClubCard
-											key={club.id}
-											userId={userId}
-											club={club}
-											likedClubs={likedClubs}
-											handleLikedClubs={handleLikedClubs}
-										/>
-									))
-									: ""}
-							</Grid>
-						</Container>
-						<PaginationRow>
-							<Pagination
-								total={total}
-								pageSize={9}
-								current={page}
-								onChange={(page) => setPage(page)}
-							/>
-						</PaginationRow>
-					</>
-				)}
-			</main>
-		</>
-	);
+            <Container sx={{ py: 0 }} maxWidth="md">
+              <Grid container spacing={4}>
+                {clubs
+                  ? clubs.map((club) => (
+                      <ClubCard
+                        key={club.id}
+                        userId={userId}
+                        club={club}
+                        likedClubs={likedClubs}
+                        handleLikedClubs={handleLikedClubs}
+                      />
+                    ))
+                  : ""}
+              </Grid>
+            </Container>
+            <FabContainer>
+              <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => {
+                  if (userId) {
+                    if (checkAthority()) {
+                      navigate("/clubs/create");
+                    } else {
+                      message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                    }
+                  } else {
+                    message.warning("로그인이 필요한 기능입니다.");
+                  }
+                }}
+              >
+                <AddIcon />
+              </Fab>
+            </FabContainer>
+            <PaginationRow>
+              <Pagination
+                total={total}
+                pageSize={9}
+                current={page}
+                onChange={(page) => setPage(page)}
+              />
+            </PaginationRow>
+          </>
+        )}
+      </main>
+    </>
+  );
 };
 
 export default Main;
@@ -236,4 +277,10 @@ const PaginationRow = styled(Row)`
 	${customMedia.between("mobile", "tablet")`
     margin-top: 24px;
   `}
+`;
+
+const FabContainer = styled.div`
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
 `;

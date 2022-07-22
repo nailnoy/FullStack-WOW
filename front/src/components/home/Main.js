@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { message } from "antd";
 import styled from "styled-components";
@@ -17,10 +18,12 @@ import Spin from "../common/Spin";
 import ClubCard from "../common/ClubCard";
 
 const Main = () => {
+  const navigate = useNavigate();
 	const [sortByCreatedAtClubs, setSortByCreatedAtClubs] = useState([]);
 	const [sortByLikesClubs, setsortByLikesClubs] = useState([]);
 	const [likedClubs, setLikedClubs] = useState([]);
 	const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState("");
 	const userId = localStorage.getItem("user_id");
 
 	useEffect(() => {
@@ -60,10 +63,22 @@ const Main = () => {
 				});
 				setLikedClubs(likedClubRes.data.likedClubIdList);
 			}
+
+      setUser(await axios.get(`/users/${userId}`));
+      
 		} catch (err) {
 			console.log(err);
 		}
 	};
+
+  const checkAthority = () => {
+    if(user.data.authority == "BANNED"){
+      return false;
+
+    }else{
+      return true;
+    }
+  };
 
 	const handleLikedClubs = (clubId) => {
 		let index = likedClubs.indexOf(clubId);
@@ -146,7 +161,22 @@ const Main = () => {
             spacing={2}
             justifyContent="center"
           >
-            <Button variant="contained" href="/clubs/create">모임 만들기</Button>
+            <Button 
+            variant="contained" 
+            onClick={() => {
+              if (userId) {
+                if(checkAthority()){
+                  navigate("/clubs/create");
+                } else {
+                  message.error("신고 누적으로 인해 이용이 불가능 합니다");
+                }
+              } else {
+                message.warning("로그인이 필요한 기능입니다.");
+              }
+            }}
+            >
+              모임 만들기
+            </Button>
             <Button variant="outlined" href="/clubs">모임 검색하기</Button>
           </Stack>
         </Container>
