@@ -104,27 +104,27 @@ const LikedClubCard = (props) => {
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography
             gutterBottom
-            variant="h5"
+            variant="h6"
             fontFamily="Jua"
             fontWeight="600"
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: '1',
-              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: "1",
+              WebkitBoxOrient: "vertical",
             }}
           >
             {props.club.title}
             </Typography>
           <Typography
             fontFamily="Jua"
-            height="20px"
+            height="50px"
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: "1",
+              WebkitLineClamp: "2",
               WebkitBoxOrient: "vertical",
             }}
           >

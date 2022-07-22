@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+<h1 align="center">  🏋️ WorkOutWith </h1>
+<h3 id="info">저희 WOW는</h3>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+여러 운동모임을 참여하고, 사용자가 필요한 운동모임을 등록하여 모집할 수 있는 사이트입니다.
 
-## Available Scripts
+  - **운동모임 등록**
+  - **운동모임 수정, 삭제**
+  - **참여자 관리 (메일로 통보)**
+  - **운동모임 검색**
+  - **좋아요**
+  - **운동모임 상세조회**
+  - **운동모임 후기 게시판**
+  - **댓글**
+  - **참여 신청/취소**
+  - **사용자 신고 및 제한**
 
-In the project directory, you can run:
 
-### `npm start`
+  <h2 id="skills"> 📚 스택 </h2>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  -  #### Front
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"> <img src="https://img.shields.io/badge/style_components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white">  <img src="https://img.shields.io/badge/mui-007FFF?style=for-the-badge&logo=mui&logoColor=white"> <img src="https://img.shields.io/badge/ant_design-0170FE?style=for-the-badge&logo=ant-design&logoColor=white"> 
+<br>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  - #### Back
+<img src="https://img.shields.io/badge/java-F7EF2A?style=for-the-badge&logo=java&logoColor=black">  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/Spring_JPA-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white"> <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"> <img src="https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=AmazonS3&logoColor=white"> <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white">
+<br>
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<h2 id="design">🛠 설계 </h2>
+  <ul>
+    <li><a href="https://placid-dart-8ad.notion.site/0f69a110ab6a4cd1a8ec63c33585f010">📜 기능 명세서</a></li>
+    <li><a href="https://www.erdcloud.com/d/H8gBaNph4KTP6TLDP">☁ DB ERDCloud</a></li>
+  </ul>
+<br>
 
-### `npm run build`
+<h2 id="member">👯 팀원 </h2>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* [`김정현`](https://github.com/Zolyer)
+* [`이관용`](https://github.com/nailnoy)
+* [`유예지`](https://github.com/creamburger)
+* [`신재훈`](https://github.com/JHun-S)
+<br>
