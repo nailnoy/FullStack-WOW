@@ -3,20 +3,24 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { customMedia } from "../../GlobalStyles";
 
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import Box from "@mui/material/Box";
-import { message } from "antd"
+import {
+  Typography,
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Box,
+  IconButton,
+} from "@mui/material";
+
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { message } from "antd";
 
 const LikedClubCard = (props) => {
   const navigate = useNavigate();
+
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card
@@ -29,7 +33,8 @@ const LikedClubCard = (props) => {
         }}
       >
         <Grid
-          container spacing={0}
+          container
+          spacing={0}
           justifyContent="space-between"
           sx={{
             position: "absolute",
@@ -64,11 +69,11 @@ const LikedClubCard = (props) => {
                 p: 1,
                 minWidth: 45,
                 maxHeight: 35,
-
               }}
             >
               마감
-            </Box>) : (
+            </Box>
+            ) : (
             ""
           )}
         </Grid>
@@ -83,7 +88,8 @@ const LikedClubCard = (props) => {
             height="300"
             image={props.club.imgUrl}
             alt="default"
-          />) : (
+          />
+          ) : (
           <CardMedia
             component="img"
             sx={{
@@ -110,27 +116,37 @@ const LikedClubCard = (props) => {
             }}
           >
             {props.club.title}
-          </Typography>
+            </Typography>
           <Typography
             fontFamily="Jua"
-            height="70px"
+            height="20px"
             sx={{
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
-              WebkitLineClamp: '3',
-              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: "1",
+              WebkitBoxOrient: "vertical",
             }}
           >
             {props.club.contents}
-          </Typography>
+            </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" variant="outlined" onClick={() => navigate(`../detail/${props.club.clubId}`)}>
-            자세히
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => navigate(`../detail/${props.club.id}`)}
+          >
+            <Typography fontFamily="Jua">자세히</Typography>
           </Button>
-          <Button size="small" variant="outlined" color="success">
-            참가 신청
+          <Button
+            variant="outlined"
+            onClick={() => navigate(`../reviews?title=${props.club.title}`)}
+            className="infoBtn"
+            color="success"
+            size="small"
+          >
+            <Typography fontFamily="Jua">후기보기</Typography>
           </Button>
           <LikeContainer>
             <LikeNum>{props.club.likes}</LikeNum>

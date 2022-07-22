@@ -1,7 +1,6 @@
 package workoutwith.service;
 
 import workoutwith.common.error.exception.ClubNotFoundException;
-import workoutwith.common.error.exception.ReviewNotFoundException;
 import workoutwith.common.error.exception.UserNotFoundException;
 import workoutwith.controller.club.ClubCreateRequestDto;
 import workoutwith.controller.club.ClubUpdateRequestDto;

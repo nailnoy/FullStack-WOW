@@ -9,13 +9,13 @@ import { customMedia } from "../../GlobalStyles";
 
 
 import LikedClubCard from "./LikedClubCard";
-import JoinedClubCard from "./JoinedClubCard";
 import Member from "./Member";
 import PendingMember from "./PendingMember";
 import Pagination from "../common/Pagination";
 import NotFound from "../common/NotFound";
 import Spin from "../common/Spin";
 import MyComment from "./MyComment";
+import ClubCard from "../common/ClubCard";
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -289,7 +289,7 @@ const Main = () => {
 								<Container sx={{ py: 4 }} maxWidth="md">
 									<Grid container spacing={4}>
 										{myJoinedClubs.map((joinedClub) => (
-											<JoinedClubCard
+											<ClubCard
 												key={joinedClub.id}
 												userId={userId}
 												club={joinedClub}
