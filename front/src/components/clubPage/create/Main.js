@@ -104,6 +104,11 @@ const Main = (props) => {
 			return;
 		}
 
+		if (!values.tags.length > 5) {
+			message.warning("태그는 5자까지 입력 가능합니다.");
+			return;
+		}
+
 		if (values.title.length > 10) {
 			message.warning("이름은 10자까지 입력 가능합니다.");
 			return;
