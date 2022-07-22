@@ -37,7 +37,7 @@ const Main = () => {
 				params: {
 					sortBy: "createdAt",
 					tags: "",
-					clubStatus: "ACTIVE",
+					clubStatus: "true",
 					keyword: "",
 					page: 1,
 				},
@@ -48,7 +48,7 @@ const Main = () => {
 				params: {
 					sortBy: "likes",
 					tags: "",
-					clubStatus: "ACTIVE",
+					clubStatus: "true",
 					keyword: "",
 					page: 1,
 				},
@@ -194,7 +194,7 @@ const Main = () => {
         </Typography>
         <Grid container spacing={4}>
           {sortByCreatedAtClubs
-            .filter((club, i) => i < 4)
+            .filter((club, i) => i < 3)
             .map((club) => (
               <ClubCard
                 key={club.id}
@@ -219,7 +219,7 @@ const Main = () => {
         </Typography>
         <Grid container spacing={4}>
           {sortByLikesClubs
-            .filter((club, i) => i < 4)
+            .filter((club, i) => i < 3)
             .map((club) => (
               <ClubCard
                 key={club.id}
